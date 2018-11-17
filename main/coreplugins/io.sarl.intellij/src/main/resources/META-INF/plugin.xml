@@ -1,11 +1,10 @@
 <idea-plugin>
     <id>io.sarl.io.sarl.intellij</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>Sarl plugin</name>
+    <vendor email="support@sarl.io" url="http://www.sarl.io">Sarl</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    Adds support for the Sarl multi-agent language to IntelliJ Idea
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -15,10 +14,15 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
+        <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
+        <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="Myplugin.Textboxes" class="HelloAction" text="Hello" description="Says hello"/>
+        </group>
     </actions>
 </idea-plugin>
