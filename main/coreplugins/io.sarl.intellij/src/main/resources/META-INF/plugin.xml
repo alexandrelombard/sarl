@@ -18,6 +18,10 @@
         <!--File type support-->
         <internalFileTemplate name="Sarl Class"/>
         <internalFileTemplate name="Sarl Agent"/>
+        <internalFileTemplate name="Sarl Behavior"/>
+        <internalFileTemplate name="Sarl Capacity"/>
+        <internalFileTemplate name="Sarl Event"/>
+        <internalFileTemplate name="Sarl Skill"/>
     </extensions>
 
     <actions>
