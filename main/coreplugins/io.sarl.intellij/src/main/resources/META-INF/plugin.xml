@@ -15,6 +15,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
+        <!--<moduleType id="SARL_MODULE_TYPE" implementationClass="io.sarl.intellij.SarlModuleType"/>-->
         <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
     </extensions>
 
