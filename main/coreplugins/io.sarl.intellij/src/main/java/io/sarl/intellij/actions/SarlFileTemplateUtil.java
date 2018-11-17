@@ -2,6 +2,7 @@ package io.sarl.intellij.actions;
 
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
@@ -12,19 +13,15 @@ import java.util.List;
 public class SarlFileTemplateUtil {
     private final static String SARL_TEMPLATE_PREFIX = "Sarl ";
 
-    public static List<FileTemplate> getApplicableTemplates() {
-        return getApplicableTemplates(new Condition<FileTemplate>() {
-            @Override
-            public boolean value(FileTemplate fileTemplate) {
-                return SarlFileType.INSTANCE.getDefaultExtension().equals(fileTemplate.getExtension());
-            }
-        });
+    public static List<FileTemplate> getApplicableTemplates(Project project) {
+        return getApplicableTemplates(project, fileTemplate ->
+                SarlFileType.INSTANCE.getDefaultExtension().equals(fileTemplate.getExtension()));
     }
 
-    public static List<FileTemplate> getApplicableTemplates(Condition<FileTemplate> filter) {
-        final List<FileTemplate> applicableTemplates = new SmartList<FileTemplate>();
-        applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance().getInternalTemplates(), filter));
-        applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance().getAllTemplates(), filter));
+    public static List<FileTemplate> getApplicableTemplates(Project project, Condition<FileTemplate> filter) {
+        final List<FileTemplate> applicableTemplates = new SmartList<>();
+        applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance(project).getInternalTemplates(), filter));
+        applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance(project).getAllTemplates(), filter));
         return applicableTemplates;
     }
 

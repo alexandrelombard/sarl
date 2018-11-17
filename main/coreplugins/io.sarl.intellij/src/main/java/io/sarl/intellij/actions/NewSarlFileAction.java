@@ -34,11 +34,12 @@ public class NewSarlFileAction extends CreateFromTemplateAction<PsiFile> {
     @Override
     protected PsiFile createFile(String className, String templateName, PsiDirectory dir) {
         try {
+            final Project project = dir.getProject();
             final Properties props = new Properties(
-                    FileTemplateManager.getInstance().getDefaultProperties(dir.getProject()));
+                    FileTemplateManager.getInstance(project).getDefaultProperties());
             props.setProperty(FileTemplate.ATTRIBUTE_NAME, className);
 
-            final FileTemplate template = FileTemplateManager.getInstance().getInternalTemplate(templateName);
+            final FileTemplate template = FileTemplateManager.getInstance(project).getInternalTemplate(templateName);
 
             final PsiElement element = FileTemplateUtil.createFromTemplate(template, className, props, dir, NewSarlFileAction.class.getClassLoader());
 
@@ -52,12 +53,14 @@ public class NewSarlFileAction extends CreateFromTemplateAction<PsiFile> {
     @Override
     protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(IdeBundle.message("action.create.new.class"));
-        for (FileTemplate fileTemplate : SarlFileTemplateUtil.getApplicableTemplates()) {
+
+        for (FileTemplate fileTemplate : SarlFileTemplateUtil.getApplicableTemplates(project)) {
             final String templateName = fileTemplate.getName();
             final String shortName = SarlFileTemplateUtil.getTemplateShortName(templateName);
             final Icon icon = SarlIcons.SARL_PLUGIN;
             builder.addKind(shortName, icon, templateName);
         }
+
         builder.setValidator(new InputValidatorEx() {
             @Override
             public String getErrorText(String inputString) {

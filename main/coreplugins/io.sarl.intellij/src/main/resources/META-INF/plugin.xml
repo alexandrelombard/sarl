@@ -18,6 +18,10 @@
         <!--<moduleType id="SARL_MODULE_TYPE" implementationClass="io.sarl.intellij.SarlModuleType"/>-->
         <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
         <syntaxHighlighter implementationClass="io.sarl.intellij.highlighter.SarlSyntaxHighlighter" />
+
+        <!--File type support-->
+        <internalFileTemplate name="Sarl Class"/>
+        <internalFileTemplate name="Sarl Agent"/>
     </extensions>
 
     <actions>

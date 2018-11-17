@@ -1,0 +1,3 @@
+agent ${NAME} extends Object {
+
+}
