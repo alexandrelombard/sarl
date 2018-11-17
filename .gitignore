@@ -77,11 +77,15 @@ target/
 **/*~
 workspace/
 
-#Others
+# Others
 **/.DS_Store
 sarlide.sh
 dbg.log
 
-#IntelliJ Idea files
+# Gradle files
+.gradle
+/build/
+
+# IntelliJ Idea files
 *.iml
 .idea/**
