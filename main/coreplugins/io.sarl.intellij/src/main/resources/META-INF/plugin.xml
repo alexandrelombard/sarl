@@ -17,9 +17,14 @@
         <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
         <!--<moduleType id="SARL_MODULE_TYPE" implementationClass="io.sarl.intellij.SarlModuleType"/>-->
         <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
+        <syntaxHighlighter implementationClass="io.sarl.intellij.highlighter.SarlSyntaxHighlighter" />
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
+        <action id="Sarl.NewFile" class="io.sarl.intellij.actions.NewSarlFileAction"
+                text="Sarl File" description="Create new Sarl file">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+        </action>
     </actions>
 </idea-plugin>
