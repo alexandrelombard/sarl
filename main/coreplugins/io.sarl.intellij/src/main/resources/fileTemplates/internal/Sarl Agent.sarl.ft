@@ -1,3 +1,4 @@
-agent ${NAME} extends Object {
+agent ${NAME} {
+    uses Logging
 
 }
