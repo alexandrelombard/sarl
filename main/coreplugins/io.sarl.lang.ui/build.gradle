@@ -26,7 +26,7 @@ shadowJar {
 }
 
 shadowJar {
-    baseName = 'dsl-language-server'
+    baseName = 'sarl-language-server'
     classifier = null
     version = null
     manifest {
