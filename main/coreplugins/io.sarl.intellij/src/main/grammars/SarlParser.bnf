@@ -59,10 +59,10 @@
         line_comment='regexp:(//.*|/\*.*\*/)'
         block_comment='regexp:/\*(.|\n)*\*/'
 
-        space='regexp:\s+'
+        whitespace='regexp:\s+'
 
         id='regexp:\p{Alpha}\w*'
-        number='regexp:\d+(\.\d*)?'
+        number='regexp:\d\d?r[\da-zA-Z]+|M?\d+(\.\d*([eE]\d+)?)?'
         string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
     ]
 
