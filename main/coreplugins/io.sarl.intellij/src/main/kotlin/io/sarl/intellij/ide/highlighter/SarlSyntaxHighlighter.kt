@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import io.sarl.intellij.ide.colors.SarlColor
 import io.sarl.intellij.lexer.SarlHighlightingLexer
 import io.sarl.intellij.parser.SarlParserUtil
+import io.sarl.intellij.psi.SarlElementTypes
 
 class SarlSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
@@ -18,6 +19,9 @@ class SarlSyntaxHighlighter : SyntaxHighlighterBase() {
 
     companion object {
         fun map(tokenType: IElementType): SarlColor = when (tokenType) {
+            SarlElementTypes.NUMBER -> SarlColor.NUMBER
+            SarlElementTypes.LINE_COMMENT -> SarlColor.COMMENT
+            SarlElementTypes.BLOCK_COMMENT -> SarlColor.COMMENT
             else -> SarlColor.DEFAULT
         }
     }

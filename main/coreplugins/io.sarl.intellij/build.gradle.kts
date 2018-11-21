@@ -42,6 +42,10 @@ allprojects {
         sourceCompatibility = VERSION_1_8
         targetCompatibility = VERSION_1_8
     }
+
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/gen")
+    }
 }
 
 project(":") {
@@ -54,14 +58,14 @@ project(":") {
 
     val generateSarlLexer = task<GenerateLexer>("generateSarlLexer") {
         source = "src/main/grammars/SarlLexer.flex"
-        targetDir = "src/main/gen/io/sarl/intellij/lexer"
+        targetDir = "src/main/java/io/sarl/intellij/parser"
         targetClass = "_SarlLexer"
         purgeOldFiles = true
     }
 
     val generateSarlParser = task<GenerateParser>("generateSarlParser") {
         source = "src/main/grammars/SarlParser.bnf"
-        targetRoot = "src/main/gen"
+        targetRoot = "src/main/java"
         pathToParser = "/io/sarl/intellij/parser/SarlParser.java"
         pathToPsiRoot = "/io/sarl/intellij/psi"
         purgeOldFiles = true

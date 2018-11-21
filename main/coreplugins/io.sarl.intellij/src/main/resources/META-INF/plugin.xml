@@ -15,6 +15,7 @@
         <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
 
         <!-- Parser -->
+        <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.grammar.SarlParserDefinition"/>
 
         <!-- Highlighter -->
         <lang.syntaxHighlighterFactory language="Sarl" implementationClass="io.sarl.intellij.ide.highlighter.SarlSyntaxHighlighterFactory" />"
