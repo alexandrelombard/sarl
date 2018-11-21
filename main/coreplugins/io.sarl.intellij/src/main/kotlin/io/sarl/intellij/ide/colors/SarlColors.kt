@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as Default
 
 enum class SarlColor(val humanName: String, val default: TextAttributesKey) {
     KEYWORD("Keyword", Default.KEYWORD),
+    DOCUMENTATION_COMMENT("DocumentationComment", Default.DOC_COMMENT),
     COMMENT("Comment", Default.BLOCK_COMMENT),
     NUMBER("Number", Default.NUMBER),
     DEFAULT("Default", Default.STRING);

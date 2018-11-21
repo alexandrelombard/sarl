@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>io.sarl.io.sarl.intellij</id>
-    <name>Sarl plugin</name>
+    <id>io.sarl.intellij</id>
+    <name>Sarl</name>
     <vendor email="support@sarl.io" url="http://www.sarl.io">Sarl</vendor>
 
     <description><![CDATA[
@@ -10,9 +10,12 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="SARL_MODULE" implementationClass="io.sarl.intellij.SarlModuleType"/>
+
+        <!-- Project creation -->
+
+        <!-- File-type factory -->
         <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
-        <!--<moduleType id="SARL_MODULE_TYPE" implementationClass="SarlModuleType"/>-->
-        <moduleBuilder builderClass="io.sarl.intellij.SarlModuleBuilder" />
 
         <!-- Parser -->
         <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.grammar.SarlParserDefinition"/>

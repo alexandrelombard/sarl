@@ -9,30 +9,65 @@
     psiPackage='io.sarl.intellij.psi'
     psiImplPackage='io.sarl.intellij.psi.impl'
 
-  tokens=[
-    SEMI=';'
-    EQ='='
-    LP='('
-    RP=')'
+    tokens=[
+        LBRACE      =  '{'
+        RBRACE      =  '}'
+        LBRACK      =  '['
+        RBRACK      =  ']'
+        LPAREN      =  '('
+        RPAREN      =  ')'
+        COLON       =  ':'
+        COLONCOLON  =  '::'
+        SEMICOLON   =  ';'
+        COMMA       =  ','
+        EQ          =  '='
+        EXCLEQ      =  '!='
+        EQEQ        =  '=='
+        SHA         =  '#'
+        EXCL        =  '!'
+        PLUSEQ      =  '+='
+        PLUS        =  '+'
+        MINUSEQ     =  '-='
+        MINUS       =  '-'
+        OREQ        =  '|='
+        ANDAND      =  '&&'
+        ANDEQ       =  '&='
+        AND         =  '&'
+        OR          =  '|'
+        LT          =  '<'
+        XOREQ       =  '^='
+        XOR         =  '^'
+        MULEQ       =  '*='
+        MUL         =  '*'
+        DIVEQ       =  '/='
+        DIV         =  '/'
+        REMEQ       =  '%='
+        REM         =  '%'
+        GT          =  '>'
+        DOT         =  '.'
+        DOTDOT      =  '..'
+        DOTDOTDOT   =  '...'
+        DOTDOTEQ    =  '..='
+        FAT_ARROW   =  '=>'
+        ARROW       =  '->'
+        Q           =  '?'
+        AT          =  '@'
+        UNDERSCORE  =  '_'
+        DOLLAR = '$'
 
-    line_comment='regexp:(//.*|/\*.*\*/)'
-    block_comment='regexp:/\*(.|\n)*\*/'
+        documentation_block='regexp:/\*\*(.|\n)*\*/'
+        line_comment='regexp:(//.*|/\*.*\*/)'
+        block_comment='regexp:/\*(.|\n)*\*/'
 
-    space='regexp:\s+'
+        space='regexp:\s+'
 
-    id='regexp:\p{Alpha}\w*'
-    number='regexp:\d+(\.\d*)?'
-    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+        id='regexp:\p{Alpha}\w*'
+        number='regexp:\d+(\.\d*)?'
+        string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+    ]
 
-    op_1='+'
-    op_2='-'
-    op_3='*'
-    op_4='/'
-    op_5='!'
-  ]
-
-  name(".*expr")='expression'
-  extends(".*expr")=expr
+    name(".*expr")='expression'
+    extends(".*expr")=expr
 }
 
 root ::= root_item *

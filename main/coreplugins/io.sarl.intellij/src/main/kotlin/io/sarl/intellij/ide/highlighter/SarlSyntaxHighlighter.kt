@@ -20,6 +20,7 @@ class SarlSyntaxHighlighter : SyntaxHighlighterBase() {
     companion object {
         fun map(tokenType: IElementType): SarlColor = when (tokenType) {
             SarlElementTypes.NUMBER -> SarlColor.NUMBER
+            SarlElementTypes.DOCUMENTATION_BLOCK -> SarlColor.DOCUMENTATION_COMMENT
             SarlElementTypes.LINE_COMMENT -> SarlColor.COMMENT
             SarlElementTypes.BLOCK_COMMENT -> SarlColor.COMMENT
             else -> SarlColor.DEFAULT
