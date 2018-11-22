@@ -15,7 +15,7 @@ object SarlFileTemplateUtil {
     fun getApplicableTemplates(
             project: Project,
             filter: Condition<FileTemplate> = Condition
-            { fileTemplate -> SarlFileType.INSTANCE.defaultExtension == fileTemplate.extension }): List<FileTemplate> {
+            { fileTemplate -> SarlFileType.defaultExtension == fileTemplate.extension }): List<FileTemplate> {
         val applicableTemplates = SmartList<FileTemplate>()
         applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance(project).internalTemplates, filter))
         applicableTemplates.addAll(ContainerUtil.findAll(FileTemplateManager.getInstance(project).allTemplates, filter))
