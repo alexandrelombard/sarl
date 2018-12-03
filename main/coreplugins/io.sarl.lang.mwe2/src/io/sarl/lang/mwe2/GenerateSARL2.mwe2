@@ -52,6 +52,12 @@ var baseName = "io.sarl.lang"
 var runtimeProjectName = "${baseName}"
 var projectPath = "${rootPath}/${runtimeProjectName}"
 
+var ideProjectName = "${baseName}.ide"
+var ideProjectPath = "${rootPath}/${ideProjectName}"
+
+var intellijProjectName = "${baseName}.intellij"
+var intellijProjectPath = "${rootPath}/${intellijProjectName}"
+
 var uiProjectName = "${baseName}.ui"
 var uiProjectPath = "${rootPath}/${uiProjectName}"
 
@@ -152,7 +158,11 @@ Workflow {
 				}
 				genericIde = auto-inject {
 					enabled = true
-					name = uiProjectName
+					name = ideProjectName
+				}
+				ideaPlugin = auto-inject {
+					enabled = true
+					name = intellijProjectName
 				}
 				runtimeTest = auto-inject {
 					enabled = true

@@ -21,26 +21,16 @@
 
 package io.sarl.lang.ide;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import org.eclipse.xtext.util.Modules2;
-
-import io.sarl.lang.SARLRuntimeModule;
-import io.sarl.lang.SARLStandaloneSetup;
 
 /**
- * Initialization support for running Xtext languages as language servers.
+ * Use this class to register ide components.
  *
  * @author $Author: sgalland$
+ * @author $Author: alombard$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
  */
-public class SARLIdeSetup extends SARLStandaloneSetup {
-
-	@Override
-	public Injector createInjector() {
-		return Guice.createInjector(Modules2.mixin(new SARLRuntimeModule(), new SARLIdeModule()));
-	}
-
+public class SARLIdeModule extends AbstractSARLIdeModule {
+	//
 }

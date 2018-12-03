@@ -233,9 +233,8 @@ public class TextMateGenerator2 extends AbstractExternalHighlightingFragment2<IT
 	protected CharSequence getLicenseText() {
 		final URL url = getClass().getResource(LICENSE_FILE);
 		if (url != null) {
-			File filename;
 			try {
-				filename = new File(
+				final File filename = new File(
 						URLDecoder.decode(url.getPath(), Charset.defaultCharset().toString()));
 				return Files.toString(filename, Charset.defaultCharset());
 			} catch (IOException exception) {

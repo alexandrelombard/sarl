@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: io.sarl.lang.ide
+Bundle-SymbolicName: io.sarl.lang.ide;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: io.sarl.lang.ide.contentassist.antlr,
+ io.sarl.lang.ide.contentassist.antlr.internal
+Require-Bundle: org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Automatic-Module-Name: io.sarl.lang.ide
+
