@@ -23,10 +23,10 @@
  */
 package io.sarl.lang.idea.completion;
 
-import org.eclipse.xtend.core.idea.completion.XtendCompletionContributor;
 import org.eclipse.xtext.idea.lang.AbstractXtextLanguage;
+import org.eclipse.xtext.xbase.annotations.idea.completion.XbaseWithAnnotationsCompletionContributor;
 
-public class AbstractSARLCompletionContributor extends XtendCompletionContributor {
+public class AbstractSARLCompletionContributor extends XbaseWithAnnotationsCompletionContributor {
 	public AbstractSARLCompletionContributor(AbstractXtextLanguage lang) {
 		super(lang);
 	}

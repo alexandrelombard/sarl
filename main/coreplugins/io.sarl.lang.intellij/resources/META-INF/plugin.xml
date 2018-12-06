@@ -4,11 +4,20 @@
 	<description>
 		This plugin enables smart editing of SARL files.
 	</description>
-	<version>1.0.0</version>
-	<vendor>My Company</vendor>
+	<version>0.9.0-SNAPSHOT</version>
+	<vendor>SARL.io</vendor>
 
 	<idea-version since-build="145"/>
-	<depends>org.eclipse.xtext.idea</depends>
+	<!--depends>org.eclipse.xtext.idea</depends-->
+	<depends optional="true">org.jetbrains.idea.maven</depends>
+	<depends optional="true">org.intellij.groovy</depends>
+	<depends optional="true">org.jetbrains.plugins.gradle</depends>
+	<depends>com.github.alexandrelombard.org.eclipse.xtext.idea</depends>
 
 	<xi:include href="plugin_gen.xml" xpointer="xpointer(/idea-plugin/*)"/>
+
+	<actions></actions>
+
+	<extensions defaultExtensionNs="org.eclipse.xtext.idea"></extensions>
+	<extensions defaultExtensionNs="com.intellij"></extensions>
 </idea-plugin>

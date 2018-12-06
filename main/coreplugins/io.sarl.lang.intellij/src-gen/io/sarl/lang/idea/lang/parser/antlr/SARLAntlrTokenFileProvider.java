@@ -23,6 +23,9 @@
  */
 package io.sarl.lang.idea.lang.parser.antlr;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import org.eclipse.xtext.parser.antlr.IAntlrTokenFileProvider;
 
@@ -30,6 +33,13 @@ public class SARLAntlrTokenFileProvider implements IAntlrTokenFileProvider {
 	@Override
 	public InputStream getAntlrTokenFile() {
 		ClassLoader classLoader = getClass().getClassLoader();
-		return classLoader.getResourceAsStream("io/sarl/lang/idea/parser/antlr/internal/PsiInternalSARL.tokens");
+//		return classLoader.getResourceAsStream("io/sarl/lang/idea/parser/antlr/internal/PsiInternalSARL.tokens");
+		try {
+			// FIXME Issue
+			final File file = new File("D:\\Eclipse DSL Workspace\\sarl\\PsiInternalSARL.tokens");
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			return null;
+		}
 	}
 }
