@@ -22,6 +22,8 @@
 package io.sarl.lang.idea;
 
 
+import org.eclipse.xtext.parser.antlr.AntlrTokenDefProvider;
+
 /**
  * Use this class to register components to be used within IntelliJ IDEA.
  * @author $Author: alombard$
@@ -30,5 +32,5 @@ package io.sarl.lang.idea;
  * @mavenartifactid $ArtifactId$
  */
 public class SARLIdeaModule extends AbstractSARLIdeaModule {
-	//
+    //
 }
