@@ -24,6 +24,7 @@ package io.sarl.lang.idea;
 import com.google.inject.Injector;
 import org.eclipse.xtext.ISetup;
 import org.eclipse.xtext.idea.extensions.EcoreGlobalRegistries;
+import org.eclipse.xtext.idea.lang.LanguageSetup;
 
 /**
  * SARL idea setup.
@@ -32,7 +33,7 @@ import org.eclipse.xtext.idea.extensions.EcoreGlobalRegistries;
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
  */
-public class SARLIdeaSetup implements ISetup {
+public class SARLIdeaSetup extends LanguageSetup implements ISetup {
 
 	@Override
 	public Injector createInjectorAndDoEMFRegistration() {

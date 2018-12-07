@@ -1,10 +1,10 @@
-<idea-plugin version="2">
+<idea-plugin>
 	<extensions defaultExtensionNs="org.eclipse.xtext.idea">
 		<package
 			uri="http://www.sarl.io/lang/SARL"
 			class="io.sarl.lang.sarl.SarlPackage"
 		/>
-		<resourceFactory 
+		<resourceFactory
 			type="sarl"
 			class="org.eclipse.xtext.resource.IResourceFactory"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
@@ -22,42 +22,43 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
+
 		<psi.treeChangePreprocessor implementation="io.sarl.lang.idea.lang.psi.SARLCodeBlockModificationListener"/>
 
 		<fileTypeFactory implementation="io.sarl.lang.idea.lang.SARLFileTypeFactory"/>
 		<stubElementTypeHolder class="io.sarl.lang.idea.lang.SARLElementTypeProvider"/>
-		<lang.ast.factory 
+		<lang.ast.factory
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="org.eclipse.xtext.idea.lang.BaseXtextASTFactory"
 		/>
-		<lang.parserDefinition 
+		<lang.parserDefinition
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="io.sarl.lang.idea.lang.parser.SARLParserDefinition"
 		/>
-		<lang.findUsagesProvider 
+		<lang.findUsagesProvider
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="org.eclipse.xtext.idea.findusages.BaseXtextFindUsageProvider"
 		/>
-		<lang.refactoringSupport 
+		<lang.refactoringSupport
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="org.eclipse.xtext.idea.refactoring.BaseXtextRefactoringSupportProvider"
 		/>
-		<lang.namesValidator 
+		<lang.namesValidator
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="com.intellij.lang.refactoring.NamesValidator"
 		/>
 		<lang.syntaxHighlighterFactory key="io.sarl.lang.SARL" implementationClass="io.sarl.lang.idea.highlighting.SARLSyntaxHighlighterFactory" />
-		<lang.braceMatcher 
+		<lang.braceMatcher
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="com.intellij.lang.PairedBraceMatcher"
 		/>
-		<annotator 
+		<annotator
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="org.eclipse.xtext.idea.annotation.IssueAnnotator"
@@ -65,13 +66,13 @@
 		<completion.contributor language="io.sarl.lang.SARL" implementationClass="io.sarl.lang.idea.completion.SARLCompletionContributor"/>
 		<pom.declarationSearcher implementation="io.sarl.lang.idea.lang.pom.SARLPomDeclarationSearcher"/>
 
-		<lang.psiStructureViewFactory 
+		<lang.psiStructureViewFactory
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="com.intellij.lang.PsiStructureViewFactory"
 		/>
 		<facetType implementation="io.sarl.lang.idea.facet.SARLFacetType"/>
-		<lang.documentationProvider 
+		<lang.documentationProvider
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="org.eclipse.xtext.idea.documentation.IdeaDocumentationProvider"
@@ -79,12 +80,12 @@
 		<colorSettingsPage implementation="io.sarl.lang.idea.highlighting.SARLColorSettingsPage"/>
 		<highlightVisitor implementation="io.sarl.lang.idea.highlighting.SARLSemanticHighlightVisitor"/>
 
-		<lang.formatter 
+		<lang.formatter
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="com.intellij.formatting.FormattingModelBuilder"
 		/>
-		<lang.commenter 
+		<lang.commenter
 			language="io.sarl.lang.SARL"
 			factoryClass="io.sarl.lang.idea.SARLExtensionFactory"
 			implementationClass="com.intellij.lang.CodeDocumentationAwareCommenter"

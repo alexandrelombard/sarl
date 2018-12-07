@@ -22,6 +22,11 @@
 package io.sarl.lang.idea.lang;
 
 
+import com.intellij.openapi.util.IconLoader;
+import org.eclipse.xtext.idea.Icons;
+
+import javax.swing.*;
+
 /**
  * SARL file type.
  * @author $Author: alombard$
@@ -30,6 +35,8 @@ package io.sarl.lang.idea.lang;
  * @mavenartifactid $ArtifactId$
  */
 public class SARLFileType extends AbstractSARLFileType {
+
+	public static final Icon SARL_FILE_TYPE = IconLoader.getIcon("/icons/sarl_file_type.png");
 	/**
 	 * SARL file type instance.
 	 */
@@ -40,5 +47,10 @@ public class SARLFileType extends AbstractSARLFileType {
 	 */
 	public SARLFileType() {
 		super(SARLLanguage.INSTANCE);
+	}
+
+	@Override
+	public Icon getIcon() {
+		return SARL_FILE_TYPE;
 	}
 }
