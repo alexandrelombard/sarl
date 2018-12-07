@@ -1,4 +1,4 @@
-<idea-plugin version="2" xmlns:xi="http://www.w3.org/2001/XInclude">
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
 	<id>io.sarl.lang.idea</id>
 	<name>SARL Support</name>
 	<description>
@@ -12,7 +12,7 @@
 	<depends optional="true">org.jetbrains.idea.maven</depends>
 	<depends optional="true">org.intellij.groovy</depends>
 	<depends optional="true">org.jetbrains.plugins.gradle</depends>
-	<depends>com.github.alexandrelombard.org.eclipse.xtext.idea</depends>
+	<!--<depends>com.github.alexandrelombard.org.eclipse.xtext.idea</depends>-->
 
 	<xi:include href="plugin_gen.xml" xpointer="xpointer(/idea-plugin/*)"/>
 
