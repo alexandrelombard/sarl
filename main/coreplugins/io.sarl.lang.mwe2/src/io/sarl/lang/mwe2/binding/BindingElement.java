@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,8 @@ public class BindingElement {
 	private String annotatedWithName;
 
 	private boolean overridePreviousDefinition;
+
+	private boolean provider;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -117,6 +119,23 @@ public class BindingElement {
 	@Pure
 	public boolean isOverride() {
 		return this.overridePreviousDefinition;
+	}
+
+	/** Set the element is a provider.
+	 *
+	 * @param provider <code>true</code> if a provider.
+	 */
+	public void setProvider(boolean provider) {
+		this.provider = provider;
+	}
+
+	/** Replies if the element is a provider.
+	 *
+	 * @return <code>true</code> if it is a provider.
+	 */
+	@Pure
+	public boolean isProvider() {
+		return this.provider;
 	}
 
 	/** Set the function name.

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -253,7 +253,7 @@ public class Agent extends AgentProtectedAPIObject implements Identifiable {
 	}
 
 	private static void runOnImplementedCapacities(Skill skill, Procedure1<? super Class<? extends Capacity>> callback) {
-		TypeToken.of(skill.getClass()).getTypes().interfaces().stream().parallel().forEach(it -> {
+		TypeToken.of(skill.getClass()).getTypes().interfaces().stream().forEach(it -> {
 			final Class<?> type = it.getRawType();
 			if (Capacity.class.isAssignableFrom(type) && !Capacity.class.equals(type)) {
 				callback.apply(type.asSubclass(Capacity.class));
