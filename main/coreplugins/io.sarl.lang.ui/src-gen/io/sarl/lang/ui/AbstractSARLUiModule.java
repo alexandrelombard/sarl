@@ -7,7 +7,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ import io.sarl.lang.ui.labeling.SARLDescriptionLabelProvider;
 import io.sarl.lang.ui.labeling.SARLDiagnosticLabelDecorator;
 import io.sarl.lang.ui.labeling.SARLHyperLinkingLabelProvider;
 import io.sarl.lang.ui.labeling.SARLLabelProvider;
+import io.sarl.lang.ui.macro.SarlJdtProcessorInstanceForJvmTypeProvider;
 import io.sarl.lang.ui.outline.SARLBehaviorUnitOutlineFilter;
 import io.sarl.lang.ui.outline.SARLFieldOutlineFilter;
 import io.sarl.lang.ui.outline.SARLOperationOutlineFilter;
@@ -93,6 +94,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtend.core.macro.AbstractFileSystemSupport;
+import org.eclipse.xtend.core.macro.ProcessorInstanceForJvmTypeProvider;
 import org.eclipse.xtend.core.macro.declaration.IResourceChangeRegistry;
 import org.eclipse.xtend.ide.XtendResourceUiServiceProvider;
 import org.eclipse.xtend.ide.autoedit.AutoEditStrategyProvider;
@@ -536,6 +538,11 @@ public abstract class AbstractSARLUiModule extends DefaultXbaseWithAnnotationsUi
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
 	public Class<? extends IImageHelper.IImageDescriptorHelper> bindIImageDescriptorHelper() {
 		return PluginImageHelper.class;
+	}
+	
+	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
+	public Class<? extends ProcessorInstanceForJvmTypeProvider> bindProcessorInstanceForJvmTypeProvider() {
+		return SarlJdtProcessorInstanceForJvmTypeProvider.class;
 	}
 	
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]

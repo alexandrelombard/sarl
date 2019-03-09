@@ -48,14 +48,14 @@
 		<!-- Version of the cat mv	OSGi module that provides the NLS (package: osgi) -->
 		<osgi.nls.version>3.10.0-v20140606-1445</osgi.nls.version>
 		<!-- Version of the Arakhne Foundation classes -->
-		<afc.version>15.0</afc.version>
+		<afc.version>15.2</afc.version>
 		<!-- Version of the Guava API -->
 		<guava.version>20.0</guava.version>
 		<!-- Version of the javax.inject module -->
 		<javaxinject.version>1</javaxinject.version>
 		<!-- Version of the Tycho module, (search for tycho-maven-plugin on Maven 
 			central) -->
-		<tycho.version>1.2.0</tycho.version>
+		<tycho.version>1.3.0</tycho.version>
 		<!-- Version of the ZeroMQ library -->
 		<zeromq.version>0.4.2</zeromq.version>
 
@@ -64,7 +64,7 @@
 		<buildId>${maven.build.timestamp}</buildId>
 		<!-- Year of the release of SARL (used in Eclipse about, license management 
 			and documentation) -->
-		<year>2018</year>
+		<year>2019</year>
 		<!-- URL of the SARL project (use in POM, Eclipse about and documentation) -->
 		<sarlUrl>http://www.sarl.io</sarlUrl>
 		<!-- Default encoding of the source files -->
@@ -74,7 +74,7 @@
 		<jre.environment>JavaSE-1.8</jre.environment>
 		<!-- Maven API version. This version should be supported by m2e. Search 
 			for maven-core on central. -->
-		<maven.api.version>3.5.4</maven.api.version>
+		<maven.api.version>3.6.0</maven.api.version>
 		<!-- Version of the Maven Java compiler.
 		     Version 3.7.0 depends on a library that is compiled with Java 9! -->
 		<mavencompiler.version>3.6.2</mavencompiler.version>

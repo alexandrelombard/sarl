@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,7 @@ import static org.eclipse.xtend.core.validation.IssueCodes.MUST_INVOKE_SUPER_CON
 import static org.eclipse.xtend.core.validation.IssueCodes.OBSOLETE_OVERRIDE;
 import static org.eclipse.xtend.core.validation.IssueCodes.OVERRIDDEN_FINAL;
 import static org.eclipse.xtend.core.validation.IssueCodes.OVERRIDE_REDUCES_VISIBILITY;
+import static org.eclipse.xtend.core.validation.IssueCodes.UNUSED_PRIVATE_MEMBER;
 import static org.eclipse.xtend.core.validation.IssueCodes.XBASE_LIB_NOT_ON_CLASSPATH;
 import static org.eclipse.xtend.core.xtend.XtendPackage.Literals.XTEND_CLASS__IMPLEMENTS;
 import static org.eclipse.xtend.core.xtend.XtendPackage.Literals.XTEND_FIELD__NAME;
@@ -123,6 +124,7 @@ import org.eclipse.xtend.core.xtend.XtendFunction;
 import org.eclipse.xtend.core.xtend.XtendInterface;
 import org.eclipse.xtend.core.xtend.XtendMember;
 import org.eclipse.xtend.core.xtend.XtendPackage;
+import org.eclipse.xtend.core.xtend.XtendParameter;
 import org.eclipse.xtend.core.xtend.XtendTypeDeclaration;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtend.lib.annotations.Data;
@@ -184,6 +186,7 @@ import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReferenceFac
 import org.eclipse.xtext.xbase.typesystem.references.StandardTypeReferenceOwner;
 import org.eclipse.xtext.xbase.util.XbaseUsageCrossReferencer;
 import org.eclipse.xtext.xbase.validation.FeatureNameValidator;
+import org.eclipse.xtext.xbase.validation.UIStrings;
 
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.annotation.EarlyExit;
@@ -403,6 +406,9 @@ public class SARLValidator extends AbstractSARLValidator {
 
 	@Inject
 	private IImmutableTypeValidator immutableTypeValidator;
+
+	@Inject
+	private UIStrings uiStrings;
 
 	// Update the annotation target information
 	{
@@ -969,8 +975,7 @@ public class SARLValidator extends AbstractSARLValidator {
 	 * @param feature the syntactic feature related to the supertypes.
 	 * @param defaultSignatures the signatures of the default constructors for the given container.
 	 */
-	@SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:npathcomplexity",
-		"checkstyle:nestedifdepth"})
+	@SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:npathcomplexity", "checkstyle:nestedifdepth"})
 	protected void checkSuperConstructor(
 			XtendTypeDeclaration container,
 			EStructuralFeature feature,
@@ -2769,17 +2774,29 @@ public class SARLValidator extends AbstractSARLValidator {
 					null,
 					ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
 					org.eclipse.xtext.xbase.validation.IssueCodes.FORBIDDEN_REFERENCE);
-		} else if (isOOActiveAnnotation(annotation)) {
+		} else if (isOOActiveAnnotation(annotation) || isAOActiveAnnotation(annotation)) {
 			XtendTypeDeclaration container = EcoreUtil2.getContainerOfType(annotation.eContainer(), XtendTypeDeclaration.class);
 			while (container != null && (container.isAnonymous() || container.getName() == null)) {
 				container = EcoreUtil2.getContainerOfType(container.eContainer(), XtendTypeDeclaration.class);
 			}
-			if (!isOOType(container)) {
-				error(Messages.SARLValidator_90,
-						annotation,
-						null,
-						ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
-						org.eclipse.xtext.xbase.validation.IssueCodes.FORBIDDEN_REFERENCE);
+			if (container != null) {
+				if (isOOType(container)) {
+					if (!isOOActiveAnnotation(annotation)) {
+						error(MessageFormat.format(Messages.SARLValidator_90, container.getName()),
+								annotation,
+								null,
+								ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
+								org.eclipse.xtext.xbase.validation.IssueCodes.FORBIDDEN_REFERENCE);
+					}
+				} else {
+					if (!isAOActiveAnnotation(annotation) || !isAOActiveAnnotationReceiver(container)) {
+						error(MessageFormat.format(Messages.SARLValidator_90, container.getName()),
+								annotation,
+								null,
+								ValidationMessageAcceptor.INSIGNIFICANT_INDEX,
+								org.eclipse.xtext.xbase.validation.IssueCodes.FORBIDDEN_REFERENCE);
+					}
+				}
 			}
 		}
 	}
@@ -2801,6 +2818,7 @@ public class SARLValidator extends AbstractSARLValidator {
 	 *
 	 * @param annotation the annotation.
 	 * @return {@code true} if the annotation should be used only for OO elements.
+	 * @see #isAOActiveAnnotation(XAnnotation)
 	 */
 	@SuppressWarnings("static-method")
 	protected boolean isOOActiveAnnotation(XAnnotation annotation) {
@@ -2809,6 +2827,33 @@ public class SARLValidator extends AbstractSARLValidator {
 				|| Strings.equal(Data.class.getName(), name)
 				|| Strings.equal(Delegate.class.getName(), name)
 				|| Strings.equal(ToString.class.getName(), name);
+	}
+
+	/** Replies if the given container can receive an active annotation.
+	 *
+	 * @param annotation the annotation.
+	 * @return {@code true} if the annotation should be used only for OO elements.
+	 * @see #isOOActiveAnnotation(XAnnotation)
+	 * @see #isAOActiveAnnotationReceiver(XtendTypeDeclaration)
+	 */
+	@SuppressWarnings("static-method")
+	protected boolean isAOActiveAnnotation(XAnnotation annotation) {
+		final String name = annotation.getAnnotationType().getQualifiedName();
+		return Strings.equal(Accessors.class.getName(), name);
+	}
+
+	/** Replies if the given annotation is an active annotation for agent-oriented elements.
+	 *
+	 * @param container the container to test.
+	 * @return {@code true} if the container could receive an active annotation.
+	 * @see #isOOActiveAnnotation(XAnnotation)
+	 * @see #isAOActiveAnnotation(XAnnotation)
+	 */
+	@SuppressWarnings("static-method")
+	protected boolean isAOActiveAnnotationReceiver(XtendTypeDeclaration container) {
+		return container instanceof SarlAgent
+				|| container instanceof SarlBehavior
+				|| container instanceof SarlSkill;
 	}
 
 	/** Replies if the given annotation is a forbidden active annotation.
@@ -2845,6 +2890,56 @@ public class SARLValidator extends AbstractSARLValidator {
 							type,
 							XtendPackage.Literals.XTEND_TYPE_DECLARATION__NAME,
 							DUPLICATE_TYPE_NAME);
+				}
+			}
+		}
+	}
+
+	/** Replies if the given function has a default value for one of its parameters.
+	 *
+	 * @param function the function to test.
+	 * @return {@code true} if one parameter has a default value.
+	 */
+	@SuppressWarnings("static-method")
+	protected boolean isDefaultValuedParameterFunction(XtendFunction function) {
+		for (final XtendParameter parameter : function.getParameters()) {
+			if (parameter instanceof SarlFormalParameter) {
+				final SarlFormalParameter sarlParameter = (SarlFormalParameter) parameter;
+				if (sarlParameter.getDefaultValue() != null) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Check
+	@Override
+	public void checkLocalUsageOfDeclaredXtendFunction(XtendFunction function) {
+		if (doCheckValidMemberName(function) && !isIgnored(UNUSED_PRIVATE_MEMBER)) {
+			final JvmOperation mainOperation;
+			if (function.isDispatch()) {
+				mainOperation = this.associations.getDispatchOperation(function);
+			} else {
+				mainOperation = this.associations.getDirectlyInferredOperation(function);
+			}
+			if (mainOperation != null && mainOperation.getVisibility() == JvmVisibility.PRIVATE) {
+				final EObject outerType = getOutermostType(function);
+				boolean isUsed = isLocallyUsed(mainOperation, outerType);
+				if (!isUsed && isDefaultValuedParameterFunction(function)) {
+					for (final EObject jvmElement : this.associations.getJvmElements(function)) {
+						if (jvmElement != mainOperation && jvmElement instanceof JvmOperation
+								&& isLocallyUsed(jvmElement, outerType)) {
+							isUsed = true;
+							// break the loop
+							break;
+						}
+					}
+				}
+				if (!isUsed) {
+					final String message = MessageFormat.format(Messages.SARLValidator_94,
+							mainOperation.getSimpleName(), this.uiStrings.parameters(mainOperation), getDeclaratorName(mainOperation));
+					addIssueToState(UNUSED_PRIVATE_MEMBER, message, XtendPackage.Literals.XTEND_FUNCTION__NAME);
 				}
 			}
 		}
