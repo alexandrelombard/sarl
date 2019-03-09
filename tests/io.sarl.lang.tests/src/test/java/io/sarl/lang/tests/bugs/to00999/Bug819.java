@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,10 +60,6 @@ import io.sarl.tests.api.AbstractSarlTest.Validator;
 @SuppressWarnings("all")
 public class Bug819 extends AbstractSarlTest {
 
-	@Inject
-	private CompilationTestHelper compiler;
-
-
 	private static final String SNIPSET01 = multilineString(
 			"import io.sarl.core.Logging",
 			"import io.sarl.core.Initialize",
@@ -98,6 +99,8 @@ public class Bug819 extends AbstractSarlTest {
 			"import io.sarl.lang.core.Scope;",
 			"import io.sarl.lang.core.Skill;",
 			"import io.sarl.lang.util.ClearableReference;",
+			"import io.sarl.lang.util.SerializableProxy;",
+			"import java.io.ObjectStreamException;",
 			"import java.util.Collection;",
 			"import java.util.UUID;",
 			"import javax.inject.Inject;",
@@ -115,9 +118,29 @@ public class Bug819 extends AbstractSarlTest {
 			"    id = _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawn(Agent2.class, \"Gilbert\");",
 			"    DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$castSkill(DefaultContextInteractions.class, (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS == null || this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS = this.$getSkill(DefaultContextInteractions.class)) : this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS);",
 			"    Hello _hello = new Hello();",
-			"    final Scope<Address> _function = (Address it) -> {",
-			"      UUID _uUID = it.getUUID();",
-			"      return Objects.equal(_uUID, id);",
+			"    class $SerializableClosureProxy implements Scope<Address> {",
+			"      ",
+			"      private final UUID id;",
+			"      ",
+			"      public $SerializableClosureProxy(final UUID id) {",
+			"        this.id = id;",
+			"      }",
+			"      ",
+			"      @Override",
+			"      public boolean matches(final Address it) {",
+			"        UUID _uUID = it.getUUID();",
+			"        return Objects.equal(_uUID, id);",
+			"      }",
+			"    }",
+			"    final Scope<Address> _function = new Scope<Address>() {",
+			"      @Override",
+			"      public boolean matches(final Address it) {",
+			"        UUID _uUID = it.getUUID();",
+			"        return Objects.equal(_uUID, id);",
+			"      }",
+			"      private Object writeReplace() throws ObjectStreamException {",
+			"        return new SerializableProxy($SerializableClosureProxy.class, id);",
+			"      }",
 			"    };",
 			"    _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_hello, _function);",
 			"  }",
@@ -204,7 +227,7 @@ public class Bug819 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.compile(SNIPSET01, (it) -> {
+		getCompileHelper().compile(SNIPSET01, (it) -> {
 			String actual = it.getGeneratedCode("Agent3");
 			assertEquals(EXPECTED01, actual);
 		});

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -471,7 +471,7 @@ public class SARLJvmModelInferrer extends XtendJvmModelInferrer {
 
 	/** {@inheritDoc}.
 	 *
-	 * <p>Overridden for: removing the existing associated body, and delaying the local type inferrence.
+	 * <p>Overridden for: removing the existing associated body, and delaying the local type inference.
 	 */
 	@Override
 	protected void setBody(JvmExecutable executable, XExpression expression) {
@@ -517,12 +517,12 @@ public class SARLJvmModelInferrer extends XtendJvmModelInferrer {
 	 * @param supportedMemberTypes the types of the supported members.
 	 * @return the created context.
 	 */
-	protected final synchronized GenerationContext openContext(EObject sarlObject, JvmIdentifiableElement type,
+	protected final synchronized GenerationContext openContext(EObject sarlObject, JvmDeclaredType type,
 			final Iterable<Class<? extends XtendMember>> supportedMemberTypes) {
 		assert type != null;
 		assert supportedMemberTypes != null;
 		this.sarlSignatureProvider.clear(type);
-		final GenerationContext context = new GenerationContext(sarlObject, type.getIdentifier()) {
+		final GenerationContext context = new GenerationContext(sarlObject, type) {
 			@Override
 			public boolean isSupportedMember(XtendMember member) {
 				for (final Class<? extends XtendMember> supportedMemberType : supportedMemberTypes) {
@@ -1801,6 +1801,7 @@ public class SARLJvmModelInferrer extends XtendJvmModelInferrer {
 						operation2.setNative(false);
 						operation2.setStrictFloatingPoint(false);
 						operation2.setSynchronized(false);
+						this.associator.associate(source, operation2);
 
 						copyTypeParametersFromJvmOperation(operation, operation2);
 

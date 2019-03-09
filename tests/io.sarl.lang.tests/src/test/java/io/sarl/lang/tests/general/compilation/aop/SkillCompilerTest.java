@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +51,6 @@ import io.sarl.tests.api.AbstractSarlTest;
 public class SkillCompilerTest {
 
 	public static class FieldTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void fieldmodifier_none() throws Exception {
@@ -110,7 +112,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
+			getCompileHelper().compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
 		}
 
 		@Test
@@ -173,7 +175,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -241,7 +243,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -309,7 +311,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -377,7 +379,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -445,7 +447,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
+			getCompileHelper().compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
 		}
 
 		@Test
@@ -481,7 +483,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -549,7 +551,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -617,7 +619,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -714,7 +716,7 @@ public class SkillCompilerTest {
 					"  val field2 : String = \"\"",
 					"}"
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
 				});
@@ -723,9 +725,6 @@ public class SkillCompilerTest {
 	}
 
 	public static class ActionTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void actionmodifier_override() throws Exception {
@@ -790,7 +789,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedS1, r.getGeneratedCode("S1"));
 					assertEquals(expectedS2, r.getGeneratedCode("S2"));
 				});
@@ -832,7 +831,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
+			getCompileHelper().compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
 		}
 
 		@Test
@@ -871,7 +870,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -915,7 +914,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -959,7 +958,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1003,7 +1002,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1044,7 +1043,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
+			getCompileHelper().compile(source, (r) -> assertEquals(expectedS1,r.getGeneratedCode("S1")));
 		}
 
 		@Test
@@ -1080,7 +1079,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1127,7 +1126,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1174,7 +1173,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1218,7 +1217,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1262,7 +1261,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1306,7 +1305,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1423,7 +1422,7 @@ public class SkillCompilerTest {
 					"  def myaction2(y : float, z : boolean) { }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -1436,9 +1435,6 @@ public class SkillCompilerTest {
 	}
 
 	public static class ReturnTypeTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void compatibleReturnType_0() throws Exception {
@@ -1555,7 +1551,7 @@ public class SkillCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -1681,7 +1677,7 @@ public class SkillCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -1752,7 +1748,7 @@ public class SkillCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -1833,7 +1829,7 @@ public class SkillCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -1845,9 +1841,6 @@ public class SkillCompilerTest {
 	}
 
 	public static class TopElementTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void skillmodifier_none() throws Exception {
@@ -1878,7 +1871,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1915,7 +1908,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1952,7 +1945,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -1989,7 +1982,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -2030,7 +2023,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -2067,7 +2060,7 @@ public class SkillCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
@@ -2235,7 +2228,7 @@ public class SkillCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
@@ -2320,7 +2313,7 @@ public class SkillCompilerTest {
 					"  def func2(a : int)",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("CapTest1"));
@@ -2468,7 +2461,7 @@ public class SkillCompilerTest {
 					"  def func1(a : int) : int { 6 }",
 					"}"
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1,r.getGeneratedCode("CapTest1"));

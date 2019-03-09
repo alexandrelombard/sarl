@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +48,6 @@ import io.sarl.tests.api.AbstractSarlTest;
 public class PureFunctionTest {
 
 	public static class DefinitionTests extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void noPureParent_noPureLocal() throws Exception {
@@ -104,7 +106,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedC1, r.getGeneratedCode("C1"));
 					assertEquals(expectedC2, r.getGeneratedCode("C2"));
 				});
@@ -165,7 +167,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1, r.getGeneratedCode("C1"));
@@ -227,7 +229,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1, r.getGeneratedCode("C1"));
@@ -287,7 +289,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedC1, r.getGeneratedCode("C1"));
 					assertEquals(expectedC2, r.getGeneratedCode("C2"));
 				});
@@ -342,7 +344,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(source, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expectedC1, r.getGeneratedCode("C1"));
@@ -380,7 +382,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 		@Test
@@ -412,7 +414,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 		@Test
@@ -444,7 +446,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 		@Test
@@ -476,7 +478,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 		@Test
@@ -508,7 +510,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 		@Test
@@ -540,7 +542,7 @@ public class PureFunctionTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expectedC1);
+			getCompileHelper().assertCompilesTo(source, expectedC1);
 		}
 
 	}

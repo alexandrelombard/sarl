@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +37,6 @@ import io.sarl.tests.api.AbstractSarlTest;
 @SuppressWarnings("all")
 public class BehaviorCompilerTest extends AbstractSarlTest {
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void basicBehaviorCompile() throws Exception {
 		String source = "behavior B1 { }";
@@ -56,7 +58,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -127,7 +129,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expectedE1,r.getGeneratedCode("E1"));
 				assertEquals(expectedB1,r.getGeneratedCode("B1"));
 			});
@@ -187,7 +189,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expectedE1, r.getGeneratedCode("E1"));
 				assertEquals(expectedB1, r.getGeneratedCode("B1"));
 			});
@@ -310,7 +312,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expectedE1,r.getGeneratedCode("E1"));
 				assertEquals(expectedB1,r.getGeneratedCode("B1"));
 			});
@@ -318,7 +320,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void valueVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" val myval = 1",
@@ -375,7 +377,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void variableVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" var myval = 1",
@@ -432,7 +434,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" def myfct { }",
@@ -465,7 +467,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void valueVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" private val myval = 1",
@@ -522,7 +524,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void variableVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" private var myval = 1",
@@ -579,7 +581,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				" private def myfct { }",
@@ -612,7 +614,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 { }"
 			),
@@ -638,7 +640,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_public() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"public behavior B1 { }"
 			),
@@ -664,7 +666,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"package behavior B1 { }"
 			),
@@ -690,7 +692,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_abstract() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"abstract behavior B1 { }"
 			),
@@ -716,7 +718,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_abstract_member() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	def fct",
@@ -746,7 +748,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void behaviormodifier_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"final behavior B1 { }"
 			),
@@ -772,7 +774,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	var field : int",
@@ -829,7 +831,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	package var field : int",
@@ -886,7 +888,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_protected() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	protected var field : int",
@@ -943,7 +945,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_private() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	private var field : int",
@@ -1049,7 +1051,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 			);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expectedB1, r.getGeneratedCode("B1"));
 				assertEquals(expectedB2, r.getGeneratedCode("B2"));
 			});
@@ -1057,7 +1059,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	def name {}",
@@ -1090,7 +1092,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_private() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	private def name {}",
@@ -1123,7 +1125,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	package def name {}",
@@ -1156,7 +1158,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_protected() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	protected def name {}",
@@ -1189,7 +1191,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_abstract() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	def name",
@@ -1219,7 +1221,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_static() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	static def name {}",
@@ -1252,7 +1254,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_dispatch() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	dispatch def name(a : Integer) {}",
@@ -1288,7 +1290,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	final def name {}",
@@ -1321,7 +1323,7 @@ public class BehaviorCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_synchronized() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"behavior B1 {",
 				"	synchronized def name {}",

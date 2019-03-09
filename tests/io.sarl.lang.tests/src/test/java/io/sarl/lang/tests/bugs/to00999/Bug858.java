@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,9 +46,6 @@ import io.sarl.tests.api.AbstractSarlTest;
  */
 @SuppressWarnings("all")
 public class Bug858 extends AbstractSarlTest {
-
-	@Inject
-	private CompilationTestHelper compiler;
 
 	private static final String SNIPSET01 = multilineString(
 			"package io.sarl.lang.tests.bug858",
@@ -92,7 +94,7 @@ public class Bug858 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.compile(SNIPSET01, (it) -> {
+		getCompileHelper().compile(SNIPSET01, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug858.SomeType");
 			assertEquals(EXPECTED01, actual);
 		});
@@ -145,7 +147,7 @@ public class Bug858 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_02() throws Exception {
-		this.compiler.compile(SNIPSET02, (it) -> {
+		getCompileHelper().compile(SNIPSET02, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug858.SomeType");
 			assertEquals(EXPECTED02, actual);
 		});
@@ -198,7 +200,7 @@ public class Bug858 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_03() throws Exception {
-		this.compiler.compile(SNIPSET03, (it) -> {
+		getCompileHelper().compile(SNIPSET03, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug858.SomeType");
 			assertEquals(EXPECTED03, actual);
 		});

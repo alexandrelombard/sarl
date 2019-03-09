@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,9 +118,6 @@ public class Bug645 extends AbstractSarlTest {
 			"}",
 			"");
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void validating_01() throws Exception {
 		Validator validator = validate(file(SNIPSET1));
@@ -128,7 +130,7 @@ public class Bug645 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.compile(SNIPSET1, (it) -> {
+		getCompileHelper().compile(SNIPSET1, (it) -> {
 			assertEquals("Invalid YYY", EXPECTED_YYY1, it.getGeneratedCode("io.sarl.lang.tests.bug645.YYY"));
 			assertEquals("Invalid XXX", EXPECTED_XXX1, it.getGeneratedCode("io.sarl.lang.tests.bug645.XXX"));
 		});

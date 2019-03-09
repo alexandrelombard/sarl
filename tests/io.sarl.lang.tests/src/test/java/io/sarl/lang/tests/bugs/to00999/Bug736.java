@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -221,9 +226,6 @@ public class Bug736 extends AbstractSarlTest {
 			"  }",
 			"}", 
 			"");
-
-	@Inject
-	private CompilationTestHelper compiler;
 	
 	@Test
 	public void validating_01() throws Exception {
@@ -234,7 +236,7 @@ public class Bug736 extends AbstractSarlTest {
 	
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.compile(SNIPSET1, (it) -> {
+		getCompileHelper().compile(SNIPSET1, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug736.Test");
 			assertEquals(EXPECTED1, actual);
 		});
@@ -249,7 +251,7 @@ public class Bug736 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_02() throws Exception {
-		this.compiler.compile(SNIPSET2, (it) -> {
+		getCompileHelper().compile(SNIPSET2, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug736.Test");
 			assertEquals(EXPECTED2, actual);
 		});
@@ -334,7 +336,7 @@ public class Bug736 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_10() throws Exception {
-		this.compiler.compile(SNIPSET10, (it) -> {
+		getCompileHelper().compile(SNIPSET10, (it) -> {
 			final String actual = it.getGeneratedCode("io.sarl.lang.tests.bug736.Messages");
 			assertEquals(EXPECTED10, actual);
 		});

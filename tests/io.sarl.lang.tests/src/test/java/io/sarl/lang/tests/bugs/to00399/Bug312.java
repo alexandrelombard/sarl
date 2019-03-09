@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +55,6 @@ public class Bug312 {
 				"    def move(direction1 : Vector2f, changeHeading1 : boolean = false)",
 				"    def move(direction2 : Vector2i, changeHeading2 : boolean = false)",
 				"}");
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void bug312() throws Exception {
@@ -155,7 +157,7 @@ public class Bug312 {
 					"  }",
 					"}",
 					"");
-			this.compiler.compile(this.snippet, (r) -> assertEquals(expected, r.getGeneratedCode("C1")));
+			getCompileHelper().compile(this.snippet, (r) -> assertEquals(expected, r.getGeneratedCode("C1")));
 		}
 
 	}

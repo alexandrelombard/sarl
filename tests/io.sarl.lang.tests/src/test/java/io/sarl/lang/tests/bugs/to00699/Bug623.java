@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,9 +78,6 @@ public class Bug623 extends AbstractSarlTest {
 			"  }",
 			"}");
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void parsing_01() throws Exception {
 		SarlScript mas = file(SNIPSET1);
@@ -85,7 +87,7 @@ public class Bug623 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.assertCompilesTo(SNIPSET1, multilineString(
+		getCompileHelper().assertCompilesTo(SNIPSET1, multilineString(
 				"package io.sarl.lang.tests.bug623;",
 				"",
 				"import io.sarl.lang.annotation.SarlElementType;",
@@ -127,7 +129,7 @@ public class Bug623 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_02() throws Exception {
-		this.compiler.assertCompilesTo(SNIPSET2, multilineString(
+		getCompileHelper().assertCompilesTo(SNIPSET2, multilineString(
 				"package io.sarl.lang.tests.bug623;",
 				"",
 				"import io.sarl.lang.annotation.SarlElementType;",
@@ -170,7 +172,7 @@ public class Bug623 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_03() throws Exception {
-		this.compiler.assertCompilesTo(SNIPSET3, multilineString(
+		getCompileHelper().assertCompilesTo(SNIPSET3, multilineString(
 				"package io.sarl.lang.tests.bug623;",
 				"",
 				"import io.sarl.lang.annotation.SarlElementType;",
@@ -188,14 +190,12 @@ public class Bug623 extends AbstractSarlTest {
 				"    int _xblockexpression = (int) 0;",
 				"    {",
 				"      int vv = 4;",
-				"      int _vv = vv;",
-				"      vv = (_vv + 1);",
+				"      vv = (vv + 1);",
 				"      final Function1<Integer, Integer> _function = (Integer it) -> {",
 				"        return Integer.valueOf((it.intValue() + vv));",
 				"      };",
 				"      this.fct2(_function);",
-				"      int _vv_1 = vv;",
-				"      vv = (_vv_1 + 1);",
+				"      vv = (vv + 1);",
 				"      _xblockexpression = vv;",
 				"    }",
 				"    return _xblockexpression;",

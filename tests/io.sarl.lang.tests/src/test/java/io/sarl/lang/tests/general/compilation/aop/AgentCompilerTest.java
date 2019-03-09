@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +37,6 @@ import io.sarl.tests.api.AbstractSarlTest;
  */
 @SuppressWarnings("all")
 public class AgentCompilerTest extends AbstractSarlTest {
-
-	@Inject
-	private CompilationTestHelper compiler;
 
 	@Test
 	public void basicAgentCompile() throws Exception {
@@ -73,7 +75,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -160,7 +162,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedE1,r.getGeneratedCode("E1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -236,7 +238,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedE1, r.getGeneratedCode("E1"));
 			assertEquals(expectedA1, r.getGeneratedCode("A1"));
 		});
@@ -375,7 +377,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"  }",
 				"}"
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedE1,r.getGeneratedCode("E1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -383,7 +385,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void valueVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" val myval = 1",
@@ -456,7 +458,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void variableVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" var myval = 1",
@@ -529,7 +531,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionVisibility_0() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" def myfct { }",
@@ -578,7 +580,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void valueVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" private val myval = 1",
@@ -651,7 +653,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void variableVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" private var myval = 1",
@@ -724,7 +726,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionVisibility_1() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						" private def myfct { }",
@@ -773,7 +775,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 { }"
 						),
@@ -815,7 +817,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_public() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"public agent A1 { }"
 						),
@@ -857,7 +859,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"package agent A1 { }"
 						),
@@ -899,7 +901,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_abstract() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"abstract agent A1 { }"
 						),
@@ -941,7 +943,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_abstract_member() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	def fct",
@@ -987,7 +989,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void agentmodifier_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"final agent A1 { }"
 						),
@@ -1029,7 +1031,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	var field : int",
@@ -1102,7 +1104,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	package var field : int",
@@ -1175,7 +1177,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_protected() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	protected var field : int",
@@ -1248,7 +1250,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_private() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	private var field : int",
@@ -1402,7 +1404,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedA1, r.getGeneratedCode("A1"));
 			assertEquals(expectedA2, r.getGeneratedCode("A2"));
 		});
@@ -1410,7 +1412,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	def name {}",
@@ -1459,7 +1461,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_private() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	private def name {}",
@@ -1508,7 +1510,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	package def name {}",
@@ -1557,7 +1559,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_protected() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	protected def name {}",
@@ -1606,7 +1608,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_abstract() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	def name",
@@ -1652,7 +1654,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_static() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	static def name {}",
@@ -1701,7 +1703,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_dispatch() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	dispatch def name(a : Integer) {}",
@@ -1753,7 +1755,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_dispatch_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	dispatch final def name(a : Integer) {}",
@@ -1805,7 +1807,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	final def name {}",
@@ -1854,7 +1856,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void actionmodifier_synchronized() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"	synchronized def name {}",
@@ -1997,7 +1999,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedC1,r.getGeneratedCode("C1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -2099,7 +2101,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedC1,r.getGeneratedCode("C1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -2201,7 +2203,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedC1,r.getGeneratedCode("C1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -2314,7 +2316,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedC1,r.getGeneratedCode("C1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -2427,7 +2429,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 			assertEquals(expectedC1,r.getGeneratedCode("C1"));
 			assertEquals(expectedA1,r.getGeneratedCode("A1"));
 		});
@@ -2486,8 +2488,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"  @Pure",
 				"  private boolean $behaviorUnitGuard$Initialize$1(final Initialize it, final Initialize occurrence) {",
 				"    boolean _isEmpty = occurrence.parameters.isEmpty();",
-				"    boolean _not = (!_isEmpty);",
-				"    return _not;",
+				"    return (!_isEmpty);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -2523,7 +2524,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("MyAgent")));
 	}
 
 	@Test
@@ -2600,7 +2601,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 	@Test
@@ -2688,7 +2689,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 	@Test
@@ -2822,7 +2823,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 	@Test
@@ -2974,7 +2975,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 	@Test
@@ -3052,7 +3053,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 	@Test
@@ -3129,7 +3130,7 @@ public class AgentCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedMyAgent, r.getGeneratedCode("foo.test.MyAgent")));
 	}
 
 }

@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,9 +51,6 @@ import com.google.inject.Inject;
 @SuppressWarnings("all")
 public class EqualsFunctionTest extends AbstractSarlTest {
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void noField_noFinalEquals_noFinalHashCode_noEquals_noHashCode() throws Exception {
 		String source = multilineString(
@@ -70,7 +72,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -124,7 +126,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -151,7 +153,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -183,7 +185,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -212,7 +214,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -244,7 +246,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -274,7 +276,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -307,7 +309,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -342,7 +344,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -388,7 +390,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -424,7 +426,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -463,7 +465,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -498,7 +500,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -550,7 +552,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -586,7 +588,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}
@@ -625,7 +627,7 @@ public class EqualsFunctionTest extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			assertEquals(expected, it.getGeneratedCode("C1"));
 		});
 	}

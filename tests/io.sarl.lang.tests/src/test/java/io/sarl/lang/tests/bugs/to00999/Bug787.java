@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,9 +59,6 @@ import io.sarl.tests.api.AbstractSarlTest.Validator;
 @SuppressWarnings("all")
 public class Bug787 extends AbstractSarlTest {
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 
 	private static final String SNIPSET01 = multilineString(
 			"package foo.bug787",
@@ -98,7 +100,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_01() throws Exception {
-		this.compiler.compile(SNIPSET01, (it) -> {
+		getCompileHelper().compile(SNIPSET01, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.C1");
 			assertEquals(EXPECTED01, actual);
 		});
@@ -142,7 +144,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_02() throws Exception {
-		this.compiler.compile(SNIPSET02, (it) -> {
+		getCompileHelper().compile(SNIPSET02, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.C2");
 			assertEquals(EXPECTED02, actual);
 		});
@@ -188,7 +190,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_03() throws Exception {
-		this.compiler.compile(SNIPSET03, (it) -> {
+		getCompileHelper().compile(SNIPSET03, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.C3");
 			assertEquals(EXPECTED03, actual);
 		});
@@ -227,7 +229,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_04() throws Exception {
-		this.compiler.compile(SNIPSET04, (it) -> {
+		getCompileHelper().compile(SNIPSET04, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.C4");
 			assertEquals(EXPECTED04, actual);
 		});
@@ -268,7 +270,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_05() throws Exception {
-		this.compiler.compile(SNIPSET05, (it) -> {
+		getCompileHelper().compile(SNIPSET05, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.C5");
 			assertEquals(EXPECTED05, actual);
 		});
@@ -319,7 +321,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_06() throws Exception {
-		this.compiler.compile(SNIPSET06, (it) -> {
+		getCompileHelper().compile(SNIPSET06, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.Z");
 			assertEquals(EXPECTED06, actual);
 		});
@@ -361,7 +363,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_07() throws Exception {
-		this.compiler.compile(SNIPSET07, (it) -> {
+		getCompileHelper().compile(SNIPSET07, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.Y");
 			assertEquals(EXPECTED07, actual);
 		});
@@ -401,7 +403,7 @@ public class Bug787 extends AbstractSarlTest {
 
 	@Test
 	public void compiling_08() throws Exception {
-		this.compiler.compile(SNIPSET08, (it) -> {
+		getCompileHelper().compile(SNIPSET08, (it) -> {
 			final String actual = it.getGeneratedCode("foo.bug787.Type2");
 			assertEquals(EXPECTED08, actual);
 		});

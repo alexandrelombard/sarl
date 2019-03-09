@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +49,6 @@ import io.sarl.tests.api.AbstractSarlTest;
  */
 @SuppressWarnings("all")
 public class Bug92 extends AbstractSarlTest {
-
-	@Inject
-	private CompilationTestHelper compiler;
 
 	protected static void assertInstance(Class<?> expected, Object actual) {
 		if (actual != null && !expected.isInstance(actual)) {
@@ -140,7 +142,7 @@ public class Bug92 extends AbstractSarlTest {
 
 	@Test
 	public void attributeDeclarationCompiler_inferredDouble() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"  var myDouble = 0d",
@@ -212,7 +214,7 @@ public class Bug92 extends AbstractSarlTest {
 
 	@Test
 	public void attributeDeclarationCompiler_Double() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"  var myDouble : Double = 0d",
@@ -284,7 +286,7 @@ public class Bug92 extends AbstractSarlTest {
 
 	@Test
 	public void attributeDeclarationCompiler_double() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 				multilineString(
 						"agent A1 {",
 						"  var myDouble : double = 0d",
@@ -532,7 +534,7 @@ public class Bug92 extends AbstractSarlTest {
 				"}",
 				"");
 
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expected1,r.getGeneratedCode("ComputeEnergyCapacity"));
 				assertEquals(expected2,r.getGeneratedCode("DeviceAgent"));
 				assertEquals(expected3,r.getGeneratedCode("EntityAgent"));
@@ -717,7 +719,7 @@ public class Bug92 extends AbstractSarlTest {
 				"}",
 				"");
 
-		this.compiler.compile(source, (r) -> {
+		getCompileHelper().compile(source, (r) -> {
 				assertEquals(expected1,r.getGeneratedCode("ComputeEnergyCapacity"));
 				assertEquals(expected2,r.getGeneratedCode("DeviceAgent"));
 				assertEquals(expected3,r.getGeneratedCode("EntityAgent"));

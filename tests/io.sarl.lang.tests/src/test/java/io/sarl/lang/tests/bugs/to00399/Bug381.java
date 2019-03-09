@@ -1,7 +1,12 @@
 /*
  * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * $Id$
  * 
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -140,9 +145,6 @@ public class Bug381 {
 	}
 
 	public static class CompilerTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 		
 		@Test
 		public void withSarlSyntaxWithLocalType() throws Exception {
@@ -201,7 +203,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithSarlSyntaxWithLocalType,
+			getCompileHelper().compile(snippetWithSarlSyntaxWithLocalType,
 					(r) -> assertEquals(expected, r.getGeneratedCode("A1")));
 		}
 
@@ -262,7 +264,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithJavaSyntaxWithLocalType,
+			getCompileHelper().compile(snippetWithJavaSyntaxWithLocalType,
 					(r) -> assertEquals(expected, r.getGeneratedCode("A1")));
 		}
 
@@ -323,7 +325,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithSarlSyntaxWithJREType, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(snippetWithSarlSyntaxWithJREType, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expected, r.getGeneratedCode("A1"));
@@ -388,7 +390,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithJavaSyntaxWithJREType,
+			getCompileHelper().compile(snippetWithJavaSyntaxWithJREType,
 					(r) -> assertEquals(expected, r.getGeneratedCode("A1")));
 		}
 
@@ -449,7 +451,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithSarlSyntaxWithoutType, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(snippetWithSarlSyntaxWithoutType, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expected, r.getGeneratedCode("A1"));
@@ -514,7 +516,7 @@ public class Bug381 {
 					"}",
 					"");
 
-			this.compiler.compile(snippetWithJavaSyntaxWithoutType, new IAcceptor<CompilationTestHelper.Result>() {
+			getCompileHelper().compile(snippetWithJavaSyntaxWithoutType, new IAcceptor<CompilationTestHelper.Result>() {
 				@Override
 				public void accept(Result r) {
 					assertEquals(expected, r.getGeneratedCode("A1"));

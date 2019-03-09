@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,9 +97,6 @@ public class Bug505 extends AbstractSarlTest {
 			"\t}",
 			"}");
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void snipset1() throws Exception {
 		SarlScript mas = file(snippet1);
@@ -153,7 +155,7 @@ public class Bug505 extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(snippet1, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
+		getCompileHelper().compile(snippet1, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
 	}
 
 	@Test
@@ -189,7 +191,7 @@ public class Bug505 extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(snippet2, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
+		getCompileHelper().compile(snippet2, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
 	}
 
 	@Test
@@ -225,7 +227,7 @@ public class Bug505 extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(snippet3, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
+		getCompileHelper().compile(snippet3, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
 	}
 
 	@Test
@@ -286,7 +288,7 @@ public class Bug505 extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(snippet4, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
+		getCompileHelper().compile(snippet4, (r) -> assertEquals(expected, r.getGeneratedCode("TestClass")));
 	}
 
 	@Test
@@ -372,7 +374,7 @@ public class Bug505 extends AbstractSarlTest {
 				"  }",
 				"}",
 				"");
-		this.compiler.compile(snippet5, (r) -> assertEquals(expected, r.getGeneratedCode("TestAgent")));
+		getCompileHelper().compile(snippet5, (r) -> assertEquals(expected, r.getGeneratedCode("TestAgent")));
 	}
 
 }

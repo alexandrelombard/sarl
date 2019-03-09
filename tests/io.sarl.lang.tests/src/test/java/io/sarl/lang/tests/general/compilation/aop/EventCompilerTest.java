@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +38,6 @@ import io.sarl.tests.api.AbstractSarlTest;
  */
 @SuppressWarnings("all")
 public class EventCompilerTest extends AbstractSarlTest {
-	@Inject
-	private CompilationTestHelper compiler;
 
 	@Test
 	public void basicCompile_withBlock() throws Exception {
@@ -65,7 +68,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -97,7 +100,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -175,7 +178,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
@@ -213,7 +216,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.compile(source, (r) -> assertEquals(expectedE2,r.getGeneratedCode("E2")));
+		getCompileHelper().compile(source, (r) -> assertEquals(expectedE2,r.getGeneratedCode("E2")));
 	}
 
 	@Test
@@ -292,12 +295,12 @@ public class EventCompilerTest extends AbstractSarlTest {
 				"}",
 				""
 				);
-		this.compiler.assertCompilesTo(source, expected);
+		getCompileHelper().assertCompilesTo(source, expected);
 	}
 
 	@Test
 	public void eventmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1"
 			),
@@ -330,7 +333,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void eventmodifier_public() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"public event E1"
 			),
@@ -363,7 +366,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void eventmodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"package event E1"
 			),
@@ -396,7 +399,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void eventmodifier_final() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"final event E1"
 			),
@@ -429,7 +432,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	var field : int",
@@ -504,7 +507,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void fieldmodifier_public() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	public var field : int",
@@ -579,7 +582,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void constructormodifier_none() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	new { super(null) }",
@@ -607,7 +610,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void constructormodifier_public() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	public new { super(null) }",
@@ -635,7 +638,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void constructormodifier_private() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	private new { super(null) }",
@@ -663,7 +666,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void constructormodifier_package() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	package new { super(null) }",
@@ -691,7 +694,7 @@ public class EventCompilerTest extends AbstractSarlTest {
 
 	@Test
 	public void constructormodifier_protected() throws Exception {
-		this.compiler.assertCompilesTo(
+		getCompileHelper().assertCompilesTo(
 			multilineString(
 				"event E1 {",
 				"	protected new { super(null) }",

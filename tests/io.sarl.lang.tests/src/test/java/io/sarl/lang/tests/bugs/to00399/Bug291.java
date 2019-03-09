@@ -77,8 +77,7 @@ public class Bug291 extends AbstractSarlTest {
 			"public class S1 extends Skill implements C1 {",
 			"  public int myfct() {",
 			"    AgentTrait _caller = Capacities.getCaller();",
-			"    boolean _tripleEquals = (_caller == null);",
-			"    if (_tripleEquals) {",
+			"    if ((_caller == null)) {",
 			"    }",
 			"    return 0;",
 			"  }",
@@ -95,9 +94,6 @@ public class Bug291 extends AbstractSarlTest {
 			"}",
 			"");
 
-	@Inject
-	private CompilationTestHelper compiler;
-
 	@Test
 	public void testParser() throws Exception {
 		SarlScript script = file(SOURCE_01);
@@ -106,7 +102,7 @@ public class Bug291 extends AbstractSarlTest {
 
 	@Test
 	public void testCompiler() throws Exception {
-		this.compiler.compile(SOURCE_01, (r) -> {
+		getCompileHelper().compile(SOURCE_01, (r) -> {
 			assertEquals(EXPECTED_01, r.getGeneratedCode("io.sarl.lang.tests.bug291.S1"));
 		});
 	}

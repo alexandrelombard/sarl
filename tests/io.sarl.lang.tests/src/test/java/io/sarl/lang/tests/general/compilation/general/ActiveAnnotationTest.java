@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +49,6 @@ import io.sarl.tests.api.AbstractSarlTest;
 public class ActiveAnnotationTest {
 	
 	public static class AccessorsTest extends AbstractSarlTest {
-		
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void inClassField_01() throws Exception {
@@ -112,7 +114,7 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -176,7 +178,7 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -243,7 +245,7 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -307,15 +309,12 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class DataTest extends AbstractSarlTest {
-		
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void inClass_01() throws Exception {
@@ -386,15 +385,12 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class DelegateTest extends AbstractSarlTest {
-		
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void inClass_01() throws Exception {
@@ -447,7 +443,7 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.compile(source, (it) -> {
+			getCompileHelper().compile(source, (it) -> {
 				assertEquals(expected, it.getGeneratedCode("C1"));
 			});
 		}
@@ -497,7 +493,7 @@ public class ActiveAnnotationTest {
 						"}",
 						""
 						);
-				this.compiler.compile(source, (it) -> {
+				getCompileHelper().compile(source, (it) -> {
 					assertEquals(expected, it.getGeneratedCode("C1"));
 				});
 		}
@@ -505,9 +501,6 @@ public class ActiveAnnotationTest {
 	}
 
 	public static class ToStringTest extends AbstractSarlTest {
-		
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void inClass_01() throws Exception {
@@ -573,7 +566,7 @@ public class ActiveAnnotationTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}

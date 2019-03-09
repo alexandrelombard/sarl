@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +48,6 @@ public class AnnotationTypeCompilerTest {
 
 	public static class TopLevelTest extends AbstractSarlTest {
 
-		@Inject
-		private CompilationTestHelper compiler;
-
 		@Test
 		public void basic() throws Exception {
 			String source = "annotation A1 { }";
@@ -59,7 +61,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -76,7 +78,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -93,7 +95,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -110,7 +112,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -127,15 +129,12 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class InClassTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void basic() throws Exception {
@@ -161,7 +160,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -189,7 +188,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -217,15 +216,12 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class InAgentTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void basic() throws Exception {
@@ -269,7 +265,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -315,7 +311,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -361,7 +357,7 @@ public class AnnotationTypeCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,9 +48,6 @@ import org.junit.ComparisonFailure;
 public abstract class AbstractExtraLanguageGeneratorTest extends AbstractSarlTest {
 
 	@Inject
-	private CompilationTestHelper compiler;
-	
-	@Inject
 	private IOutputConfigurationProvider outputConfigurationProvider;
 
 	protected abstract String getOutputConfigurationName();
@@ -70,7 +67,7 @@ public abstract class AbstractExtraLanguageGeneratorTest extends AbstractSarlTes
 	
 	protected GeneratorTest compile(String source) throws IOException {
 		final Result[] result = new Result[1];
-		this.compiler.compile(source, (it) -> {
+		getCompileHelper().compile(source, (it) -> {
 			result[0] = it;
 		});
 		return new GeneratorTest(result[0]);

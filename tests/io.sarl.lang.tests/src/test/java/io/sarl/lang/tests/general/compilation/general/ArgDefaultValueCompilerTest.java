@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +48,6 @@ import io.sarl.tests.api.AbstractSarlTest;
 public class ArgDefaultValueCompilerTest {
 
 	public static class AgentTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void action_1p_int() throws Exception {
@@ -112,7 +114,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -180,7 +182,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -248,7 +250,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -316,7 +318,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -384,7 +386,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -452,7 +454,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -520,7 +522,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -590,7 +592,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -658,7 +660,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -726,7 +728,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -794,7 +796,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -862,7 +864,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -930,7 +932,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1017,7 +1019,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1087,7 +1089,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1155,7 +1157,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1223,7 +1225,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1304,7 +1306,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1374,7 +1376,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1481,15 +1483,12 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class BehaviorTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void constructor_1p_int() throws Exception {
@@ -1536,7 +1535,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1584,7 +1583,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1632,7 +1631,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1680,7 +1679,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1728,7 +1727,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1776,7 +1775,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1824,7 +1823,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1872,7 +1871,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1920,7 +1919,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -1968,7 +1967,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2016,7 +2015,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2064,7 +2063,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2131,7 +2130,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2179,7 +2178,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2227,7 +2226,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2288,7 +2287,7 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 		@Test
@@ -2375,15 +2374,12 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class CapacityTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void capacity() throws Exception {
@@ -2496,15 +2492,12 @@ public class ArgDefaultValueCompilerTest {
 					"}",
 					""
 					);
-			this.compiler.assertCompilesTo(source, expected);
+			getCompileHelper().assertCompilesTo(source, expected);
 		}
 
 	}
 
 	public static class SkillTest extends AbstractSarlTest {
-
-		@Inject
-		private CompilationTestHelper compiler;
 
 		@Test
 		public void overridingCapacitySkill() throws Exception {
@@ -2633,7 +2626,7 @@ public class ArgDefaultValueCompilerTest {
 					"  def myaction(arg0 : int, arg1 : int, arg2 : int*) {}",
 					"}"
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
 				});
@@ -2814,7 +2807,7 @@ public class ArgDefaultValueCompilerTest {
 					"  }",
 					"}"
 					);
-			this.compiler.compile(source, (r) -> {
+			getCompileHelper().compile(source, (r) -> {
 					assertEquals(expectedC1,r.getGeneratedCode("C1"));
 					assertEquals(expectedC2,r.getGeneratedCode("C2"));
 					assertEquals(expectedS1,r.getGeneratedCode("S1"));
