@@ -11,6 +11,14 @@
 	<artifactId>io.sarl.lang.ui</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	<name>General UI Contributions</name>
+	
+	<dependencies>
+		<dependency>
+		    <groupId>org.eclipse.lsp4j</groupId>
+		    <artifactId>org.eclipse.lsp4j</artifactId>
+		    <version>0.5.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

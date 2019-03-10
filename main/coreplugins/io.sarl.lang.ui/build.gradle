@@ -1,20 +1,23 @@
 plugins {
-	id 'com.github.johnrengelman.shadow' version '2.0.0'
+	id 'com.github.johnrengelman.shadow' version '4.0.1'
 }
 
 dependencies {
 	compile project(':io.sarl.lang')
 	compile "org.eclipse.xtext:org.eclipse.xtext.ide:${xtextVersion}"
 	compile "org.eclipse.xtext:org.eclipse.xtext.xbase.ide:${xtextVersion}"
+	compile "org.eclipse.lsp4j:org.eclipse.lsp4j:0.5.0"
 	
 	testCompile "junit:junit:4.12"
 	testCompile "org.eclipse.xtext:org.eclipse.xtext.testing:${xtextVersion}"
 }
 
 apply plugin: 'application'
-apply plugin: 'com.github.johnrengelman.shadow'
-mainClassName = "org.eclipse.xtext.ide.server.ServerLauncher"
 
+mainClassName = 'org.eclipse.xtext.ide.server.ServerLauncher'
+
+apply plugin: 'com.github.johnrengelman.shadow'
+/*
 shadowJar {
 	from(project.convention.getPlugin(JavaPluginConvention).sourceSets.main.output)
 	configurations = [project.configurations.runtime]
@@ -24,7 +27,7 @@ shadowJar {
 	classifier = 'ls'
 	append('plugin.properties')
 }
-
+*/
 shadowJar {
     baseName = 'sarl-language-server'
     classifier = null
