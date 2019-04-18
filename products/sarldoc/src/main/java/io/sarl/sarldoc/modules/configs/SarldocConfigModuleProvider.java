@@ -19,18 +19,13 @@
  * limitations under the License.
  */
 
-package io.sarl.sarldoc.utils;
+package io.sarl.sarldoc.modules.configs;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Iterator;
+import com.google.inject.Module;
+import io.bootique.BQModule;
+import io.bootique.BQModuleProvider;
 
-import org.arakhne.afc.vmutil.ClasspathUtil;
-import org.arakhne.afc.vmutil.FileSystem;
-
-import io.sarl.lang.sarlc.tools.SARLBootClasspathProvider;
-
-/** A provider of the boot classpath for the sarldoc tool.
+/** Provider of the module for the general sarldoc specific configuration.
  *
  * @author $Author: sgalland$
  * @version $FullVersion$
@@ -38,18 +33,21 @@ import io.sarl.lang.sarlc.tools.SARLBootClasspathProvider;
  * @mavenartifactid $ArtifactId$
  * @since 0.10
  */
-public class DefaultSarldocBootClasspath implements SARLBootClasspathProvider {
+public class SarldocConfigModuleProvider implements BQModuleProvider {
 
 	@Override
-	public String getClasspath() {
-		final SystemPath path = new SystemPath();
-		final Iterator<URL> iterator = ClasspathUtil.getClasspath();
-		while (iterator.hasNext()) {
-			final URL classpathEntry = iterator.next();
-			final File entry = FileSystem.convertURLToFile(classpathEntry);
-			path.add(entry);
-		}
-		return path.toString();
+	public Module module() {
+		return new SarldocConfigModule();
 	}
+
+	@Override
+    public BQModule.Builder moduleBuilder() {
+        return BQModule
+                .builder(module())
+                .overrides(overrides())
+                .providerName(name())
+                .configs(configs())
+                .description(Messages.SarldocConfigModuleProvider_0);
+    }
 
 }

@@ -30,7 +30,7 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 /** Represents a collection of path with the OS syntax.
- * 
+ *
  * @author $Author: sgalland$
  * @version $FullVersion$
  * @mavengroupid $GroupId$

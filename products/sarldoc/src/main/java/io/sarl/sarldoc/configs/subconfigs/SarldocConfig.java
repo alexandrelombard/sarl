@@ -554,7 +554,7 @@ public class SarldocConfig {
 		return this.visibility;
 	}
 
-	/** Change the visibility of the elements to appear into the documentation. 
+	/** Change the visibility of the elements to appear into the documentation.
 	 *
 	 * @param visibility the visibility.
 	 */
@@ -581,7 +581,7 @@ public class SarldocConfig {
 	 */
 	@BQConfigProperty("Specify the list of the excluded packages.")
 	public void setExcludedPackages(Set<String> excludedPackages) {
-		this.excludedPackages= excludedPackages;
+		this.excludedPackages = excludedPackages;
 	}
 
 }

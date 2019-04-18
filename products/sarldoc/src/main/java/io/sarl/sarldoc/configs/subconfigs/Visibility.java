@@ -58,7 +58,7 @@ public enum Visibility {
 	public static Visibility getDefault() {
 		return PROTECTED;
 	}
-	
+
 	/** Parse the given case insensitive string for obtaining the progress bar style.
 	 *
 	 * @param name the string to parse.

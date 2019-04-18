@@ -103,7 +103,7 @@ public class SarldocCommand extends CommandWithMetadata {
 	@Override
 	public CommandOutcome run(Cli cli) {
 		final SarlConfig genconfig = this.config.get();
-		CommandOutcome outcome = runSarlc(cli);
+		final CommandOutcome outcome = runSarlc(cli);
 		if (outcome.isSuccess()) {
 			runJavadoc(cli, genconfig);
 		}
@@ -151,39 +151,40 @@ public class SarldocCommand extends CommandWithMetadata {
 	 *         <code>m</code>.
 	 * @throws IllegalArgumentException if the <code>memory</code> parameter is null or doesn't match any pattern.
 	 */
+	@SuppressWarnings("checkstyle:magicnumber")
 	private static String parseJavadocMemory(String memory) throws IllegalArgumentException {
 		if (Strings.isNullOrEmpty(memory)) {
 			return null;
 		}
 
-		Pattern p = Pattern.compile("^\\s*(\\d+)\\s*?\\s*$"); //$NON-NLS-1$
-		Matcher m = p.matcher(memory);
-		if (m.matches()) {
-			return m.group(1) + "m"; //$NON-NLS-1$
+		Pattern pattern = Pattern.compile("^\\s*(\\d+)\\s*?\\s*$"); //$NON-NLS-1$
+		Matcher matcher = pattern.matcher(memory);
+		if (matcher.matches()) {
+			return matcher.group(1) + "m"; //$NON-NLS-1$
 		}
 
-		p = Pattern.compile("^\\s*(\\d+)\\s*k(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
-		m = p.matcher(memory);
-		if (m.matches()) {
-			return m.group(1) + "k"; //$NON-NLS-1$
+		pattern = Pattern.compile("^\\s*(\\d+)\\s*k(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+		matcher = pattern.matcher(memory);
+		if (matcher.matches()) {
+			return matcher.group(1) + "k"; //$NON-NLS-1$
 		}
 
-		p = Pattern.compile("^\\s*(\\d+)\\s*m(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
-		m = p.matcher(memory);
-		if (m.matches()) {
-			return m.group(1) + "m"; //$NON-NLS-1$
+		pattern = Pattern.compile("^\\s*(\\d+)\\s*m(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+		matcher = pattern.matcher(memory);
+		if (matcher.matches()) {
+			return matcher.group(1) + "m"; //$NON-NLS-1$
 		}
 
-		p = Pattern.compile("^\\s*(\\d+)\\s*g(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
-		m = p.matcher(memory);
-		if (m.matches()) {
-			return (Integer.parseInt(m.group(1)) * 1024) + "m"; //$NON-NLS-1$
+		pattern = Pattern.compile("^\\s*(\\d+)\\s*g(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+		matcher = pattern.matcher(memory);
+		if (matcher.matches()) {
+			return (Integer.parseInt(matcher.group(1)) * 1024) + "m"; //$NON-NLS-1$
 		}
 
-		p = Pattern.compile("^\\s*(\\d+)\\s*t(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
-		m = p.matcher(memory);
-		if (m.matches()) {
-			return ( Integer.parseInt(m.group(1)) * 1024 * 1024) + "m"; //$NON-NLS-1$
+		pattern = Pattern.compile("^\\s*(\\d+)\\s*t(b)?\\s*$", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
+		matcher = pattern.matcher(memory);
+		if (matcher.matches()) {
+			return (Integer.parseInt(matcher.group(1)) * 1024 * 1024) + "m"; //$NON-NLS-1$
 		}
 
 		throw new IllegalArgumentException(MessageFormat.format(Messages.SarldocCommand_3, memory));
@@ -206,9 +207,9 @@ public class SarldocCommand extends CommandWithMetadata {
 	}
 
 	private static void addProxyFromProperty(Map<String, URI> activeProxies, String protocol, String hostVar, String portVar) {
-		String host = System.getProperty(hostVar, null);
+		final String host = System.getProperty(hostVar, null);
 		if (!Strings.isNullOrEmpty(host)) {
-			String port = System.getProperty(portVar, null);
+			final String port = System.getProperty(portVar, null);
 			final URI uri;
 			try {
 				if (Strings.isNullOrEmpty(port)) {
@@ -224,7 +225,7 @@ public class SarldocCommand extends CommandWithMetadata {
 	}
 
 	private static void addProxyFromEnvironment(Map<String, URI> activeProxies, String protocol, String var) {
-		String host = SystemUtils.getEnvironmentVariable(var, null);
+		final String host = SystemUtils.getEnvironmentVariable(var, null);
 		if (!Strings.isNullOrEmpty(host)) {
 			try {
 				final URI uri = new URI(host);
@@ -235,6 +236,7 @@ public class SarldocCommand extends CommandWithMetadata {
 		}
 	}
 
+	@SuppressWarnings("checkstyle:npathcomplexity")
 	private static void addProxyArg(CommandLine cmd, SarldocConfig config) {
 		final Map<String, URI> activeProxies = new HashMap<>();
 
@@ -279,22 +281,23 @@ public class SarldocCommand extends CommandWithMetadata {
 		}
 	}
 
-	private static String or(String a, String b) {
-		if (Strings.isNullOrEmpty(a)) {
-			return b;
+	private static String or(String param1, String param2) {
+		if (Strings.isNullOrEmpty(param1)) {
+			return param2;
 		}
-		return a;
+		return param1;
 	}
 
+	@SuppressWarnings("checkstyle:npathcomplexity")
 	private CommandOutcome runJavadoc(Cli cli, SarlConfig genconfig) throws IllegalArgumentException {
 		this.logger.info(Messages.SarldocCommand_2);
 		final SarldocConfig docconfig = genconfig.getSarldoc();
-		String javadocExecutable = docconfig.getJavadocExecutable();
-		CommandLine cmd = new CommandLine(javadocExecutable);
+		final String javadocExecutable = docconfig.getJavadocExecutable();
+		final CommandLine cmd = new CommandLine(javadocExecutable);
 
 		// Memory Options
-		addJOption( cmd, mergeIfNotNull("-Xmx", parseJavadocMemory(docconfig.getMaxMemory()))); //$NON-NLS-1$
-		addJOption( cmd, mergeIfNotNull("-Xms", parseJavadocMemory(docconfig.getMinMemory()))); //$NON-NLS-1$
+		addJOption(cmd, mergeIfNotNull("-Xmx", parseJavadocMemory(docconfig.getMaxMemory()))); //$NON-NLS-1$
+		addJOption(cmd, mergeIfNotNull("-Xms", parseJavadocMemory(docconfig.getMinMemory()))); //$NON-NLS-1$
 
 		// Proxy Options
 		addProxyArg(cmd, docconfig);
@@ -308,7 +311,7 @@ public class SarldocCommand extends CommandWithMetadata {
 		for (final String option : docconfig.getJavadocOption()) {
 			cmd.addArgument(option);
 		}
-		
+
 		// Java version
 		final String javaVersion = genconfig.getCompiler().getJavaVersion();
 		if (!Strings.isNullOrEmpty(javaVersion)) {
@@ -382,7 +385,6 @@ public class SarldocCommand extends CommandWithMetadata {
 		cmd.addArgument("-classpath").addArgument(fullClassPath.toString()); //$NON-NLS-1$
 
 		// Output folder
-		
 		cmd.addArgument("-d").addArgument(docconfig.getOutputDirectory().getAbsolutePath()); //$NON-NLS-1$
 
 		// Doclet
@@ -394,7 +396,7 @@ public class SarldocCommand extends CommandWithMetadata {
 		for (final String sourceFile : files) {
 			cmd.addArgument(sourceFile);
 		}
-		
+
 		// Execute the Javadoc
 		final DefaultExecutor executor = new DefaultExecutor();
 		try {
@@ -418,16 +420,17 @@ public class SarldocCommand extends CommandWithMetadata {
 			return false;
 		}
 		final StringBuilder name = new StringBuilder();
-		File f = file.getParentFile();
+		File cfile = file.getParentFile();
 		boolean first = true;
-		while (f != null && !Objects.equals(f.getName(), FileSystem.CURRENT_DIRECTORY) && !Objects.equals(f.getName(), FileSystem.PARENT_DIRECTORY)) {
+		while (cfile != null && !Objects.equals(cfile.getName(), FileSystem.CURRENT_DIRECTORY)
+				&& !Objects.equals(cfile.getName(), FileSystem.PARENT_DIRECTORY)) {
 			if (first) {
 				first = false;
 			} else {
 				name.insert(0, "."); //$NON-NLS-1$
 			}
-			name.insert(0, f.getName());
-			f = f.getParentFile();
+			name.insert(0, cfile.getName());
+			cfile = cfile.getParentFile();
 		}
 		return !excl.contains(name.toString());
 	}

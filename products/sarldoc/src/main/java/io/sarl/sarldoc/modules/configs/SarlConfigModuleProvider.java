@@ -52,7 +52,7 @@ public class SarlConfigModuleProvider implements BQModuleProvider {
 	public Map<String, Type> configs() {
 		return Collections.singletonMap(io.sarl.lang.sarlc.configs.SarlConfig.PREFIX, SarlConfig.class);
 	}
-	
+
 	@Override
 	public Collection<Class<? extends Module>> overrides() {
 		return Collections.singletonList(SarlcConfigModule.class);
