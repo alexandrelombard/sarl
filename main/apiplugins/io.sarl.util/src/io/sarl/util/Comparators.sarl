@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ final class Comparators {
 
 	/** Comparator of classes.
 	 */
+	@SuppressWarnings("org.eclipse.xtext.xbase.validation.IssueCodes.raw_type")
 	public static val classComparator : Comparator<Class> = [o1, o2 |
 		if (o1 === o2) {
 			return 0
@@ -65,6 +66,7 @@ final class Comparators {
 
 	/** Comparator of objects.
 	 */
+	@SuppressWarnings("org.eclipse.xtext.xbase.validation.IssueCodes.raw_type")
 	public static val objectComparator : Comparator = [o1 : Object, o2 : Object |
 		if (o1 === o2) {
 			return 0

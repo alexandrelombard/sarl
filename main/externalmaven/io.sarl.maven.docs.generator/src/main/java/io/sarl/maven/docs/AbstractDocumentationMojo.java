@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -397,7 +397,7 @@ public abstract class AbstractDocumentationMojo extends AbstractMojo {
 		final StringBuilder cp = new StringBuilder();
 		for (final File cpElement : getClassPath()) {
 			if (cp.length() > 0) {
-				cp.append(":"); //$NON-NLS-1$
+				cp.append(File.pathSeparator);
 			}
 			cp.append(cpElement.getAbsolutePath());
 		}
@@ -468,7 +468,7 @@ public abstract class AbstractDocumentationMojo extends AbstractMojo {
 				root = FileSystem.makeAbsolute(root, this.baseDirectory);
 			}
 			getLog().debug(MessageFormat.format(Messages.AbstractDocumentationMojo_4, root.getName()));
-			for (final File file : Files.fileTreeTraverser().breadthFirstTraversal(root)) {
+			for (final File file : Files.fileTraverser().breadthFirst(root)) {
 				if (file.exists() && file.isFile() && !file.isHidden() && file.canRead() && hasExtension(file)) {
 					files.put(file, root);
 				}

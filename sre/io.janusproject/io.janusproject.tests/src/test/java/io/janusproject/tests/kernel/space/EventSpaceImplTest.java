@@ -19,46 +19,48 @@
  */
 package io.janusproject.tests.kernel.space;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import io.janusproject.kernel.services.jdk.distributeddata.DMapView;
 import io.janusproject.kernel.space.EventSpaceImpl;
+import io.janusproject.services.contextspace.ContextSpaceService;
 import io.janusproject.services.distributeddata.DMap;
 import io.janusproject.services.distributeddata.DistributedDataStructureService;
 import io.janusproject.services.executor.ExecutorService;
 import io.janusproject.services.network.NetworkService;
 import io.janusproject.tests.testutils.AbstractJanusTest;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.internal.verification.Times;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.lang.core.Address;
+import io.sarl.lang.core.AgentContext;
 import io.sarl.lang.core.Event;
 import io.sarl.lang.core.EventListener;
+import io.sarl.lang.core.EventSpace;
 import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.tests.api.ManualMocking;
 import io.sarl.tests.api.Nullable;
-import io.sarl.util.OpenEventSpaceSpecification;
 import io.sarl.util.Scopes;
+import io.sarl.util.concurrent.NoReadWriteLock;
 
 /**
  * @author $Author: sgalland$
@@ -74,7 +76,16 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 	private UUID agentId;
 
 	@Nullable
-	private DistributedDataStructureService service;
+	private DistributedDataStructureService dataStructureService;
+
+	@Nullable
+	private ContextSpaceService contextSpaceService;
+
+	@Nullable
+	private AgentContext context;
+
+	@Nullable
+	private EventSpace defaultEventSpace;
 
 	@Nullable
 	private SpaceID spaceId;
@@ -98,23 +109,33 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 	public void setUp() {
 		this.agentId = UUID.randomUUID();
 
-		this.service = Mockito.mock(DistributedDataStructureService.class);
-		DMap<Object, Object> mapMock = new DMapView<>(UUID.randomUUID().toString(), new HashMap<>());
-		Mockito.when(this.service.getMap(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(mapMock);
-		Mockito.when(this.service.getMap(ArgumentMatchers.any())).thenReturn(mapMock);
-
 		this.spaceId = new SpaceID(UUID.randomUUID(), UUID.randomUUID(), OpenEventSpaceSpecification.class);
 
 		this.address = new Address(this.spaceId, this.agentId);
 
-		this.space = new EventSpaceImpl(this.spaceId, this.service);
+		this.dataStructureService = mock(DistributedDataStructureService.class);
+		DMap<Object, Object> mapMock = new DMapView<>(UUID.randomUUID().toString(), new HashMap<>());
+		when(this.dataStructureService.getMap(any(), any())).thenReturn(mapMock);
+		when(this.dataStructureService.getMap(any())).thenReturn(mapMock);
 
-		this.listener = Mockito.mock(EventListener.class);
-		Mockito.when(this.listener.getID()).thenReturn(this.agentId);
+		this.defaultEventSpace = mock(EventSpace.class);
+		when(this.defaultEventSpace.getSpaceID()).thenReturn(this.spaceId);
 
-		MockitoAnnotations.initMocks(this);
+		this.context = mock(AgentContext.class);
+		when(this.context.getDefaultSpace()).thenReturn(this.defaultEventSpace);
 
-		Mockito.when(this.executor.submit(Mockito.any(Runnable.class))).thenAnswer(new Answer<Future<?>>() {
+		this.contextSpaceService = mock(ContextSpaceService.class);
+		when(this.contextSpaceService.getContext(any(UUID.class))).thenReturn(this.context);
+
+		this.space = new EventSpaceImpl(this.spaceId, this.dataStructureService, this.contextSpaceService,
+				() -> NoReadWriteLock.SINGLETON);
+
+		this.listener = mock(EventListener.class);
+		when(this.listener.getID()).thenReturn(this.agentId);
+
+		initMocks(this);
+
+		when(this.executor.submit(any(Runnable.class))).thenAnswer(new Answer<Future<?>>() {
 			@Override
 			public Future<?> answer(InvocationOnMock invocation) throws Throwable {
 				Runnable r = (Runnable) invocation.getArguments()[0];
@@ -171,27 +192,27 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 	public void doEmit_fullscope() throws Exception {
 		Event event;
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.<Address> allParticipants());
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.<Address> allParticipants());
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 
 		unregister();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.<Address> allParticipants());
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		verify(this.listener).receiveEvent(argument.capture());
 		assertNotSame(event, argument.getValue());
 	}
 
@@ -199,27 +220,27 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 	public void doEmit_scopeaddress() throws Exception {
 		Event event;
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address));
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address));
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 
 		unregister();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address));
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		verify(this.listener).receiveEvent(argument.capture());
 		assertNotSame(event, argument.getValue());
 	}
 
@@ -230,24 +251,24 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		Event event;
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(otherAddress));
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(otherAddress));
-		Mockito.verify(this.listener, new Times(0)).receiveEvent(Mockito.any(Event.class));
+		verify(this.listener, times(0)).receiveEvent(any(Event.class));
 
 		unregister();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(otherAddress));
-		Mockito.verify(this.listener, new Times(0)).receiveEvent(Mockito.any(Event.class));
+		verify(this.listener, times(0)).receiveEvent(any(Event.class));
 	}
 
 	@Test
@@ -257,27 +278,27 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		Event event;
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address, otherAddress));
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address, otherAddress));
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 
 		unregister();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.reflect.invoke(this.space, "doEmit", event, Scopes.addresses(this.address, otherAddress));
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		verify(this.listener).receiveEvent(argument.capture());
 		assertNotSame(event, argument.getValue());
 	}
 
@@ -288,17 +309,17 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.space.emit(event, scope);
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 		{
-			ArgumentCaptor<Scope> netscope = ArgumentCaptor.forClass(Scope.class);
-			ArgumentCaptor<Event> netarg = ArgumentCaptor.forClass(Event.class);
-			Mockito.verify(this.network).publish(netscope.capture(), netarg.capture());
+			ArgumentCaptor<Scope> netscope = forClass(Scope.class);
+			ArgumentCaptor<Event> netarg = forClass(Event.class);
+			verify(this.network).publish(netscope.capture(), netarg.capture());
 			assertSame(scope, netscope.getValue());
 			assertSame(event, netarg.getValue());
 		}
@@ -311,17 +332,17 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.space.emit(event, scope);
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 		{
-			ArgumentCaptor<Scope> netscope = ArgumentCaptor.forClass(Scope.class);
-			ArgumentCaptor<Event> netarg = ArgumentCaptor.forClass(Event.class);
-			Mockito.verify(this.network).publish(netscope.capture(), netarg.capture());
+			ArgumentCaptor<Scope> netscope = forClass(Scope.class);
+			ArgumentCaptor<Event> netarg = forClass(Event.class);
+			verify(this.network).publish(netscope.capture(), netarg.capture());
 			assertSame(scope, netscope.getValue());
 			assertSame(event, netarg.getValue());
 		}
@@ -337,14 +358,14 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.space.emit(event, scope);
-		Mockito.verify(this.listener, new Times(0)).receiveEvent(Mockito.any(Event.class));
+		verify(this.listener, times(0)).receiveEvent(any(Event.class));
 		{
-			ArgumentCaptor<Scope> netscope = ArgumentCaptor.forClass(Scope.class);
-			ArgumentCaptor<Event> netarg = ArgumentCaptor.forClass(Event.class);
-			Mockito.verify(this.network).publish(netscope.capture(), netarg.capture());
+			ArgumentCaptor<Scope> netscope = forClass(Scope.class);
+			ArgumentCaptor<Event> netarg = forClass(Event.class);
+			verify(this.network).publish(netscope.capture(), netarg.capture());
 			assertSame(scope, netscope.getValue());
 			assertSame(event, netarg.getValue());
 		}
@@ -360,17 +381,17 @@ public class EventSpaceImplTest extends AbstractJanusTest {
 
 		register();
 
-		event = Mockito.mock(Event.class);
-		Mockito.when(event.getSource()).thenReturn(this.address);
+		event = mock(Event.class);
+		when(event.getSource()).thenReturn(this.address);
 		this.space.emit(event, scope);
 
-		ArgumentCaptor<Event> argument = ArgumentCaptor.forClass(Event.class);
-		Mockito.verify(this.listener).receiveEvent(argument.capture());
+		ArgumentCaptor<Event> argument = forClass(Event.class);
+		verify(this.listener).receiveEvent(argument.capture());
 		assertSame(event, argument.getValue());
 		{
-			ArgumentCaptor<Scope> netscope = ArgumentCaptor.forClass(Scope.class);
-			ArgumentCaptor<Event> netarg = ArgumentCaptor.forClass(Event.class);
-			Mockito.verify(this.network).publish(netscope.capture(), netarg.capture());
+			ArgumentCaptor<Scope> netscope = forClass(Scope.class);
+			ArgumentCaptor<Event> netarg = forClass(Event.class);
+			verify(this.network).publish(netscope.capture(), netarg.capture());
 			assertSame(scope, netscope.getValue());
 			assertSame(event, netarg.getValue());
 		}

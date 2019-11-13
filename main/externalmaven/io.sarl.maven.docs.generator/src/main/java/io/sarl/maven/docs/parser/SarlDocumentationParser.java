@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ import io.sarl.maven.docs.testing.ScriptExecutor;
 /** Generator of the marker language files for the modified marker language for SARL.
  *
  * @author $Author: sgalland$
+ * @author $Author: alombard$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
@@ -2134,8 +2135,12 @@ public class SarlDocumentationParser {
 									final String stringResult = Strings.nullToEmpty(Objects.toString(result));
 									return stringResult;
 								}
+							} catch (IllegalStateException e) {
+								// Triggered when a documentation file does not contain Xtext code
+								// It is ignored
 							} catch (Exception exception) {
-								Throwables.propagate(exception);
+								Throwables.throwIfUnchecked(exception);
+							    throw new RuntimeException(exception);
 							}
 						}
 					}
@@ -2204,8 +2209,12 @@ public class SarlDocumentationParser {
 									final String stringResult = Strings.nullToEmpty(Objects.toString(result));
 									return formatBlockText(stringResult, context.getOutputLanguage(), context.getBlockCodeFormat());
 								}
+							} catch (IllegalStateException e) {
+								// Triggered when a documentation file does not contain Xtext code
+								// It is ignored
 							} catch (Exception exception) {
-								Throwables.propagate(exception);
+								Throwables.throwIfUnchecked(exception);
+							    throw new RuntimeException(exception);
 							}
 						}
 					}
@@ -2763,15 +2772,15 @@ public class SarlDocumentationParser {
 
 		/** Default pattern.
 		 */
-		static final String DEFAULT_REFERENCE_PATTERN = "\\[:[a-zA-Z0-9\\._]+:\\]"; //$NON-NLS-1$
+		static final String DEFAULT_REFERENCE_PATTERN = "\\[:[a-zA-Z0-9\\._\\-@~]+:\\]"; //$NON-NLS-1$
 
 		/** Default pattern.
 		 */
-		static final String DEFAULT_RAW_REFERENCE_PATTERN = "\\[:[a-zA-Z0-9\\._]+\\!\\]"; //$NON-NLS-1$
+		static final String DEFAULT_RAW_REFERENCE_PATTERN = "\\[:[a-zA-Z0-9\\._\\-@~]+\\!\\]"; //$NON-NLS-1$
 
 		/** Default pattern.
 		 */
-		static final String DEFAULT_DEFINITION_PATTERN = "\\[:[a-zA-Z0-9\\._]+\\]"; //$NON-NLS-1$
+		static final String DEFAULT_DEFINITION_PATTERN = "\\[:[a-zA-Z0-9\\._\\-@~]+\\]"; //$NON-NLS-1$
 
 		/** Default pattern.
 		 */

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,20 @@ public class UnimplementedCapacityException extends RuntimeException {
 	 * @param agent the agent accessing the capacity
 	 */
 	public UnimplementedCapacityException(Class<? extends Capacity> unimplementedCapacity, UUID agent) {
-		super(unimplementedCapacity.getName());
+		this(unimplementedCapacity, agent, null);
+	}
+
+	/**
+	 * Creates a new instance of the exception.
+	 *
+	 * @param unimplementedCapacity
+	 *            the capacitiy that the agent was trying to access.
+	 * @param agent the agent accessing the capacity
+	 * @param cause the cause of the error.
+	 * @since 16.0
+	 */
+	public UnimplementedCapacityException(Class<? extends Capacity> unimplementedCapacity, UUID agent, Throwable cause) {
+		super(unimplementedCapacity.getName(), cause);
 		this.unimplementedCapacity = unimplementedCapacity;
 		this.callingAgent = agent;
 	}

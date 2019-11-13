@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,12 @@ import java.nio.file.Path;
 import org.apache.maven.it.Verifier;
 import org.apache.maven.shared.utils.io.FileUtils;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.annotation.SarlSpecification;
+import io.sarl.lang.sarl.SarlPackage;
 
 /**
  * @author $Author: sgalland$
@@ -76,7 +78,7 @@ public class Bug465Test extends AbstractMojoTest {
 				"import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
 				"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
-				"@SarlElementType(18)",
+				"@SarlElementType(" + SarlPackage.SARL_AGENT + ")",
 				"@SuppressWarnings(\"all\")",
 				"public class MyAgent extends Agent {",
 				"private void $behaviorUnit$Initialize$0(final Initialize occurrence) {",

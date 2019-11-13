@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public final class JanusVersion {
 
 	/** The version number of the current release of the Janus platform.
 	 */
-	public static final String JANUS_RELEASE_VERSION = "2.0.9.0"; //$NON-NLS-1$
+	public static final String JANUS_RELEASE_VERSION = "2.0.11.0"; //$NON-NLS-1$
 
 	/** Flag that indicates if the current Janus platform is a stable release.
 	 *

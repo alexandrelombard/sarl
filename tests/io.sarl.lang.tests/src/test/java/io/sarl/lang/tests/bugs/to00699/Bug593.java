@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +108,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -147,7 +152,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -191,7 +196,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -235,7 +240,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -339,7 +344,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -394,7 +399,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -456,7 +461,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -500,7 +505,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 1L;",
+					"  private static final long serialVersionUID = 1L;",
 					"}",
 					""));
 		}
@@ -548,7 +553,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = -844578811L;",
+					"  private static final long serialVersionUID = -844578811L;",
 					"}",
 					""));
 		}
@@ -596,7 +601,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = -844578811L;",
+					"  private static final long serialVersionUID = -844578811L;",
 					"}",
 					""));
 		}
@@ -751,7 +756,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 107525711L;",
+					"  private static final long serialVersionUID = 107525711L;",
 					"}",
 					""));
 		}
@@ -828,7 +833,7 @@ public class Bug593 {
 					"  }",
 					"  ",
 					"  @SyntheticMember",
-					"  private final static long serialVersionUID = 107525711L;",
+					"  private static final long serialVersionUID = 107525711L;",
 					"}",
 					""));
 		}

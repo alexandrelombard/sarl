@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import org.eclipse.xtext.xbase.validation.IssueCodes;
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.sarl.SarlPackage;
 import io.sarl.tests.api.AbstractMassiveCompilationTest;
+import io.sarl.tests.api.AbstractMassiveCompilationTest.DifferedTest;
 
 /**
  * @author $Author: sgalland$
@@ -40,32 +41,95 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 
 	@DifferedTest
 	public void as_byte() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : byte {",
 				"    left as byte",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public byte fct(final Long left) {",
+						"    return (left == null ? 0 : left.byteValue());",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_short() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : short {",
 				"    left as short",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public short fct(final Long left) {",
+						"    return (left == null ? 0 : left.shortValue());",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_int() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : int {",
 				"    left as int",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public int fct(final Long left) {",
+						"    return (left == null ? 0 : left.intValue());",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
@@ -88,7 +152,7 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						"public class A {",
 						"  @Pure",
 						"  public long fct(final Long left) {",
-						"    return ((long) (left).longValue());",
+						"    return ((left) == null ? 0 : (left).longValue());",
 						"  }",
 						"  ",
 						"  @SyntheticMember",
@@ -119,7 +183,7 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						"public class A {",
 						"  @Pure",
 						"  public float fct(final Long left) {",
-						"    return ((float) (left).longValue());",
+						"    return ((left) == null ? 0 : (left).longValue());",
 						"  }",
 						"  ",
 						"  @SyntheticMember",
@@ -150,7 +214,7 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						"public class A {",
 						"  @Pure",
 						"  public double fct(final Long left) {",
-						"    return ((double) (left).longValue());",
+						"    return ((left) == null ? 0 : (left).longValue());",
 						"  }",
 						"  ",
 						"  @SyntheticMember",
@@ -163,32 +227,95 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 
 	@DifferedTest
 	public void as_Byte() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : Byte {",
 				"    left as Byte",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public Byte fct(final Long left) {",
+						"    return (left == null ? null : Byte.valueOf(left.byteValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_Short() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : Short {",
 				"    left as Short",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public Short fct(final Long left) {",
+						"    return (left == null ? null : Short.valueOf(left.shortValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_Integer() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : Integer {",
 				"    left as Integer",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public Integer fct(final Long left) {",
+						"    return (left == null ? null : Integer.valueOf(left.intValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
@@ -211,7 +338,7 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						"public class A {",
 						"  @Pure",
 						"  public Long fct(final Long left) {",
-						"    return ((Long) left);",
+						"    return left;",
 						"  }",
 						"  ",
 						"  @SyntheticMember",
@@ -224,55 +351,229 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 
 	@DifferedTest
 	public void as_Float() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : Float {",
 				"    left as Float",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public Float fct(final Long left) {",
+						"    return (left == null ? null : Float.valueOf(left.floatValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_Double() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"class A {",
 				"  def fct(left : Long) : Double {",
 				"    left as Double",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public Double fct(final Long left) {",
+						"    return (left == null ? null : Double.valueOf(left.doubleValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Long) : AtomicInteger {",
 				"    left as AtomicInteger",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import java.util.concurrent.atomic.AtomicInteger;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public AtomicInteger fct(final Long left) {",
+						"    return (left == null ? null : new AtomicInteger(left.intValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : Long) : AtomicLong {",
 				"    left as AtomicLong",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import java.util.concurrent.atomic.AtomicLong;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public AtomicLong fct(final Long left) {",
+						"    return (left == null ? null : new AtomicLong(left.longValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
 	public void as_AtomicDouble() throws Exception {
-		diffSingleTypeCompileTo_unexpectedCastError(multilineString(
+		diffSingleTypeCompileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
-				"  def fct(left : Long) : AtomicLong {",
+				"  def fct(left : Long) : AtomicDouble {",
 				"    left as AtomicDouble",
 				"  }",
-				"}"));
+				"}"),
+				multilineString(
+						"import com.google.common.util.concurrent.AtomicDouble;",
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public AtomicDouble fct(final Long left) {",
+						"    return (left == null ? null : new AtomicDouble(left.doubleValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
+	}
+
+	@DifferedTest
+	public void as_BigInteger() throws Exception {
+		diffSingleTypeCompileTo(multilineString(
+				"import java.math.BigInteger",
+				"class A {",
+				"  def fct(left : Long) : BigInteger {",
+				"    left as BigInteger",
+				"  }",
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import java.math.BigInteger;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public BigInteger fct(final Long left) {",
+						"    return (left == null ? null : BigInteger.valueOf(left.longValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
+	}
+
+	@DifferedTest
+	public void as_BigDecimal() throws Exception {
+		diffSingleTypeCompileTo(multilineString(
+				"import java.math.BigDecimal",
+				"class A {",
+				"  def fct(left : Long) : BigDecimal {",
+				"    left as BigDecimal",
+				"  }",
+				"}"),
+				multilineString(
+						"import io.sarl.lang.annotation.SarlElementType;",
+						"import io.sarl.lang.annotation.SarlSpecification;",
+						"import io.sarl.lang.annotation.SyntheticMember;",
+						"import java.math.BigDecimal;",
+						"import org.eclipse.xtext.xbase.lib.Pure;",
+						"",
+						"@SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
+						"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
+						"@SuppressWarnings(\"all\")",
+						"public class A {",
+						"  @Pure",
+						"  public BigDecimal fct(final Long left) {",
+						"    return (left == null ? null : BigDecimal.valueOf(left.doubleValue()));",
+						"  }",
+						"  ",
+						"  @SyntheticMember",
+						"  public A() {",
+						"    super();",
+						"  }",
+						"}",
+						""));
 	}
 
 	@DifferedTest
@@ -295,7 +596,7 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						"public class A {",
 						"  @Pure",
 						"  public Number fct(final Long left) {",
-						"    return ((Number) left);",
+						"    return left;",
 						"  }",
 						"  ",
 						"  @SyntheticMember",

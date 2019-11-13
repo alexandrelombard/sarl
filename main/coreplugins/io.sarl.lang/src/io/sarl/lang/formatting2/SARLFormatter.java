@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -510,7 +510,7 @@ public class SARLFormatter extends XtendFormatter {
 		final ISemanticRegionsFinder regionFor = this.textRegionExtensions.regionFor(expr);
 		document.append(regionFor.keyword(this.keywords.getExtensionExtensionKeyword()), ONE_SPACE);
 		document.append(regionFor.keyword(this.keywords.getValKeyword()), ONE_SPACE);
-		document.append(regionFor.keyword(this.keywords.getVarKeyword()), ONE_SPACE);
+		document.append(regionFor.keyword(this.keywords.getWriteableVarKeyword()), ONE_SPACE);
 		document.surround(regionFor.keyword(this.keywords.getColonKeyword()), ONE_SPACE);
 		document.surround(regionFor.keyword(this.keywords.getEqualsSignKeyword()), ONE_SPACE);
 		document.format(expr.getType());

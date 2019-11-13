@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,9 @@ public abstract class BuiltinSkill extends Skill {
 	 *
 	 * @param skill the skill.
 	 * @return the installation order.
+	 * @deprecated since 0.10
 	 */
+	@Deprecated
 	protected static int installationOrder(Skill skill) {
 		final int len = StandardBuiltinCapacitiesProvider.SKILL_INSTALLATION_ORDER.length;
 		if (skill instanceof BuiltinSkill) {
@@ -69,7 +71,9 @@ public abstract class BuiltinSkill extends Skill {
 	/** Replies the installation order of the builtin skill.
 	 *
 	 * @return the order.
+	 * @deprecated since 0.10
 	 */
+	@Deprecated
 	public abstract int getInstallationOrder();
 
 }

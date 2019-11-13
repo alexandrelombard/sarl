@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,14 @@
 package io.sarl.lang.sarlc.tools;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.google.common.collect.Iterables;
+import org.arakhne.afc.vmutil.FileSystem;
 import org.eclipse.xtext.util.Strings;
 
 import io.sarl.lang.SARLConfig;
@@ -47,7 +49,7 @@ public class DefaultPathDetector implements PathDetector {
 
 	private File classOutputPath;
 
-	private File workingPath;
+	private File tempPath;
 
 	@Override
 	public void setSarlOutputPath(File path) {
@@ -60,8 +62,8 @@ public class DefaultPathDetector implements PathDetector {
 	}
 
 	@Override
-	public void setWorkingPath(File path) {
-		this.workingPath = path;
+	public void setTempDirectory(File path) {
+		this.tempPath = path;
 	}
 
 	@Override
@@ -75,28 +77,29 @@ public class DefaultPathDetector implements PathDetector {
 	}
 
 	@Override
-	public File getWorkingPath() {
-		return this.workingPath;
+	public File getTempDirectory() {
+		return this.tempPath;
 	}
 
 	@Override
-	public void resolve(List<String>  args) {
-		if (this.sarlOutputPath == null || this.workingPath == null || this.classOutputPath == null) {
+	@SuppressWarnings("checkstyle:npathcomplexity")
+	public void resolve(List<String>  args) throws IOException {
+		if (this.sarlOutputPath == null || this.tempPath == null || this.classOutputPath == null) {
 			final Iterable<File> cliFiles = Iterables.transform(
 					args,
 					it -> toFile(it));
 			File root = determineCommonRoot(Iterables.concat(
 					cliFiles,
 					Collections.singleton(this.sarlOutputPath),
-					Collections.singleton(this.workingPath),
+					Collections.singleton(this.tempPath),
 					Collections.singleton(this.classOutputPath)));
 			if (root != null) {
 				root = normalize(root);
 				if (this.sarlOutputPath == null) {
 					this.sarlOutputPath = toFile(root, SARLConfig.FOLDER_SOURCE_GENERATED);
 				}
-				if (this.workingPath == null) {
-					this.workingPath = toFile(root, SARLConfig.FOLDER_TMP);
+				if (this.tempPath == null) {
+					this.tempPath = toFile(root, SARLConfig.FOLDER_TMP);
 				}
 				if (this.classOutputPath == null) {
 					this.classOutputPath = toFile(root, SARLConfig.FOLDER_BIN);
@@ -105,13 +108,23 @@ public class DefaultPathDetector implements PathDetector {
 		}
 
 		if (this.sarlOutputPath == null) {
-			this.sarlOutputPath = toFile(cwd(), SARLConfig.FOLDER_SOURCE_GENERATED);
+			this.sarlOutputPath = toFile(cwd(), SARLConfig.FOLDER_SOURCE_GENERATED).getCanonicalFile();
 		}
-		if (this.workingPath == null) {
-			this.workingPath = toFile(cwd(), SARLConfig.FOLDER_TMP);
+		if (this.tempPath == null) {
+			this.tempPath = toFile(cwd(), SARLConfig.FOLDER_TMP).getCanonicalFile();
 		}
 		if (this.classOutputPath == null) {
-			this.classOutputPath = toFile(cwd(), SARLConfig.FOLDER_BIN);
+			this.classOutputPath = toFile(cwd(), SARLConfig.FOLDER_BIN).getCanonicalFile();
+		}
+
+		if (this.sarlOutputPath != null && !this.sarlOutputPath.isAbsolute()) {
+			this.sarlOutputPath = FileSystem.join(cwd(), this.sarlOutputPath).getCanonicalFile();
+		}
+		if (this.tempPath != null && !this.tempPath.isAbsolute()) {
+			this.tempPath = FileSystem.join(cwd(), this.tempPath).getCanonicalFile();
+		}
+		if (this.classOutputPath != null && !this.classOutputPath.isAbsolute()) {
+			this.classOutputPath = FileSystem.join(cwd(), this.classOutputPath).getCanonicalFile();
 		}
 	}
 

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import io.sarl.core.Initialize;
 import io.sarl.core.Logging;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
+import io.sarl.lang.core.Behavior;
 import io.sarl.lang.core.Event;
 import io.sarl.lang.core.EventListener;
 import io.sarl.lang.core.Skill;
@@ -118,7 +119,12 @@ public class InternalEventBusSkill extends BuiltinSkill implements InternalEvent
 		return $castSkill(Logging.class, this.skillBufferLogging);
 	}
 
+	/** {@inheritDoc}
+	 *
+	 * @deprecated since 0.10
+	 */
 	@Override
+	@Deprecated
 	public int getInstallationOrder() {
 		if (installationOrder < 0) {
 			installationOrder = installationOrder(this);
@@ -164,8 +170,10 @@ public class InternalEventBusSkill extends BuiltinSkill implements InternalEvent
 		if (stage == UninstallationStage.POST_DESTROY_EVENT) {
 			final Destroy event = new Destroy();
 			event.setSource(getInnerDefaultSpaceAddress());
+			final Agent owner = getOwner();
 			this.eventDispatcher.unregisterAll(subscriber -> {
-				if (subscriber != getOwner()) {
+				// Behaviors are already destroyed by AgentLifeCycleSupport#agentDestroy
+				if (subscriber != owner && !(subscriber instanceof Behavior)) {
 					this.eventDispatcher.immediateDispatchTo(subscriber, event);
 				}
 			});
@@ -353,7 +361,6 @@ public class InternalEventBusSkill extends BuiltinSkill implements InternalEvent
 
 		private final UUID aid;
 
-		@SuppressWarnings("synthetic-access")
 		AgentEventListener() {
 			this.aid = InternalEventBusSkill.this.getOwner().getID();
 		}

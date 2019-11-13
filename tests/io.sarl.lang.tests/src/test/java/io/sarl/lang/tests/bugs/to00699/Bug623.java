@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +103,7 @@ public class Bug623 extends AbstractSarlTest {
 				"  @Pure",
 				"  public void fct() {",
 				"    final Function1<Integer, Integer> _function = (Integer it) -> {",
-				"      return Integer.valueOf((it.intValue() + 4));",
+				"      return Integer.valueOf((((it) == null ? 0 : (it).intValue()) + 4));",
 				"    };",
 				"    this.fct2(_function);",
 				"  }",
@@ -141,7 +146,7 @@ public class Bug623 extends AbstractSarlTest {
 				"  public void fct() {",
 				"    final int vv = 4;",
 				"    final Function1<Integer, Integer> _function = (Integer it) -> {",
-				"      return Integer.valueOf((it.intValue() + vv));",
+				"      return Integer.valueOf((((it) == null ? 0 : (it).intValue()) + vv));",
 				"    };",
 				"    this.fct2(_function);",
 				"  }",
@@ -187,7 +192,7 @@ public class Bug623 extends AbstractSarlTest {
 				"      int vv = 4;",
 				"      vv = (vv + 1);",
 				"      final Function1<Integer, Integer> _function = (Integer it) -> {",
-				"        return Integer.valueOf((it.intValue() + vv));",
+				"        return Integer.valueOf((((it) == null ? 0 : (it).intValue()) + vv));",
 				"      };",
 				"      this.fct2(_function);",
 				"      vv = (vv + 1);",

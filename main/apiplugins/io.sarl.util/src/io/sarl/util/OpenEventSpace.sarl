@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import io.sarl.lang.core.Address
 import io.sarl.lang.core.EventListener
 import io.sarl.lang.core.EventSpace
 
-
-
 /**
  * Event driven interaction space where agent are free register and unregister themselves.
  * Agents should only register once in this type of space.
@@ -35,7 +33,9 @@ import io.sarl.lang.core.EventSpace
  * @version $FullVersion$
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
+ * @deprecated
  */
+@Deprecated
 interface OpenEventSpace extends EventSpace {
 
 	/**

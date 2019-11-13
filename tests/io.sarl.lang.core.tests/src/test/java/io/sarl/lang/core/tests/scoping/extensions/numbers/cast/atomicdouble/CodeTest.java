@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,19 @@
 
 package io.sarl.lang.core.tests.scoping.extensions.numbers.cast.atomicdouble;
 
+import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toAtomicInteger;
+import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toAtomicLong;
+import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toBigDecimal;
+import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toBigInteger;
 import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toByte;
 import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toDouble;
-import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toDoubleObject;
 import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toFloat;
-import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toInt;
+import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toInteger;
 import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toLong;
 import static io.sarl.lang.scoping.extensions.numbers.cast.AtomicDoubleCastExtensions.toShort;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import org.junit.Test;
@@ -47,40 +53,57 @@ public class CodeTest extends AbstractSarlTest {
 	private static AtomicDouble left = new AtomicDouble(4);
 
 	@Test
-	public void toFloat_AtomicLong() {
-		assertEpsilonEquals(4, toFloat(left));
+	public void toByte_AtomicDouble() {
+		assertEquals(Byte.valueOf((byte) 4), toByte(left));
 	}
 
 	@Test
-	public void toByte_AtomicLong() {
-		assertEquals(4, toByte(left));
+	public void toShort_AtomicDouble() {
+		assertEquals(Short.valueOf((short) 4), toShort(left));
 	}
 
 	@Test
-	public void toLong_AtomicLong() {
-		assertEquals(4, toLong(left));
+	public void toInteger_AtomicDouble() {
+		assertEquals(Integer.valueOf(4), toInteger(left));
 	}
 
 	@Test
-	public void toDouble_AtomicLong() {
-		assertEpsilonEquals(4, toDouble(left));
+	public void toAtomicInteger_AtomicDouble() {
+		assertEquals(4, toAtomicInteger(left).intValue());
 	}
 
 	@Test
-	public void toShort_AtomicLong() {
-		assertEquals(4, toShort(left));
+	public void toLong_AtomicDouble() {
+		assertEquals(Long.valueOf(4), toLong(left));
 	}
 
 	@Test
-	public void toInt_AtomicLong() {
-		assertEquals(4, toInt(left));
+	public void toAtomicLong_AtomicDouble() {
+		assertEquals(4, toAtomicLong(left).longValue());
 	}
 
 	@Test
-	public void toIntegerInteger_AtomicLong() {
-		Double value = toDoubleObject(left);
+	public void toFloat_AtomicDouble() {
+		assertEpsilonEquals(Float.valueOf(4), toFloat(left));
+	}
+
+	@Test
+	public void toDouble_AtomicDouble() {
+		assertEpsilonEquals(Double.valueOf(4), toDouble(left));
+	}
+
+	@Test
+	public void toBigInteger_AtomicDouble() {
+		BigInteger value = toBigInteger(left);
 		assertNotNull(value);
-		assertEpsilonEquals(4, value.doubleValue());
+		assertEpsilonEquals(4., value.doubleValue());
+	}
+
+	@Test
+	public void toBigDecimal_AtomicDouble() {
+		BigDecimal value = toBigDecimal(left);
+		assertNotNull(value);
+		assertEpsilonEquals(4., value.doubleValue());
 	}
 
 }

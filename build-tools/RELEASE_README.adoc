@@ -60,9 +60,9 @@ CAUTION: Do not remove the `-SNAPSHOT` in the Groovy scripts.
 
 === 2.3) Comment any reference to the Snapshot Maven repository
 
-=== 2.4) Update Readme
+=== 2.4) Update General and Contributor Readme Files
 
-Update the content of the file `README.adoc` for using the new version numbers.
+Update the content of the files `README.adoc` and `CONTRIBUTING.adoc` for using the new version numbers.
 
 === 2.5) Update the graphical resources
 
@@ -177,9 +177,10 @@ Announce the new version of SARL on:
 
 * SARL's Google groups https://groups.google.com/forum/#!forum/sarl
 * SARL's Facebook page https://www.facebook.com/sarllanguage/
-* Research mailing lists
-* Google+
-* Linked-in
+* SARL Gitter https://gitter.im/sarl/Lobby
+* Linked-in https://www.linkedin.com/
+* CIAD laboratory Intranet 
+* Research mailing lists 
 
 == 4) PHASE 4: DEVELOPMENT VERSION
 

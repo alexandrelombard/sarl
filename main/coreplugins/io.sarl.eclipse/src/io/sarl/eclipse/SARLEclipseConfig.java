@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,13 @@ package io.sarl.eclipse;
  * @see io.sarl.lang.SARLConfig
  */
 public final class SARLEclipseConfig {
+
+	/**
+	 * Default SARL file extension (with the dot).
+	 *
+	 * <p>TODO Find a way to get it from the io.sarl.lang code itself (which is generated).
+	 */
+	public static final String SARL_FILE_EXTENSION = ".sarl"; //$NON-NLS-1$
 
 	/**
 	 * ID of the project nature defined by XText.

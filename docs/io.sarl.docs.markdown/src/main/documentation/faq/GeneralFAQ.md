@@ -14,22 +14,22 @@ agent-oriented paradigm holds the keys to effectively meet this challenge.
 
 Syntactically and semantically SARL has its roots in the Java programming language but improves on many aspects:
 
-* [Agent specific statements](../index.md#5-2-agent-oriented-programming) - provide specific statements for agent programming
+* [Agent specific statements](../index.md#agent-oriented-programming) - provide specific statements for agent programming
 * [Type inference](../reference/GeneralSyntax.md) - you rarely need to write down type signatures anymore
 * [Lambda expressions](../reference/general/Lambda.md) - concise syntax for anonymous function literals
 * [Operator overloading](../reference/general/Operators.md) - make your libraries even more expressive
 * [Extension methods](../reference/general/Extension.md) - enhance closed types with new functionality
 * [Powerful switch expressions](../reference/general/SwitchExpression.md) - type based switching with implicit casts
-* [No statements](../reference/GeneralSyntax.md#4-details-on-the-sarl-language-elements) - everything is an expression
+* [No statements](../reference/GeneralSyntax.md#details-on-the-sarl-language-elements) - everything is an expression
 * Full support for Java generics - including all conformance and conversion rules
-* Translates to Java not bytecode - understand what is going on and use your code for platforms such as Android or GWT
+* Translates to Java not byte code - understand what is going on and use your code for platforms such as Android or GWT
 
 Unlike other JVM languages, SARL has zero interoperability issues with Java: everything you write interacts with Java exactly as expected. At the same time, SARL is much more concise, readable and expressive.
 
 __The language is platform- and architecture-independent.__
 
 For a brief comparison between SARL, Java and Xtend languages, see the Section
-"[Comparison between SARL and other languages](../reference/OOP.md#1-comparison-between-sarl-and-other-languages)".
+"[Comparison between SARL and other languages](../reference/OOP.md#comparison-between-sarl-and-other-languages)".
 
 
 ### Can I use SARL to make agent-based software?
@@ -125,11 +125,11 @@ that fully supports the concepts of SARL.
 We can compare the SARL universe with the Java universe:
 
 
-|                          | SARL Universe       | Java Universe               |
-| ------------------------ | ------------------- | --------------------------- |
-| Language Specification   | SARL Specification  | Java Specification          |
-| Standard Development Kit | SARL SDK            | J(ava)DK                    |
-| Runtime environment      | Janus, TinyMAS...   | Hotspot, IcedTea, Dalvik... |
+|                          | SARL Universe                 | Java Universe                         |
+| ------------------------ | ----------------------------- | ------------------------------------- |
+| Language Specification   | SARL Specification            | Java Specification                    |
+| Standard Development Kit | SARL SDK                      | J(ava)DK                              |
+| Runtime environment      | SRE, e.g. Janus, TinyMAS...   | JVM, e.g. Hotspot, IcedTea, Dalvik... |
 
 
 ### Where can I find information on the release planning of SARL?
@@ -143,13 +143,17 @@ on Github.
 
 If your question is not addressed in the FAQ, the reference documents, or
 the [existing issues](https://github.com/sarl/sarl/issues), you
-may ask the SARL developers on 
-[the SARL forum](https://groups.google.com/forum/#!forum/sarl).
+may ask the SARL developers on the 
+[SARL forum](https://groups.google.com/forum/#!forum/sarl), or 
+on the [instant messaging forum](https://gitter.im/sarl/Lobby).
 
 
 ### Where can I find more information and projects related to SARL?
 
-A community driven list of useful SARL libraries, frameworks and software
+A list of successful projects are given on the [Community](http://sarl.io/community/index.html#sucessstories)
+page of the SARL web site.
+
+Additionally, a community driven list of useful SARL libraries, frameworks and software
 is maintained on [Github](https://github.com/sarl/awesome-sarl).
 This is not a catalog of all the libraries, just a starting point for your explorations.
 This list is used by the SARL team to update the official web site of SARL.
@@ -166,10 +170,10 @@ Virtual Machine with Eclipse may be used to run SARL.
 
 ### What version of the Java virtual machine is required?
 
-SARL requires the JRE and the JDK [:compiler.level!] or higher to compile and run.
+SARL requires the JDK [:sarl-run.min.jdk.version!] or higher to compile and run.
 Note that if you plan to create Android applications, you should
-configure your JDK to produce 1.6 class files from [:compiler.level!] Java code. 
-[:Fact:]("[:compiler.level!]".shouldBeAtLeastJava)
+configure your JDK to produce 1.6 class files from [:sarl-run.min.jdk.version!] Java code. 
+[:Fact:]("[:sarl-run.min.jdk.version!]".shouldBeAtLeastJava)
 
 
 ### Why does SARL display an error on startup?
@@ -178,7 +182,7 @@ Most of the time the problem is due to an incompatibility between
 the configuration of your operating system or Java virtual machine,
 and the SARL Eclipse product.
 
-If a problem occured, find the ".log" file in which Eclipse is writting
+If a problem occurred, find the ".log" file in which Eclipse is writing
 the complete error trace. Usually, it is in your home directory or in
 the folder of the SARL Eclipse executable file.
 
@@ -199,15 +203,17 @@ If another error occurs, you should go on the SARL forum and report this problem
 ### Why does the SARL product launch but not contain any features related to SARL?
 
 This is due to a problem in your configuration. SARL tools need the Eclipse
-framework to be run with a Java Development Kit [:compiler.level!] or higher.
+framework to be run with a Java Development Kit [:sarl-run.min.jdk.version!] or higher.
 You are currently running the SARL product with a lower version of the JDK.
 
 You must run the SARL product with a valid version of the JDK.
 Two ways are available for solving this issue:
 
-1. install the JDK [:compiler.level!], and configuring your operating system to use it by default; or
-2. force the SARL product to use the JDK [:compiler.level!] by editing the `eclipse-sarl.ini` file. Add the following parameter on a new line: `-vm path`, where `path` is the path to the binary file `javaw[.exe]` or `java[.exe]` of the JDK [:compiler.level!].
-[:Fact:]("[:compiler.level!]".shouldBeAtLeastJava)
+1. install the JDK [:sarl-run.min.jdk.version!], and configuring your operating system to use it by default; or
+2. force the SARL product to use the JDK [:sarl-run.min.jdk.version!] by editing the `eclipse-sarl.ini` file
+into the folder of the SARL IDE. Add the following parameter on a new line: `-vm path`, where `path` is the
+path to the binary file `javaw[.exe]` or `java[.exe]` of at least the JDK [:sarl-run.min.jdk.version!].
+[:Fact:]("[:sarl-run.min.jdk.version!]".shouldBeAtLeastJava)
 
 
 ### Why does the content assistant not propose any suggestion on MacOS?
@@ -223,6 +229,152 @@ For enabling the SARL product content assist, we recommend to change its shortcu
 * Change the shortcut key
 
 ![Content assist shortcut change](./ctrlspaceprefs.png)
+
+
+## Implementation of SARL Applications
+
+
+### Is it possible to obtain examples of SARL code for applications?
+
+__Yes__.
+
+The SARL development environment contains a collection of SARL applications that may be used for creating your own applications.
+They are called the "SARL examples".
+
+In order to create a fresh project based on of these SARL examples, you have to use the menu `File > New > Example`.
+This menu opens a dialog box with a list of examples from which you may select one for creating your fresh project.
+The SARL examples have been put into several categories:
+
+* SARL Tutorials: the SARL code that is associated to one of the tutorial from the official documentation pages.
+* SARL Examples without user interface: a collection of fully-featured applications without graphical user interface.
+* SARL Examples with JavaFX: a collection of fully-featured applications with a JavaFX-based user interface.
+* SARL Templates of applications: a collection of templates for creating a fresh SARL application.
+
+
+### How can we know when an agent has been created fully after being spawn?
+
+An event [:agspawnedevt:] will be emitted when an agent has been created and can
+be handled, say by a coordinator, to know the agent is now alive! For example:
+
+        [:Success:]
+            package io.sarl.docs.faq.general
+            import io.sarl.core.AgentSpawned
+            import io.sarl.core.Logging
+            import java.util.Map
+            agent X {
+                uses Logging
+                [:On]
+                on [:agspawnedevt](AgentSpawned) {
+                    info("Agent {0} of type {1} has been created successfully and is now alive!",
+                        occurrence.agentIdentifiers, occurrence.agentType)
+                }
+                [:Off]
+            }
+        [:End:]
+
+
+
+### Be careful on the emit of events in "on Initialize"
+
+The `on Initialize` event handler in agents is a bit special, as it is the code ran when an agent is born.
+As such, its execution is more "synchronous" than other on-behavior rules. In particular:
+
+1. Any event emitted within an `on Initialize`, will not be processed until that
+   `on Initialize` code finishes. So, your agent initialization should not depend
+   (and wait) on any fired event being processed, as they won't!
+2. When spawning an agent in `on Initialize`, the spawn instructions will return only
+   after the agent has been created. However, creation of the agent (i.e., of the
+   corresponding object) does not include initialization of the agent via its 
+   `on Initialize` handler. Said so, the Java thread manager may process those
+   initialization processes of the new agent before continuing with the execution
+   of the spawning agent (and this seems to be the case in many Linux boxes
+   where the executor service of Java tends to have the same behavior during
+   all the runs). If you change computer, it may be different. In the following
+   example, the thread executor service of Java seems to give the priority to
+   the `on Initialize` of [:agenttwoname:] instead of continuing the run of the
+   spawn function.
+
+        [:Success:]
+            package io.sarl.docs.faq.general
+            import io.sarl.core.Initialize
+            import io.sarl.core.Logging
+            import io.sarl.core.Lifecycle
+            [:On]
+            agent Agent1 {
+                uses Logging, Lifecycle
+                var agent_name = "agent1"
+                on Initialize {
+                    info(agent_name + " spawned")
+                    info(agent_name + " spawning Agent2")
+                    spawn(Agent2)
+                    info(agent_name + " end")
+                }
+            }
+
+            agent [:agenttwoname](Agent2) {
+                uses Logging
+                var agent_name = "agent2"
+                on Initialize {
+                    info(agent_name + " spawned")
+                    info(agent_name + " sleeping")
+                    Thread::sleep(5000)
+                    info(agent_name + " woke up")
+                    info(agent_name + " end")
+                }
+                on Initialize {
+                    info(agent_name + " init2")
+                    info(agent_name + " init2 end")
+                }
+            }
+        [:End:]
+
+The output has been:
+
+```
+Launching the agent: Agent1
+agent1 spawned
+agent1 spawning Agent2
+agent2 spawned
+agent2 init2
+agent2 sleeping
+agent2 init2 end
+agent2 woke up
+agent2 end
+agent1 end
+```
+
+Here it appears as the `on Initialize` behaviors have been run all before
+the execution resumes after the `spawn()` statement, but this is just one way
+and one should not rely on that behavior being guaranteed: once the spawned
+agent is created, the `spawn()` commands returns.
+
+
+
+### How can the warnings given by the SARL compiler be avoided?
+
+You can use `@SupressWarnings(...)` annotations in the entities you do not want
+to be warned. For example, a typical warning SARL will give is lack of
+synchronization for variables that can be accessed/edited concurrently:
+```
+[WARNING] The field noToSpawn should be synchronized for avoiding value inconsistency
+due to parallel execution. [BootMultiSWIAgents.sarl:70]
+```
+
+To get rid of such warnings, assuming you are aware of the potential issue and
+have planned for it, you can do:
+
+        [:Success:]
+            package io.sarl.docs.faq.general
+            [:On]
+            @SuppressWarnings("potential_field_synchronization_problem")
+            agent BootMultiSWIAgents {
+                //...
+            }
+        [:End:]
+
+See the [Issue Codes](https://github.com/sarl/sarl/blob/master/main/coreplugins/io.sarl.lang/src/io/sarl/lang/validation/IssueCodes.java)
+for a complete list of what can be suppressed.
+
 
 
 ## Contribute to SARL

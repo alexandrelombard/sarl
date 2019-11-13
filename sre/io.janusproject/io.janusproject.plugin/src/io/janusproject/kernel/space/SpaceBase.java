@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
  */
 
 package io.janusproject.kernel.space;
-
-import org.eclipse.xtext.xbase.lib.Inline;
 
 import io.janusproject.services.network.NetworkService.NetworkEventReceivingListener;
 
@@ -47,17 +45,6 @@ public abstract class SpaceBase implements Space, NetworkEventReceivingListener 
 	 */
 	public SpaceBase(SpaceID id) {
 		this.id = id;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @deprecated see {@link #getSpaceID()}.
-	 */
-	@Override
-	@Inline("getSpaceID()")
-	@Deprecated
-	public final SpaceID getID() {
-		return getSpaceID();
 	}
 
 	@Override

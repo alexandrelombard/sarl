@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,13 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
@@ -58,7 +62,7 @@ import io.sarl.lang.core.SREutils;
 import io.sarl.lang.core.Skill;
 import io.sarl.lang.util.ClearableReference;
 import io.sarl.lang.util.SynchronizedSet;
-import io.sarl.util.Collections3;
+import io.sarl.util.concurrent.Collections3;
 
 /**
  * Skill that permits to execute tasks with an executor service.
@@ -77,6 +81,9 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	private ExecutorService executorService;
 
 	private final Map<String, TaskDescription> tasks = new TreeMap<>();
+
+	@Inject
+	private ReadWriteLock tasksLock;
 
 	private ClearableReference<Skill> skillBufferLogging;
 
@@ -111,20 +118,31 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		return $castSkill(Time.class, this.skillBufferTime);
 	}
 
-	/** Replies the mutex for synchronizing on the task list.
+	/** Replies the lock for synchronizing on the task list.
 	 *
-	 * @return the mutex.
+	 * @return the lock.
 	 */
-	protected final Object getTaskListMutex() {
-		return this.tasks;
-	}
 
+	/** {@inheritDoc}
+	 *
+	 * @deprecated since 0.10
+	 */
 	@Override
+	@Deprecated
 	public int getInstallationOrder() {
 		if (installationOrder < 0) {
 			installationOrder = installationOrder(this);
 		}
 		return installationOrder;
+	}
+
+	/** Replies the lock for the tasks' list.
+	 *
+	 * @return the lock.
+	 * @since 0.10
+	 */
+	protected final ReadWriteLock getTaskListLock() {
+		return this.tasksLock;
 	}
 
 	@Override
@@ -137,7 +155,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	/**
 	 * Remove any reference to the given task.
 	 *
-	 * <p>This function is not thread-safe.
+	 * <p>This function is thread-safe.
 	 *
 	 * @param task the task.
 	 * @param updateSkillReferences indicates if the references to skills should be updated too.
@@ -146,12 +164,19 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	private void finishTask(AgentTask task, boolean updateSkillReferences, boolean updateAgentTraitReferences) {
 		assert task != null;
 		if (updateSkillReferences) {
-			this.tasks.remove(task.getName());
+			final ReadWriteLock llock = getTaskListLock();
+			llock.writeLock().lock();
+			try {
+				this.tasks.remove(task.getName());
+			} finally {
+				llock.writeLock().unlock();
+			}
 		}
 		if (updateAgentTraitReferences) {
 			final Object initiator = task.getInitiator();
 			if (initiator instanceof AgentTrait) {
-				final AgentTraitData data = SREutils.getSreSpecificData((AgentTrait) initiator, AgentTraitData.class);
+				final AgentTrait trait = (AgentTrait) initiator;
+				final AgentTraitData data = SREutils.getSreSpecificData(trait, AgentTraitData.class);
 				if (data != null) {
 					data.removeTask(task);
 				}
@@ -161,8 +186,12 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 
 	@Override
 	public SynchronizedSet<String> getActiveTasks() {
-		synchronized (getTaskListMutex()) {
-			return Collections3.unmodifiableSynchronizedSet(this.tasks.keySet(), getTaskListMutex());
+		final ReadWriteLock lock = getTaskListLock();
+		lock.readLock().lock();
+		try {
+			return Collections3.unmodifiableSynchronizedSet(this.tasks.keySet(), lock);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
@@ -172,8 +201,12 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	 * @return the names of the active futures.
 	 */
 	Collection<Future<?>> getActiveFutures() {
-		synchronized (getTaskListMutex()) {
+		final ReadWriteLock lock = getTaskListLock();
+		lock.readLock().lock();
+		try {
 			return Lists.newArrayList(Iterables.transform(this.tasks.values(), it -> it.getFuture()));
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
@@ -181,7 +214,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	 *
 	 * @param behavior the behavior.
 	 */
-	synchronized void unregisterTasksForBehavior(Behavior behavior) {
+	void unregisterTasksForBehavior(Behavior behavior) {
 		final AgentTraitData data = SREutils.getSreSpecificData(behavior, AgentTraitData.class);
 		if (data != null) {
 			final Iterable<AgentTask> iterable = data.resetTaskList();
@@ -191,37 +224,43 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		}
 	}
 
+	/** Cancel the running tasks.
+	 *
+	 * <p>This function is thread-safe.
+	 */
 	private void cancelAllRunningTasks() {
 		Future<?> future;
 		AgentTask task;
-		for (final Entry<String, TaskDescription> taskDescription : this.tasks.entrySet()) {
-			final TaskDescription pair = taskDescription.getValue();
-			if (pair != null) {
-				future = pair.getFuture();
-				if (future != null) {
-					future.cancel(true);
-				}
-				task = pair.getTask();
-				if (task != null) {
-					finishTask(task, false, true);
+		final ReadWriteLock lock = getTaskListLock();
+		lock.writeLock().lock();
+		try {
+			for (final Entry<String, TaskDescription> taskDescription : this.tasks.entrySet()) {
+				final TaskDescription pair = taskDescription.getValue();
+				if (pair != null) {
+					future = pair.getFuture();
+					if (future != null) {
+						future.cancel(true);
+					}
+					task = pair.getTask();
+					if (task != null) {
+						finishTask(task, false, true);
+					}
 				}
 			}
+			this.tasks.clear();
+		} finally {
+			lock.writeLock().unlock();
 		}
-		this.tasks.clear();
 	}
 
 	@Override
 	protected void uninstall(UninstallationStage stage) {
 		if (stage == UninstallationStage.PRE_DESTROY_EVENT) {
 			// Cancel the tasks as soon as possible in the uninstallation process
-			synchronized (getTaskListMutex()) {
-				cancelAllRunningTasks();
-			}
+			cancelAllRunningTasks();
 		} else {
-			synchronized (getTaskListMutex()) {
-				// Cancel the tasks that were creating during the destruction stage (in the Destroy event handler)
-				cancelAllRunningTasks();
-			}
+			// Cancel the tasks that were creating during the destruction stage (in the Destroy event handler)
+			cancelAllRunningTasks();
 		}
 	}
 
@@ -232,19 +271,14 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 
 	@Override
 	public AgentTask in(AgentTask task, long delay, Procedure1<? super Agent> procedure) {
-		TaskDescription pair;
-		synchronized (getTaskListMutex()) {
-			pair = preRunTask(task, procedure);
-		}
+		TaskDescription description = preRunTask(task, procedure);
 		final long osDelay = Math.round(getTimeSkill().toOSDuration(delay));
-		final AgentTask runnableTask = pair != null ? pair.getTask() : task;
+		final AgentTask runnableTask = description != null ? description.getTask() : task;
 		final ScheduledFuture<?> sf = this.executorService.schedule(
 				new AgentTaskRunner(runnableTask, false),
 				osDelay, TimeUnit.MILLISECONDS);
-		synchronized (getTaskListMutex()) {
-			pair = postRunTask(pair, task, sf);
-		}
-		return pair.getTask();
+		description = postRunTask(description, task, sf);
+		return description.getTask();
 	}
 
 	@Override
@@ -256,6 +290,14 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		return task;
 	}
 
+	/** Prepare the task to be run.
+	 *
+	 * <p>This function is thread safe.
+	 *
+	 * @param task the task to run.
+	 * @param procedure the procedure to attach tothe task.
+	 * @return the description
+	 */
 	private TaskDescription preRunTask(AgentTask task, Procedure1<? super Agent> procedure) {
 		final TaskDescription pair;
 		final AgentTask rtask;
@@ -264,20 +306,47 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 			rtask = pair.getTask();
 		} else {
 			rtask = task;
-			pair = this.tasks.get(task.getName());
+			final ReadWriteLock lock = getTaskListLock();
+			lock.readLock().lock();
+			try {
+				pair = this.tasks.get(task.getName());
+			} finally {
+				lock.readLock().unlock();
+			}
 			if (pair != null) {
-				pair.setTask(rtask);
+				// Caution: according to the lock's documentation, the writing lock cannot be obtained with reading lock handle
+				lock.writeLock().lock();
+				try {
+					pair.setTask(rtask);
+				} finally {
+					lock.writeLock().unlock();
+				}
 			}
 		}
 		rtask.setProcedure(procedure);
 		return pair;
 	}
 
+	/** Finalize the running query for the given task.
+	 *
+	 * <p>This function is thread-safe.
+	 *
+	 * @param description the description of the task.
+	 * @param task the task.
+	 * @param future the future object associated to the task.
+	 * @return the description.
+	 */
 	private TaskDescription postRunTask(TaskDescription description, AgentTask task, Future<?> future) {
 		final TaskDescription pair;
 		if (description == null) {
 			pair = new TaskDescription(task, future);
-			this.tasks.put(task.getName(), pair);
+			final ReadWriteLock lock = getTaskListLock();
+			lock.writeLock().lock();
+			try {
+				this.tasks.put(task.getName(), pair);
+			} finally {
+				lock.writeLock().unlock();
+			}
 		} else {
 			pair = description;
 			pair.setFuture(future);
@@ -285,15 +354,26 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		return pair;
 	}
 
+	/** Create a task if it was not created.
+	 *
+	 * <p>This function is thread-safe.
+	 *
+	 * @param name the name of the task.
+	 * @return the description.
+	 */
 	private TaskDescription createTaskIfNecessary(String name) {
 		TaskDescription pair = null;
 		final String realName;
+		final ReadWriteLock lock = getTaskListLock();
 		if (Strings.isNullOrEmpty(name)) {
 			realName = "task-" + UUID.randomUUID().toString(); //$NON-NLS-1$
 		} else {
 			realName = name;
-			synchronized (getTaskListMutex()) {
+			lock.readLock().lock();
+			try {
 				pair = this.tasks.get(realName);
+			} finally {
+				lock.readLock().unlock();
 			}
 		}
 		if (pair == null) {
@@ -302,16 +382,20 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 			task.setTaskName(realName);
 			task.setGuard(AgentTask.TRUE_GUARD);
 			pair = new TaskDescription(task);
-			synchronized (getTaskListMutex()) {
+			// Caution: according to the lock's documentation, the writing lock cannot be obtained with reading lock handle
+			lock.writeLock().lock();
+			try {
 				this.tasks.put(realName, pair);
-				if (caller != null) {
-					AgentTraitData data = SREutils.getSreSpecificData(caller, AgentTraitData.class);
-					if (data == null) {
-						data = new AgentTraitData();
-						SREutils.setSreSpecificData(caller, data);
-					}
-					data.addTask(task);
+			} finally {
+				lock.writeLock().unlock();
+			}
+			if (caller != null) {
+				AgentTraitData data = SREutils.getSreSpecificData(caller, AgentTraitData.class);
+				if (data == null) {
+					data = new AgentTraitData();
+					SREutils.setSreSpecificData(caller, data);
 				}
+				data.addTask(task);
 			}
 		}
 		return pair;
@@ -327,15 +411,34 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		String nm = name;
 		int i = 0;
 		final String prefix = name + "-"; //$NON-NLS-1$
-		synchronized (getTaskListMutex()) {
-			final TaskDescription desc = this.tasks.remove(task.getName());
+		final TaskDescription desc;
+		final ReadWriteLock lock = getTaskListLock();
+		lock.writeLock().lock();
+		try {
+			desc = this.tasks.remove(task.getName());
 			if (desc != null) {
+				// Acquire the reading lock before releasing the writing lock
+				lock.readLock().lock();
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
+		if (desc != null) {
+			try {
 				while (this.tasks.containsKey(nm)) {
 					++i;
 					nm = prefix + i;
 				}
-				task.setTaskName(nm);
+			} finally {
+				lock.readLock().unlock();
+			}
+			task.setTaskName(nm);
+			// Caution: according to the lock's documentation, the writing lock cannot be obtained with reading lock handle
+			lock.writeLock().lock();
+			try {
 				this.tasks.put(nm, desc);
+			} finally {
+				lock.writeLock().unlock();
 			}
 		}
 	}
@@ -361,14 +464,19 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	protected boolean cancel(AgentTask task, boolean mayInterruptIfRunning, boolean updateAgentTraitReferences) {
 		if (task != null) {
 			final String name = task.getName();
-			synchronized (getTaskListMutex()) {
-				final TaskDescription pair = this.tasks.get(name);
-				if (pair != null) {
-					final Future<?> future = pair.getFuture();
-					if (future != null && !future.isDone() && !future.isCancelled() && future.cancel(mayInterruptIfRunning)) {
-						finishTask(task, true, updateAgentTraitReferences);
-						return true;
-					}
+			final TaskDescription pair;
+			final ReadWriteLock lock = getTaskListLock();
+			lock.readLock().lock();
+			try {
+				pair = this.tasks.get(name);
+			} finally {
+				lock.readLock().unlock();
+			}
+			if (pair != null) {
+				final Future<?> future = pair.getFuture();
+				if (future != null && !future.isDone() && !future.isCancelled() && future.cancel(mayInterruptIfRunning)) {
+					finishTask(task, true, updateAgentTraitReferences);
+					return true;
 				}
 			}
 		}
@@ -394,11 +502,16 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	 * @since 0.5
 	 */
 	Future<?> getActiveFuture(String taskName) {
-		synchronized (getTaskListMutex()) {
-			final TaskDescription pair = this.tasks.get(taskName);
-			if (pair != null) {
-				return pair.getFuture();
-			}
+		final TaskDescription pair;
+		final ReadWriteLock lock = getTaskListLock();
+		lock.readLock().lock();
+		try {
+			pair = this.tasks.get(taskName);
+		} finally {
+			lock.readLock().unlock();
+		}
+		if (pair != null) {
+			return pair.getFuture();
 		}
 		return null;
 	}
@@ -410,18 +523,13 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 
 	@Override
 	public AgentTask every(AgentTask task, long period, Procedure1<? super Agent> procedure) {
-		TaskDescription description;
-		synchronized (getTaskListMutex()) {
-			description = preRunTask(task, procedure);
-		}
+		TaskDescription description = preRunTask(task, procedure);
 		final long osPeriod = Math.round(getTimeSkill().toOSDuration(period));
 		final AgentTask runnableTask = description != null ? description.getTask() : task;
 		final ScheduledFuture<?> sf = this.executorService.scheduleAtFixedRate(
 				new AgentTaskRunner(runnableTask, true),
 				0, osPeriod, TimeUnit.MILLISECONDS);
-		synchronized (getTaskListMutex()) {
-			description = postRunTask(description, task, sf);
-		}
+		description = postRunTask(description, task, sf);
 		return description.getTask();
 	}
 
@@ -432,10 +540,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 
 	@Override
 	public AgentTask atFixedDelay(AgentTask task, long delay, Procedure1<? super Agent> procedure) {
-		TaskDescription description;
-		synchronized (getTaskListMutex()) {
-			description = preRunTask(task, procedure);
-		}
+		TaskDescription description = preRunTask(task, procedure);
 		final AgentTask runnableTask = description != null ? description.getTask() : task;
 		final Future<?> future;
 		final long osDelay = Math.round(getTimeSkill().toOSDuration(delay));
@@ -446,9 +551,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 					new AgentTaskRunner(runnableTask, true),
 					0, osDelay, TimeUnit.MILLISECONDS);
 		}
-		synchronized (getTaskListMutex()) {
-			description = postRunTask(description, task, future);
-		}
+		description = postRunTask(description, task, future);
 		return description.getTask();
 	}
 
@@ -458,16 +561,11 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 	}
 
 	@Override
-	public synchronized AgentTask execute(AgentTask task, Procedure1<? super Agent> procedure) {
-		TaskDescription description;
-		synchronized (getTaskListMutex()) {
-			description = preRunTask(task, procedure);
-		}
+	public AgentTask execute(AgentTask task, Procedure1<? super Agent> procedure) {
+		TaskDescription description = preRunTask(task, procedure);
 		final AgentTask runnableTask = description != null ? description.getTask() : task;
 		final Future<?> future = this.executorService.submit(new AgentTaskRunner(runnableTask, false));
-		synchronized (getTaskListMutex()) {
-			description = postRunTask(description, task, future);
-		}
+		description = postRunTask(description, task, future);
 		return description.getTask();
 	}
 
@@ -544,9 +642,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 				mustBeCanceled = true;
 			} finally {
 				if (mustBeCanceled || !this.isPeriodic) {
-					synchronized (getTaskListMutex()) {
-						finishTask(task, true, true);
-					}
+					finishTask(task, true, true);
 				}
 			}
 		}
@@ -624,9 +720,7 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 			} finally {
 				final AgentTask task = this.agentTaskRef.get();
 				if (task != null) {
-					synchronized (getTaskListMutex()) {
-						finishTask(task, true, true);
-					}
+					finishTask(task, true, true);
 				}
 			}
 		}
@@ -659,12 +753,16 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		private Future<?> future;
 
 		TaskDescription(AgentTask task) {
-			this.task = task;
+			this(task, null);
 		}
 
 		TaskDescription(AgentTask task, Future<?> future) {
 			this.task = task;
-			this.future = future;
+			if (future == null) {
+				this.future = new FutureReceiver();
+			} else {
+				this.future = future;
+			}
 		}
 
 		@Override
@@ -685,7 +783,77 @@ public class SchedulesSkill extends BuiltinSkill implements Schedules {
 		}
 
 		public void setFuture(Future<?> future) {
-			this.future = future;
+			if (future != null) {
+				final FutureReceiver receiver;
+				if (this.future instanceof FutureReceiver) {
+					receiver = (FutureReceiver) this.future;
+				} else {
+					receiver = null;
+				}
+				this.future = future;
+				if (receiver != null) {
+					receiver.apply(this.future);
+				}
+			}
+		}
+
+		/**
+		 * A future definition that enables to interact with the future
+		 * object's even if it is not already provided by the thread manager.
+		 * This receiver will be replaced by the real future object as soon
+		 * as it is provided by the thread manager. Then, any interaction with
+		 * the receiver will be propagated to the real future.
+		 *
+		 * @author $Author: sgalland$
+		 * @version $Name$ $Revision$ $Date$
+		 * @mavengroupid $GroupId$
+		 * @mavenartifactid $ArtifactId$
+		 * @since 0.9
+		 */
+		private static class FutureReceiver implements Future<Object> {
+
+			private final AtomicBoolean cancelFlag = new AtomicBoolean();
+
+			private final AtomicBoolean mayInterruptIfRunningFlag = new AtomicBoolean();
+
+			FutureReceiver() {
+				//
+			}
+
+			void apply(Future<?> future) {
+				if (future != null && !future.isCancelled() && !future.isDone() && this.cancelFlag.get()) {
+					future.cancel(this.mayInterruptIfRunningFlag.get());
+				}
+			}
+
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				this.mayInterruptIfRunningFlag.set(mayInterruptIfRunning);
+				this.cancelFlag.set(true);
+				return true;
+			}
+
+			@Override
+			public boolean isCancelled() {
+				return this.cancelFlag.get();
+			}
+
+			@Override
+			public boolean isDone() {
+				return false;
+			}
+
+			@Override
+			public Object get() throws InterruptedException, ExecutionException {
+				throw new ExecutionException(new UnsupportedOperationException());
+			}
+
+			@Override
+			public Object get(long timeout, TimeUnit unit)
+					throws InterruptedException, ExecutionException, TimeoutException {
+				throw new ExecutionException(new UnsupportedOperationException());
+			}
+
 		}
 
 	}

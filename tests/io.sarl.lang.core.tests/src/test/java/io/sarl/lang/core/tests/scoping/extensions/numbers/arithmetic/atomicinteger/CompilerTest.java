@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,17 @@
 
 package io.sarl.lang.core.tests.scoping.extensions.numbers.arithmetic.atomicinteger;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.sarl.SarlPackage;
 import io.sarl.tests.api.AbstractMassiveCompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.CompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.Context;
 
 /**
+ * <p>FIXME: Enable when the speed issue of implicitly imported functions is solved.
+ *
  * @author $Author: sgalland$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
@@ -35,11 +39,12 @@ import io.sarl.tests.api.AbstractMassiveCompilationTest;
  * @see "https://github.com/eclipse/xtext-extras/issues/186"
  */
 @SuppressWarnings("all")
+@Ignore
 public class CompilerTest extends AbstractMassiveCompilationTest {
 
-	@DifferedTest
-	public void operator_minus_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -71,9 +76,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -106,9 +111,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : long {",
@@ -139,9 +144,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -172,9 +177,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : int {",
@@ -205,9 +210,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Byte) : int {",
@@ -238,9 +243,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : float {",
@@ -271,9 +276,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Float) : float {",
@@ -304,9 +309,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : int {",
@@ -337,9 +342,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Integer) : int {",
@@ -370,9 +375,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : int {",
@@ -403,9 +408,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Short) : int {",
@@ -436,9 +441,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : AtomicInteger) : int {",
@@ -469,9 +474,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_AtomicInteger_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_AtomicInteger_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
@@ -504,9 +509,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -537,9 +542,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : long {",
@@ -570,9 +575,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : int {",
@@ -603,9 +608,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Byte) : int {",
@@ -636,9 +641,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Float) : float {",
@@ -669,9 +674,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : float {",
@@ -702,9 +707,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Integer) : int {",
@@ -735,9 +740,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : int {",
@@ -768,9 +773,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : int {",
@@ -801,9 +806,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Short) : int {",
@@ -834,9 +839,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : AtomicInteger) : int {",
@@ -867,9 +872,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -900,9 +905,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -935,9 +940,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -970,9 +975,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : double {",
@@ -1003,9 +1008,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : double {",
@@ -1036,9 +1041,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : double {",
@@ -1069,9 +1074,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : double {",
@@ -1102,9 +1107,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : double {",
@@ -1135,9 +1140,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_AtomicInteger_double() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_AtomicInteger_double(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : double) : double {",
@@ -1168,9 +1173,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : long {",
@@ -1201,9 +1206,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -1234,9 +1239,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : int {",
@@ -1267,9 +1272,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Byte) : int {",
@@ -1300,9 +1305,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : float {",
@@ -1333,9 +1338,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Float) : float {",
@@ -1366,9 +1371,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : int {",
@@ -1399,9 +1404,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Integer) : int {",
@@ -1432,9 +1437,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -1467,9 +1472,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : int {",
@@ -1500,9 +1505,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Short) : int {",
@@ -1533,9 +1538,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : AtomicInteger) : int {",
@@ -1566,9 +1571,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_AtomicInteger_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_AtomicInteger_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
@@ -1601,9 +1606,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : long {",
@@ -1634,9 +1639,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -1667,9 +1672,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : int {",
@@ -1700,9 +1705,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Byte) : int {",
@@ -1733,9 +1738,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : float {",
@@ -1766,9 +1771,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Float) : float {",
@@ -1799,9 +1804,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : int {",
@@ -1832,9 +1837,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Integer) : int {",
@@ -1865,9 +1870,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -1900,9 +1905,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : int {",
@@ -1933,9 +1938,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Short) : int {",
@@ -1966,9 +1971,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : AtomicInteger) : int {",
@@ -1999,9 +2004,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_AtomicInteger_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_AtomicInteger_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
@@ -2034,9 +2039,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : long) : long {",
@@ -2067,9 +2072,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Long) : long {",
@@ -2100,9 +2105,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Byte) : int {",
@@ -2133,9 +2138,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : byte) : int {",
@@ -2166,9 +2171,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : float) : float {",
@@ -2199,9 +2204,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Float) : float {",
@@ -2232,9 +2237,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : int) : int {",
@@ -2265,9 +2270,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Integer) : int {",
@@ -2298,9 +2303,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
@@ -2333,9 +2338,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : short) : int {",
@@ -2366,9 +2371,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : Short) : int {",
@@ -2399,9 +2404,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : AtomicInteger, right : AtomicInteger) : int {",
@@ -2432,9 +2437,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_AtomicInteger_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_AtomicInteger_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",

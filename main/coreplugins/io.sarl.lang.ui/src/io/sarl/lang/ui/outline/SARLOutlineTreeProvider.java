@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,10 @@ import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.internal.ui.viewsupport.ColoringLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtend.core.xtend.XtendClass;
 import org.eclipse.xtend.core.xtend.XtendMember;
@@ -55,7 +58,9 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
 import org.eclipse.xtext.ui.editor.outline.impl.EObjectNode;
 import org.eclipse.xtext.ui.editor.outline.impl.EStructuralFeatureNode;
+import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.XFeatureCall;
+import org.eclipse.xtext.xbase.XListLiteral;
 import org.eclipse.xtext.xbase.annotations.ui.outline.XbaseWithAnnotationsOutlineTreeProvider;
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
 import org.eclipse.xtext.xbase.typesystem.util.CommonTypeComputationServices;
@@ -68,6 +73,7 @@ import io.sarl.lang.sarl.SarlConstructor;
 import io.sarl.lang.sarl.SarlField;
 import io.sarl.lang.sarl.SarlRequiredCapacity;
 import io.sarl.lang.sarl.SarlScript;
+import io.sarl.lang.util.OutParameter;
 import io.sarl.lang.util.Utils;
 
 /**
@@ -79,6 +85,7 @@ import io.sarl.lang.util.Utils;
  * @mavenartifactid $ArtifactId$
  * @see "https://www.eclipse.org/Xtext/documentation/304_ide_concepts.html#outline"
  */
+@SuppressWarnings("checkstyle:classfanoutcomplexity")
 public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProvider {
 
 	@Inject
@@ -121,13 +128,35 @@ public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProv
 		}
 	}
 
-	/** Create a node for the given feature container.
+	/** Create a node for the given feature container at the root level.
 	 *
 	 * @param parentNode the parent node.
 	 * @param modelElement the feature container for which a node should be created.
 	 */
-	@SuppressWarnings("checkstyle:cyclomaticcomplexity")
 	protected void _createNode(DocumentRootNode parentNode, XtendTypeDeclaration modelElement) {
+		createTypeDeclarationNode(parentNode, modelElement);
+	}
+
+	/** Create a node for the given feature container at the root level.
+	 *
+	 * @param parentNode the parent node.
+	 * @param modelElement the feature container for which a node should be created.
+	 */
+	protected void _createNode(EObjectNode parentNode, XtendTypeDeclaration modelElement) {
+		createTypeDeclarationNode(parentNode, modelElement);
+	}
+
+	/** Create a node for the given feature container at the root level.
+	 *
+	 * @param parentNode the parent node.
+	 * @param modelElement the feature container for which a node should be created.
+	 */
+	protected void _createNode(EStructuralFeatureNode parentNode, XtendTypeDeclaration modelElement) {
+		createTypeDeclarationNode(parentNode, modelElement);
+	}
+
+	@SuppressWarnings("checkstyle:cyclomaticcomplexity")
+	private void createTypeDeclarationNode(IOutlineNode parentNode, XtendTypeDeclaration modelElement) {
 		//
 		// The text region is set to the model element, not to the model element's name as in the
 		// default implementation of createStructuralFeatureNode().
@@ -176,69 +205,90 @@ public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProv
 		}
 	}
 
+	private static boolean extractGetterSetterFromAccessorsAnnotation(EObject value, OutParameter<Boolean> hasGetter,
+			OutParameter<Boolean> hasSetter) {
+		if (value instanceof XListLiteral) {
+			final XListLiteral list = (XListLiteral) value;
+			boolean hasArg = false;
+			for (final XExpression literalExpression : list.getElements()) {
+				hasArg = extractGetterSetterFromAccessorsAnnotation(literalExpression, hasGetter, hasSetter) || hasArg;
+			}
+			return hasArg;
+		} else if (value instanceof XFeatureCall) {
+			final XFeatureCall call = (XFeatureCall) value;
+			final String id = call.getFeature().getSimpleName();
+			try {
+				final AccessorType acc = AccessorType.valueOf(id);
+				assert acc != null;
+				switch (acc) {
+				case PACKAGE_GETTER:
+				case PRIVATE_GETTER:
+				case PROTECTED_GETTER:
+				case PUBLIC_GETTER:
+					hasGetter.set(true);
+					return true;
+				case PACKAGE_SETTER:
+				case PRIVATE_SETTER:
+				case PROTECTED_SETTER:
+				case PUBLIC_SETTER:
+					hasSetter.set(true);
+					return true;
+				case NONE:
+					hasGetter.set(false);
+					hasSetter.set(false);
+					return true;
+				default:
+				}
+			} catch (Throwable exception) {
+				// Ignore
+			}
+		}
+		return false;
+	}
+
 	@SuppressWarnings({"checkstyle:npathcomplexity", "checkstyle:cyclomaticcomplexity", "checkstyle:nestedifdepth"})
 	private void createAutomaticAccessors(EStructuralFeatureNode elementNode, SarlField field) {
 		final JvmField jvmField = this.associations.getJvmField(field);
 		if (jvmField != null) {
 			final JvmAnnotationReference annotation = this.annotationFinder.findAnnotation(jvmField, Accessors.class);
-			if (annotation != null && !annotation.getValues().isEmpty()) {
-				for (final JvmAnnotationValue value : annotation.getValues()) {
-					if (value instanceof JvmCustomAnnotationValue) {
-						final JvmCustomAnnotationValue annotationValue = (JvmCustomAnnotationValue) value;
-						boolean hasGetter = false;
-						boolean hasSetter = false;
-						for (final EObject rvalue : annotationValue.getValues()) {
-							if (rvalue instanceof XFeatureCall) {
-								final XFeatureCall call = (XFeatureCall) rvalue;
-								final String id = call.getFeature().getSimpleName();
-								try {
-									final AccessorType acc = AccessorType.valueOf(id);
-									assert acc != null;
-									switch (acc) {
-									case PACKAGE_GETTER:
-									case PRIVATE_GETTER:
-									case PROTECTED_GETTER:
-									case PUBLIC_GETTER:
-										hasGetter = true;
-										break;
-									case PACKAGE_SETTER:
-									case PRIVATE_SETTER:
-									case PROTECTED_SETTER:
-									case PUBLIC_SETTER:
-										hasSetter = true;
-										break;
-									case NONE:
-										hasGetter = false;
-										hasSetter = false;
-										break;
-									default:
-									}
-								} catch (Throwable exception) {
-									// Ignore
-								}
+			if (annotation != null) {
+				final OutParameter<Boolean> hasGetter = new OutParameter<>(false);
+				final OutParameter<Boolean> hasSetter = new OutParameter<>(false);
+				boolean explicitArgument = false;
+				if (!annotation.getValues().isEmpty()) {
+					for (final JvmAnnotationValue value : annotation.getValues()) {
+						if (value instanceof JvmCustomAnnotationValue) {
+							final JvmCustomAnnotationValue annotationValue = (JvmCustomAnnotationValue) value;
+							for (final EObject rvalue : annotationValue.getValues()) {
+								explicitArgument = extractGetterSetterFromAccessorsAnnotation(rvalue, hasGetter, hasSetter) || explicitArgument;
+							}
+							break;
+						}
+					}
+				}
+				if (!explicitArgument) {
+					hasGetter.set(true);
+					hasSetter.set(true);
+				}
+				if (hasGetter.get() || hasSetter.get()) {
+					final JvmDeclaredType container = jvmField.getDeclaringType();
+					final String basename = org.eclipse.xtext.util.Strings.toFirstUpper(field.getName());
+					if (hasGetter.get()) {
+						JvmOperation operation = findMethod(container, "get" + basename); //$NON-NLS-1$
+						if (operation == null) {
+							operation = findMethod(container, "is" + basename); //$NON-NLS-1$
+							if (operation == null) {
+								operation = findMethod(container, "has" + basename); //$NON-NLS-1$
 							}
 						}
-						if (hasGetter || hasSetter) {
-							final JvmDeclaredType container = jvmField.getDeclaringType();
-							final String basename = org.eclipse.xtext.util.Strings.toFirstUpper(field.getName());
-							if (hasGetter) {
-								JvmOperation operation = findMethod(container, "get" + basename); //$NON-NLS-1$
-								if (operation == null) {
-									operation = findMethod(container, "is" + basename); //$NON-NLS-1$
-									if (operation == null) {
-										operation = findMethod(container, "has" + basename); //$NON-NLS-1$
-									}
-								}
-								if (operation != null) {
-									createNode(elementNode, operation);
-								}
-							}
-							if (hasSetter) {
-								final JvmOperation operation = findMethod(container, "set" + basename); //$NON-NLS-1$
-								if (operation != null) {
-									createNode(elementNode, operation);
-								}
-							}
+						if (operation != null) {
+							createNode(elementNode, operation);
+						}
+					}
+					if (hasSetter.get()) {
+						final JvmOperation operation = findMethod(container, "set" + basename); //$NON-NLS-1$
+						if (operation != null) {
+							createNode(elementNode, operation);
 						}
 					}
 				}
@@ -256,6 +306,22 @@ public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProv
 			}
 		}
 		return null;
+	}
+
+	private boolean hasInheritedConstructors(XtendTypeDeclaration modelElement) {
+		if (modelElement instanceof XtendClass) {
+			final JvmTypeReference extend = ((XtendClass) modelElement).getExtends();
+			if (extend != null) {
+				final LightweightTypeReference reference = Utils.toLightweightTypeReference(extend, this.services);
+				if (reference != null) {
+					final JvmType type = reference.getType();
+					if (type instanceof JvmDeclaredType) {
+						return ((JvmDeclaredType) type).getDeclaredConstructors().iterator().hasNext();
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private void createInheritedConstructors(EStructuralFeatureNode elementNode, XtendClass modelElement) {
@@ -318,9 +384,8 @@ public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProv
 	 * @param modelElement the model element.
 	 * @return <code>true</code> if it is a leaf, <code>false</code> otherwise.
 	 */
-	@SuppressWarnings("static-method")
 	protected boolean _isLeaf(XtendTypeDeclaration modelElement) {
-		return modelElement.getMembers().isEmpty();
+		return modelElement.getMembers().isEmpty() && !hasInheritedConstructors(modelElement);
 	}
 
 	/** Replies if the member element is a leaf in the outline.
@@ -394,6 +459,20 @@ public class SARLOutlineTreeProvider extends XbaseWithAnnotationsOutlineTreeProv
 	protected Image _image(XtendMember modelElement) {
 		final Image img = super._image(modelElement);
 		return this.diagnoticDecorator.decorateImage(img, modelElement);
+	}
+
+	/** Compute the text for the given JVM constructor, which is usually a inherited constructor.
+	 *
+	 * @param modelElement the model
+	 * @return the text.
+	 */
+	protected CharSequence _text(JvmConstructor modelElement) {
+		if (this.labelProvider instanceof IStyledLabelProvider) {
+			final StyledString str = ((IStyledLabelProvider) this.labelProvider).getStyledText(modelElement);
+			str.setStyle(0, str.length(), ColoringLabelProvider.INHERITED_STYLER);
+			return str;
+		}
+		return this.labelProvider.getText(modelElement);
 	}
 
 }

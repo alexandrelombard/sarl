@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
-# With Janus
-PLUGIN_MODULES=("./main/coreplugins/io.sarl.lang.core" "./main/apiplugins/io.sarl.core" "./main/apiplugins/io.sarl.util" "./main/apiplugins/io.sarl.javafx" "./sre/io.janusproject/io.janusproject.plugin")
+# Modules with standard Eclipse paths
+DOCUMENTED_MODULES=(
+	"./main/coreplugins/io.sarl.lang.core"
+	"./main/apiplugins/io.sarl.core"
+	"./main/apiplugins/io.sarl.util"
+	"./main/externalmaven/io.sarl.javafx"
+	"./sre/io.janusproject/io.janusproject.plugin"
+)
 
-# Without Janus
-#PLUGIN_MODULES=("./main/coreplugins/io.sarl.lang.core" "./main/apiplugins/io.sarl.core" "./main/apiplugins/io.sarl.util" "./main/apiplugins/io.sarl.javafx")
-
+# Build the source paths
 SOURCE_PATH=""
-for module in "${PLUGIN_MODULES[@]}"
+for module in "${DOCUMENTED_MODULES[@]}"
 do
 	pom_path="${module}/pom.xml"
 	if [ -f "${pom_path}" ]
@@ -20,12 +24,17 @@ do
 			SOURCE_PATH="${SOURCE_PATH}:${module_path}"
 		fi
 	else
-		echo "${module} no found." >&2
+		echo "${module} is not an module." >&2
 		exit 255
 	fi
 done
-
-
 echo "Source Paths: ${SOURCE_PATH}"
 
-exec mvn -Dmaven.test.skip=true -Dcheckstyle.skip=true -DpublicSarlApiModuleSet=true -Dsourcepath=${SOURCE_PATH} clean install org.arakhne.afc.maven:tag-replacer:generatereplacesrc javadoc:aggregate
+# Build the documentation
+if mvn -Dmaven.test.skip=true -Dcheckstyle.skip=true -DpublicSarlApiModuleSet=true clean install org.arakhne.afc.maven:tag-replacer:generatereplacesrc
+then
+
+	exec mvn -Dmaven.test.skip=true -Dcheckstyle.skip=true -DpublicSarlApiModuleSet=true "-Dsourcepath=${SOURCE_PATH}" javadoc:aggregate
+
+fi
+

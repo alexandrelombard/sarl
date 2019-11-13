@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,11 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackage().getName() + ".messages"; //$NON-NLS-1$
 	public static String SarlBatchCompilerModuleProvider_0;
-	public static String SarlcDefaultCommandModuleProvider_0;
-	public static String SARLRuntimeModuleProvider_0;
 	public static String SarlcApplicationModule_0;
 	public static String SarlcApplicationModule_1;
 	public static String SarlcApplicationModule_2;
 	public static String SarlcApplicationModuleProvider_0;
+	public static String SLF4JLoggerModuleProvider_0;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

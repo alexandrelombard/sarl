@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,7 @@ import javax.inject.Inject;
 import com.google.inject.Singleton;
 import org.eclipse.xtext.xbase.scoping.batch.ImplicitlyImportedFeatures;
 
-import io.sarl.lang.bugfixes.pending.pr106.PR106ArrayExtensions;
-import io.sarl.lang.bugfixes.pending.pr106.PR106ArrayLiterals;
-import io.sarl.lang.scoping.extensions.numbers.arithmetic.NumberArithmeticImplicitlyImportedFeatures;
+import io.sarl.lang.scoping.extensions.cast.GeneralCastImplicitlyImportedFeatures;
 import io.sarl.lang.scoping.extensions.numbers.cast.NumberCastImplicitlyImportedFeatures;
 import io.sarl.lang.scoping.extensions.numbers.comparison.NumberComparisonImplicitlyImportedFeatures;
 import io.sarl.lang.scoping.extensions.time.TimeExtensions;
@@ -49,11 +47,14 @@ public class SARLImplicitlyImportedFeatures extends ImplicitlyImportedFeatures {
 	@Inject
 	private NumberComparisonImplicitlyImportedFeatures numberComparisonFeatures;
 
-	@Inject
-	private NumberArithmeticImplicitlyImportedFeatures numberArithmeticFeatures;
+	/*TODO: @Inject
+	private NumberArithmeticImplicitlyImportedFeatures numberArithmeticFeatures;*/
 
 	@Inject
 	private NumberCastImplicitlyImportedFeatures numberCastFeatures;
+
+	@Inject
+	private GeneralCastImplicitlyImportedFeatures generalCastFeatures;
 
 	/** Construct the provider.
 	 */
@@ -62,24 +63,16 @@ public class SARLImplicitlyImportedFeatures extends ImplicitlyImportedFeatures {
 	}
 
 	@Override
-	protected List<Class<?>> getStaticImportClasses() {
-		final List<Class<?>> xtextList = super.getStaticImportClasses();
-		// Insert at the beginning for ensuring the SARL extension is selected before any Xtext extension.
-		xtextList.add(0, PR106ArrayLiterals.class);
-		return xtextList;
-	}
-
-	@Override
 	protected List<Class<?>> getExtensionClasses() {
 		final List<Class<?>> xtextList = super.getExtensionClasses();
 		// Insert at the beginning for ensuring the SARL extension is selected before any Xtext extension.
-		xtextList.add(0, PR106ArrayExtensions.class);
 		xtextList.add(0, TimeExtensions.class);
 
 		// Add features related to numbers.
 		this.numberComparisonFeatures.getImportedFeatures(xtextList);
-		this.numberArithmeticFeatures.getImportedFeatures(xtextList);
+		//TODO: this.numberArithmeticFeatures.getImportedFeatures(xtextList);
 		this.numberCastFeatures.getImportedFeatures(xtextList);
+		this.generalCastFeatures.getImportedFeatures(xtextList);
 
 		return xtextList;
 	}

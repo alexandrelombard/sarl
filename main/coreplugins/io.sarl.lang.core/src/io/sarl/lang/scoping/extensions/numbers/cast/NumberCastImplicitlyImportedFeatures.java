@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,9 @@ public class NumberCastImplicitlyImportedFeatures {
 	public void getImportedFeatures(List<Class<?>> features) {
 		features.add(AtomicLongCastExtensions.class);
 		features.add(AtomicIntegerCastExtensions.class);
+		features.add(AtomicDoubleCastExtensions.class);
+		features.add(BigIntegerCastExtensions.class);
+		features.add(BigDecimalCastExtensions.class);
 		features.add(NumberCastExtensions.class);
 		features.add(PrimitiveByteCastExtensions.class);
 		features.add(PrimitiveDoubleCastExtensions.class);

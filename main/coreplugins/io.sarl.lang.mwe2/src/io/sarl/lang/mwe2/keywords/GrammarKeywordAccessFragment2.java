@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -236,10 +236,9 @@ public class GrammarKeywordAccessFragment2 extends AbstractXtextGeneratorFragmen
 		for (final Keyword grammarKeyword : getAllKeywords(grammar)) {
 			final String keyword = grammarKeyword.getValue().trim();
 			if (!keyword.isEmpty()) {
-				final String id = keyword.toLowerCase();
-				if (!addedKeywords.contains(id) && !this.configuration.getIgnoredKeywords().contains(keyword)) {
+				if (!addedKeywords.contains(keyword) && !this.configuration.getIgnoredKeywords().contains(keyword)) {
 					clients.add(generateKeyword(grammarKeyword, grammar.getName(), getters));
-					addedKeywords.add(id);
+					addedKeywords.add(keyword);
 				}
 			}
 		}

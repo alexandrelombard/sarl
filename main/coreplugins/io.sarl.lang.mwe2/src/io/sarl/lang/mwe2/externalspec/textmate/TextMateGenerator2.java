@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ package io.sarl.lang.mwe2.externalspec.textmate;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -234,7 +233,10 @@ public class TextMateGenerator2 extends AbstractExternalHighlightingFragment2<IT
 		if (url != null) {
 			final File filename = new File(url.getPath());
 			try {
-				return Files.toString(filename, Charset.defaultCharset());
+				final byte[] array = Files.toByteArray(filename);
+				if (array != null) {
+					return new String(array);
+				}
 			} catch (IOException exception) {
 				throw new RuntimeException(exception);
 			}

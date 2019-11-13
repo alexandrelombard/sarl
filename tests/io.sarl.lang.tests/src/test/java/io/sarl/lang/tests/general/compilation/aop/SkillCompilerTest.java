@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2342,7 +2347,7 @@ public class SkillCompilerTest {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"5\")",
-					"  public final static int $DEFAULT_VALUE$FUNC1_0 = 5;",
+					"  public static final int $DEFAULT_VALUE$FUNC1_0 = 5;",
 					"  ",
 					"  @DefaultValueUse(\"int\")",
 					"  @SyntheticMember",

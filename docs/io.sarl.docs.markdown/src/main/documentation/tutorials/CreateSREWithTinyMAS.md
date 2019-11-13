@@ -294,21 +294,21 @@ identifier of the default space. In the other cases, the function replies nothin
 			import io.sarl.lang.core.SpaceSpecification
 			import io.sarl.lang.core.EventSpaceSpecification
 			import io.sarl.lang.util.SynchronizedCollection
-			import io.sarl.util.Collections3
+			import io.sarl.util.concurrent.Collections3
 			abstract class TMAgentContext implements AgentContext {
 				var defaultSpace : Space
 			[:On]
 				def getSpaces : SynchronizedCollection<? extends Space> {
-					[:collection3](Collections3)::[:synccoll](synchronizedCollection)(Collections::singleton(this.defaultSpace), this)
+   					[:collection3](Collections3)::[:synccoll](synchronizedSingleton)(this.defaultSpace)
 				}
 
 				def getSpaces(spec : Class<? extends SpaceSpecification<S>>)
 						: SynchronizedCollection<S>
 						with S extends Space {
 					if (spec !== null && spec == typeof([:evtspacespec](EventSpaceSpecification))) {
-						return Collections3::synchronizedCollection(Collections::singleton(this.defaultSpace as S), this);
+						return Collections3::synchronizedSingleton(this.defaultSpace as S)
 					}
-					return Collections3::synchronizedCollection(Collections::emptyList, this)
+					return Collections3::emptySynchronizedSet
 				}
 
 				def [:getspacefct](getSpace)(spaceUUID : UUID) : S
@@ -321,6 +321,10 @@ identifier of the default space. In the other cases, the function replies nothin
 			[:Off]
 			}
 		[:End:]
+
+        
+The function call [:synccoll:] is provided by the SARL Development Kit in order to create synchronized collections.
+The argument of this function is the collection to synchronize.
 
 
 #### Definition of the creation functions for spaces
@@ -1689,9 +1693,11 @@ Two functions must be implemented for accessing to the internal list of the beha
 			import java.util.UUID
 			import java.util.List
 			import java.util.ArrayList
+            import java.util.concurrent.locks.ReadWriteLock
+            import java.util.concurrent.locks.ReentrantReadWriteLock
 			import io.sarl.lang.core.Behavior
 			import io.sarl.core.Behaviors
-			import io.sarl.util.Collections3
+			import io.sarl.util.concurrent.Collections3
 			import io.sarl.lang.util.SynchronizedIterable
 			abstract class BehaviorsSkill implements Behaviors {
 				var behaviors : List<Behavior>
@@ -1701,13 +1707,56 @@ Two functions must be implemented for accessing to the internal list of the beha
 				}
 
 				def getRegisteredBehaviors : SynchronizedIterable<Behavior> {
-					[:synccolbuild](Collections3::unmodifiableSynchronizedIterable)(this.behaviors, this)
+                    this.lock.readLock.lock
+                    try {
+    					[:synccolbuild](Collections3::unmodifiableSynchronizedIterable)(this.behaviors, this.lock)
+                    } finally {
+                        this.lock.readLock.unlock
+                    }
 				}
+
+                val lock : ReadWriteLock = new [:reentrantlock](ReentrantReadWriteLock)
 				[:Off]
 			}
 		[:End:]
 		
 The function call [:synccolbuild:] is provided by the SARL Development Kit in order to create synchronized collections.
+The first argument of this function is the collection to synchronize.
+The second argument is the locking object that is supporting the synchronization of 
+the given collection.
+Usually, the locking object is an instance of [:reentrantlock:].
+The call to [:synccolbuild:] is enclosed by a typical code block that is enabling the 
+synchronization on the list of behaviors as reader of this list.
+
+If you don't want to apply a real synchronization on the replied collection, you could 
+replace the previous code by:
+
+        [:Success:]
+            package io.sarl.docs.tutorials.tinyMASSRE
+            import java.util.UUID
+            import java.util.List
+            import java.util.ArrayList
+            import java.util.concurrent.locks.ReadWriteLock
+            import java.util.concurrent.locks.ReentrantReadWriteLock
+            import io.sarl.lang.core.Behavior
+            import io.sarl.lang.util.SynchronizedIterable
+            import io.sarl.core.Behaviors
+            import io.sarl.util.concurrent.Collections3
+            import io.sarl.util.concurrent.NoReadWriteLock
+            abstract class BehaviorsSkill implements Behaviors {
+                var behaviors : List<Behavior>
+                [:On]
+                def getRegisteredBehaviors : SynchronizedIterable<Behavior> {
+                    Collections3::unmodifiableSynchronizedIterable(this.behaviors, [:nolock]{NoReadWriteLock::SINGLETON})
+                }
+                [:Off]
+            }
+        [:End:]
+
+
+In the previous code, [:nolock:] is a specific locking object that is doing exactly 
+nothing regarding the synchronization. In other words, this this locking object, the
+synchronization of the collection is disable. 
 
 
 #### Updating the tinyMAS agent life-cycle for (un)registering the behaviors
@@ -3170,59 +3219,6 @@ The following manifest context gives an example of the tinyMAS SRE declaration:
 		$
 
 
-### Maven Plugin for Updating the Manifest
-
-The SARL project provides a <a href="http://maven.apache.org">Maven</a> plugin that enables the
-SRE developer to update the manifest file automatically when the SRE project is built/compile (with Maven).
-
-The Maven plugin is:
-
-* GroupID: [:mavenplugingroup:]
-* ArtifactID: [:mavenpluginartifact:]
-
-The mojo action defined by the SRE Maven plugin is [:mavengoalupdatemanifest:]. This mojo action
-updates the existing manifest file with the SRE information.
-
-The following XML code gives an example of Maven configuration that enables to use the SRE Maven plugin.
-
-```xml
-<build>
-	<plugins>
-		<plugin>
-			<groupId>[:mavenplugingroup](io.sarl.maven)</groupId>
-			<artifactId>[:mavenpluginartifact](io.sarl.maven.sre)</artifactId>
-			<version>${sarl.version}</version>
-			<configuration>
-				<sreName>TinyMAS</sreName>
-				<commandLineOptions>
-					<hideInfo></hideInfo>
-					<hideLogo></hideLogo>
-					<showInfo></showInfo>
-					<showLogo></showLogo>
-					<defaultContextId></defaultContextId>
-					<randomContextId></randomContextId>
-					<bootAgentContextId></bootAgentContextId>
-					<offline></offline>
-					<embedded></embedded>
-					<noMoreOption></noMoreOption>
-					<standaloneSRE>true</standaloneSRE>
-				</commandLineOptions>
-				<mainClass>[:tinymasbootclass!]</mainClass>
-			</configuration>
-
-			<executions>
-				<execution>
-					<id>update-manifest-standard</id>
-					<goals>
-						<goal>[:mavengoalupdatemanifest](updatemanifest)</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
- 	</plugins>
-</build>
-```
-
 ## Configuration of a SRE Bootstrap
 
 An SRE bootstrap is a service that is provided by a SRE (here TinyMAS) for launching agents.
@@ -3245,53 +3241,6 @@ This file contains a single line, which is the fully qualified name of the boots
 As soon the SRE library is included into the *run-time classpath*, the SRE utility class is able to find the
 bootstrap implementation class. This SRE utility class is the major front-end for launching the agents programmatically.
 
-
-### Configuration with Maven plugin
-
-The above [:mavenpluginartifact:] Maven plugin provides a tool for created the service definition.
-First, you have to define the [:mavenbootstrapprop:] property with the fully qualified name of the bootstrap implementation class.
-Second, you should run the [:mavengoaladdbootstrap:] goal.
-The resulting Mavne configuration becomes (after upadting the configuration above):
-
-```xml
-<build>
-	<plugins>
-		<plugin>
-			<groupId>[:mavenplugingroup!]</groupId>
-			<artifactId>[:mavenpluginartifact!]</artifactId>
-			<version>${sarl.version}</version>
-			<configuration>
-				<sreName>TinyMAS</sreName>
-				<commandLineOptions>
-					<hideInfo></hideInfo>
-					<hideLogo></hideLogo>
-					<showInfo></showInfo>
-					<showLogo></showLogo>
-					<defaultContextId></defaultContextId>
-					<randomContextId></randomContextId>
-					<bootAgentContextId></bootAgentContextId>
-					<offline></offline>
-					<embedded></embedded>
-					<noMoreOption></noMoreOption>
-					<standaloneSRE>true</standaloneSRE>
-				</commandLineOptions>
-				<mainClass>[:tinymasbootclass!]</mainClass>
-				<[:mavenbootstrapprop](bootstrap)>$org.arakhne.tinymas.sarl.Bootstrap</[:mavenbootstrapprop!]>
-			</configuration>
-
-			<executions>
-				<execution>
-					<id>update-manifest-standard</id>
-					<goals>
-						<goal>[:mavengoalupdatemanifest!]</goal>
-						<goal>[:mavengoaladdbootstrap](addbootstrap)</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
- 	</plugins>
-</build>
-```
 
 
 

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,12 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -45,6 +42,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer;
@@ -157,9 +155,9 @@ public final class Utils {
 
 	private static final String SARL_VERSION_FIELD_NAME_STR = "SPECIFICATION_RELEASE_VERSION_STRING"; //$NON-NLS-1$
 
-	private static final String SARL_VERSION_FIELD_NAME_FLOAT = "SPECIFICATION_RELEASE_VERSION"; //$NON-NLS-1$
-
 	private static boolean checkSarlVersionClass = true;
+
+	private static final Pattern IMPLICIT_LAMBDA_PARAMETER_PATTERN = Pattern.compile("^\\$[0-9]+$"); //$NON-NLS-1$
 
 	static {
 		final StringBuilder name = new StringBuilder();
@@ -344,7 +342,7 @@ public final class Utils {
 	 *
 	 * @param fromType - the type from which the feature visibility is tested.
 	 * @param target - the feature to test for the visibility.
-	 * @return <code>true</code> if the given type can see the target feature.
+	 * @return {@code true} if the given type can see the target feature.
 	 */
 	public static boolean isVisible(JvmDeclaredType fromType, JvmMember target) {
 		switch (target.getVisibility()) {
@@ -362,7 +360,7 @@ public final class Utils {
 	/** Replies if the last parameter is a variadic parameter.
 	 *
 	 * @param params - parameters.
-	 * @return <code>true</code> if the late parameter is variadic.
+	 * @return {@code true} if the late parameter is variadic.
 	 */
 	public static boolean isVarArg(List<? extends XtendParameter> params) {
 		assert params != null;
@@ -380,10 +378,22 @@ public final class Utils {
 	 * compiler, and that cannot be defined by the SARL user.
 	 *
 	 * @param name - the name to test.
-	 * @return <code>true</code> if the given name is reserved by SARL.
+	 * @return {@code true} if the given name is reserved by SARL.
 	 */
 	public static boolean isHiddenMember(String name) {
 		return name.contains(HIDDEN_MEMBER_CHARACTER);
+	}
+
+	/** Replies if the given name is related to an hidden parameter for closures.
+	 *
+	 * <p>An hidden parameter for closures is the name assigned to a formal parameter
+	 * for a closure when no name is explicitly provided.
+	 *
+	 * @param name - the name to test.
+	 * @return {@code true} if the given name is reserved by SARL.
+	 */
+	public static boolean isImplicitLambdaParameterName(String name) {
+		return IMPLICIT_LAMBDA_PARAMETER_PATTERN.matcher(name).matches();
 	}
 
 	/** Replies a fixed version of the given name assuming
@@ -433,7 +443,7 @@ public final class Utils {
 	/** Replies if the given simple name is the name of the hidden method that is calling a capacity implementation.
 	 *
 	 * @param simpleName the simple name.
-	 * @return <code>true</code> if the given simple name if for the hidden method for capacuty uses.
+	 * @return {@code true} if the given simple name if for the hidden method for capacuty uses.
 	 */
 	public static boolean isNameForHiddenCapacityImplementationCallingMethod(String simpleName) {
 		return simpleName != null && simpleName.startsWith(PREFIX_CAPACITY_IMPLEMENTATION)
@@ -482,7 +492,7 @@ public final class Utils {
 	/** Replies if the given reference is pointing to a class type.
 	 *
 	 * @param typeRef - the type reference to test.
-	 * @return <code>true</code> if the pointed element is a class type.
+	 * @return {@code true} if the pointed element is a class type.
 	 */
 	public static boolean isClass(LightweightTypeReference typeRef) {
 		final JvmType t = typeRef.getType();
@@ -495,7 +505,7 @@ public final class Utils {
 	/** Replies if the given type is a class type.
 	 *
 	 * @param type - the type to test.
-	 * @return <code>true</code> if the element is a class type.
+	 * @return {@code true} if the element is a class type.
 	 */
 	public static boolean isClass(Class<?> type) {
 		return !type.isInterface();
@@ -504,7 +514,7 @@ public final class Utils {
 	/** Replies if the given reference is referencing a final type.
 	 *
 	 * @param expressionTypeRef - the type reference to test.
-	 * @return <code>true</code> if the given type is final.
+	 * @return {@code true} if the given type is final.
 	 */
 	public static boolean isFinal(LightweightTypeReference expressionTypeRef) {
 		if (expressionTypeRef.isArray()) {
@@ -520,7 +530,7 @@ public final class Utils {
 	/** Replies if the given type is a final type.
 	 *
 	 * @param expressionType - the type to test.
-	 * @return <code>true</code> if the given type is final.
+	 * @return {@code true} if the given type is final.
 	 */
 	public static boolean isFinal(Class<?> expressionType) {
 		if (expressionType.isArray()) {
@@ -536,7 +546,7 @@ public final class Utils {
 	/** Replies if the given type is an interface.
 	 *
 	 * @param type - the type to test.
-	 * @return <code>true</code> if the given type is an interface.
+	 * @return {@code true} if the given type is an interface.
 	 */
 	public static boolean isInterface(LightweightTypeReference type) {
 		return type.getType() instanceof JvmGenericType
@@ -1026,7 +1036,7 @@ public final class Utils {
 	/** Replies if the given declaration has an abstract member.
 	 *
 	 * @param declaration - the declaration.
-	 * @return <code>true</code> if the given type has an abstract function.
+	 * @return {@code true} if the given type has an abstract function.
 	 */
 	public static boolean hasAbstractMember(XtendTypeDeclaration declaration) {
 		if (declaration != null) {
@@ -1045,8 +1055,8 @@ public final class Utils {
 	 *
 	 * @param typeReferences - the accessor to the types.
 	 * @param context - the context that is providing the access to the classpath.
-	 * @return <code>true</code> if a compatible SARL library was found.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if a compatible SARL library was found.
+	 *     Otherwise {@code false}.
 	 */
 	public static boolean isCompatibleSARLLibraryOnClasspath(TypeReferences typeReferences, Notifier context) {
 		final OutParameter<String> version = new OutParameter<>();
@@ -1060,38 +1070,92 @@ public final class Utils {
 	/** Check if a version is compatible with the expected SARL library.
 	 *
 	 * @param version - the version to test.
-	 * @return <code>true</code> if a compatible SARL library was found.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if a compatible SARL library was found.
+	 *     Otherwise {@code false}.
 	 */
 	public static boolean isCompatibleSARLLibraryVersion(String version) {
-		return org.eclipse.xtext.util.Strings.equal(SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING, version);
+		if (version != null) {
+			final Version currentVersion = Version.parseVersion(SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING);
+			final Version paramVersion = Version.parseVersion(version);
+			return currentVersion.getMajor() == paramVersion.getMajor()
+					&& currentVersion.getMinor() == paramVersion.getMinor();
+		}
+		return false;
 	}
 
-	/** Check if a version of the JRE is compatible with the SARL library.
+	/** Check if a version of the JDK is compatible with the SARL compilation environment.
+	 * In other words, check if the SARL compiler is able to be run without issue
+	 * with a JDK at the given version.
 	 *
 	 * @param version - the version to test.
-	 * @return <code>true</code> if this version is for a compatible JRE.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if this version is for a compatible JDK.
+	 *     Otherwise {@code false}.
+	 * @since 0.10
+	 * @see SARLVersion#MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT
+	 * @see SARLVersion#INCOMPATIBLE_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT
 	 */
-	public static boolean isCompatibleJREVersion(String version) {
-		return version != null && !version.isEmpty()
-				&& compareVersions(version, SARLVersion.MINIMAL_JDK_VERSION) >= 0;
+	public static boolean isCompatibleJDKVersionWithSARLCompilationEnvironment(String version) {
+		if (version != null && !version.isEmpty()) {
+			final Version current = Version.parseVersion(version);
+			if (current != null) {
+				final Version minJdk = Version.parseVersion(SARLVersion.MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT);
+				assert minJdk != null;
+				if (current.compareTo(minJdk) >= 0) {
+					final Version maxJdk = Version.parseVersion(SARLVersion.INCOMPATIBLE_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT);
+					assert maxJdk != null;
+					return current.compareTo(maxJdk) < 0;
+				}
+			}
+		}
+		return false;
 	}
 
-	/** Check if a version of the current JRE is compatible with the SARL library.
+	/** Check if a version of the JDK is compatible with the SARL compilation environment.
+	 * In other words, check if the SARL compiler is able to be run without issue
+	 * with the current JDK.
 	 *
-	 * @return <code>true</code> if this version is for a compatible JRE.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if this version is for a compatible JDK.
+	 *     Otherwise {@code false}.
+	 * @since 0.10
+	 * @see SARLVersion#MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT
+	 * @see SARLVersion#INCOMPATIBLE_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT
 	 */
-	public static boolean isCompatibleJREVersion() {
-		return isCompatibleJREVersion(System.getProperty("java.specification.version")); //$NON-NLS-1$
+	public static boolean isCompatibleJDKVersionWithSARLCompilationEnvironment() {
+		return isCompatibleJDKVersionWithSARLCompilationEnvironment(System.getProperty("java.specification.version")); //$NON-NLS-1$
+	}
+
+	/** Check if a version of the JDK is compatible with the SARL libraries that is specified in the SARL project classpath.
+	 * In other words, check if the SARL libraries in compiled SARL project are
+	 * compatible with the JDK at the given version.
+	 *
+	 * @param version - the version to test.
+	 * @return {@code true} if this version is for a compatible JDK.
+	 *     Otherwise {@code false}.
+	 * @since 0.10
+	 * @see SARLVersion#MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH
+	 * @see SARLVersion#INCOMPATIBLE_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH
+	 */
+	public static boolean isCompatibleJDKVersionWhenInSARLProjectClasspath(String version) {
+		if (version != null && !version.isEmpty()) {
+			final Version current = Version.parseVersion(version);
+			if (current != null) {
+				final Version minJdk = Version.parseVersion(SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
+				assert minJdk != null;
+				if (current.compareTo(minJdk) >= 0) {
+					final Version maxJdk = Version.parseVersion(SARLVersion.INCOMPATIBLE_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
+					assert maxJdk != null;
+					return current.compareTo(maxJdk) < 0;
+				}
+			}
+		}
+		return false;
 	}
 
 	/** Check if a version of Xtext is compatible with the SARL library.
 	 *
 	 * @param version - the version to test.
-	 * @return <code>true</code> if this version is for a compatible Xtext.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if this version is for a compatible Xtext.
+	 *     Otherwise {@code false}.
 	 */
 	public static boolean isCompatibleXtextVersion(String version) {
 		return version != null && !version.isEmpty()
@@ -1100,8 +1164,8 @@ public final class Utils {
 
 	/** Check if a version of the current Xtext is compatible with the SARL library.
 	 *
-	 * @return <code>true</code> if this version is for a compatible Xtext.
-	 *     Otherwise <code>false</code>.
+	 * @return {@code true} if this version is for a compatible Xtext.
+	 *     Otherwise {@code false}.
 	 */
 	public static boolean isCompatibleXtextVersion() {
 		final XtextVersion xtextVersion = XtextVersion.getCurrent();
@@ -1143,13 +1207,12 @@ public final class Utils {
 		if (checkSarlVersionClass) {
 			checkSarlVersionClass = false;
 			try {
-				SARLVersion.class.getDeclaredField(SARL_VERSION_FIELD_NAME_STR);
-			} catch (Exception e) {
-				try {
-					SARLVersion.class.getDeclaredField(SARL_VERSION_FIELD_NAME_FLOAT);
-				} catch (Exception ex) {
+				final Object v = SARLVersion.class.getDeclaredField(SARL_VERSION_FIELD_NAME_STR);
+				if (v == null) {
 					return SarlLibraryErrorCode.INVALID_SARL_VERSION_BYTECODE;
 				}
+			} catch (Throwable e) {
+				return SarlLibraryErrorCode.INVALID_SARL_VERSION_BYTECODE;
 			}
 		}
 		final JvmType type;
@@ -1166,27 +1229,17 @@ public final class Utils {
 		}
 		final JvmDeclaredType sarlVersionType = (JvmDeclaredType) type;
 		JvmField versionField = null;
-		boolean isString = true;
 		final Iterator<JvmField> iterator = sarlVersionType.getDeclaredFields().iterator();
 		while (versionField == null && iterator.hasNext()) {
 			final JvmField field = iterator.next();
 			if (SARL_VERSION_FIELD_NAME_STR.equals(field.getSimpleName())) {
 				versionField = field;
-			} else if (SARL_VERSION_FIELD_NAME_FLOAT.equals(field.getSimpleName())) {
-				versionField = field;
-				isString = false;
 			}
 		}
 		if (versionField == null) {
 			return SarlLibraryErrorCode.NO_SARL_VERSION_FIELD;
 		}
-		final String value;
-		if (isString) {
-			value = versionField.getConstantValueAsString();
-		} else {
-			final DecimalFormat format = new DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.US)); //$NON-NLS-1$
-			value = format.format(versionField.getConstantValueAsFloat());
-		}
+		final String value = versionField.getConstantValueAsString();
 		if (Strings.isNullOrEmpty(value)) {
 			return SarlLibraryErrorCode.NO_SARL_VERSION_VALUE;
 		}
@@ -1199,7 +1252,7 @@ public final class Utils {
 	/** Replies if the given annotation is an annotation from the SARL core library.
 	 *
 	 * @param type the type of the annotation
-	 * @return <code>true</code> if the given type is a SARL annotation.
+	 * @return {@code true} if the given type is a SARL annotation.
 	 */
 	public static boolean isSARLAnnotation(Class<?> type) {
 		return (type != null && Annotation.class.isAssignableFrom(type))
@@ -1209,7 +1262,7 @@ public final class Utils {
 	/** Replies if the given annotation is an annotation from the SARL core library.
 	 *
 	 * @param qualifiedName the qualified name of the annotation type.
-	 * @return <code>true</code> if the given type is a SARL annotation.
+	 * @return {@code true} if the given type is a SARL annotation.
 	 */
 	public static boolean isSARLAnnotation(String qualifiedName) {
 		return qualifiedName != null && qualifiedName.startsWith(SARL_PACKAGE_PREFIX);
@@ -1222,7 +1275,7 @@ public final class Utils {
 	 *
 	 * @param type the type to test.
 	 * @param sarlSignatureProvider the provider of SARL operation signatures.
-	 * @return <code>true</code> if the given type is final.
+	 * @return {@code true} if the given type is final.
 	 */
 	public static boolean isFunctionalInterface(JvmGenericType type, IActionPrototypeProvider sarlSignatureProvider) {
 		if (type != null && type.isInterface()) {
@@ -1684,6 +1737,23 @@ public final class Utils {
 		}
 	}
 
+
+	/** Set the given structure feature with the given value.
+	 *
+	 * @param object the object that contains the feature.
+	 * @param property the feature to change.
+	 * @param value the value of the feature.
+	 */
+	public static void setStructuralFeature(EObject object, EStructuralFeature property, Object value) {
+		assert object != null;
+		assert property != null;
+		if (value == null) {
+			object.eUnset(property);
+		} else {
+			object.eSet(property, value);
+		}
+	}
+
 	/** Replies the root feature call into a sequence of feature calls.
 	 *
 	 * @param featureCall the leaf feature call.
@@ -1777,3 +1847,4 @@ public final class Utils {
 	}
 
 }
+

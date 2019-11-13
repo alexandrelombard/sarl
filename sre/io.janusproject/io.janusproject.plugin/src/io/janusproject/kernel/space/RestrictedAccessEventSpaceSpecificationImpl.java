@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package io.janusproject.kernel.space;
 
 import java.security.acl.Acl;
 import java.security.acl.Permission;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -66,7 +67,8 @@ public class RestrictedAccessEventSpaceSpecificationImpl implements RestrictedAc
 				permission = new RegistrationPermission();
 			}
 			final RestrictedAccessEventSpaceImpl space = new RestrictedAccessEventSpaceImpl(id, acl, permission,
-					this.injector.getInstance(DistributedDataStructureService.class));
+					this.injector.getInstance(DistributedDataStructureService.class),
+					this.injector.getProvider(ReadWriteLock.class));
 			this.injector.injectMembers(space);
 			return space;
 		}

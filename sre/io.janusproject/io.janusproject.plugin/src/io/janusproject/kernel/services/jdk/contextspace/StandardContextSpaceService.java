@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,10 @@ package io.janusproject.kernel.services.jdk.contextspace;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
@@ -55,7 +54,9 @@ import io.janusproject.util.TwoStepConstruction;
 import io.sarl.lang.core.AgentContext;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
-import io.sarl.util.Collections3;
+import io.sarl.lang.util.SynchronizedCollection;
+import io.sarl.lang.util.SynchronizedSet;
+import io.sarl.util.concurrent.Collections3;
 
 /**
  * A repository of Agent's context and spaces that is based on the other Janus platform services.
@@ -106,6 +107,8 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	 */
 	private LogService logger;
 
+	private ReadWriteLock lock;
+
 	/**
 	 * Constructs <code>ContextRepository</code>.
 	 *
@@ -117,6 +120,7 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	@Inject
 	public StandardContextSpaceService(@Named(JanusConfig.DEFAULT_CONTEXT_ID_NAME) UUID janusID,
 			DistributedDataStructureService dataStructureService, LogService logService, Injector injector) {
+		this.lock = injector.getProvider(ReadWriteLock.class).get();
 		this.logger = logService;
 		setContextFactory(new DefaultContextFactory());
 		setSpaceRepositoryFactory(new Context.DefaultSpaceRepositoryFactory(injector, dataStructureService, logService));
@@ -175,8 +179,8 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	}
 
 	@Override
-	public final Object mutex() {
-		return this;
+	public final ReadWriteLock getLock() {
+		return this.lock;
 	}
 
 	/**
@@ -192,43 +196,72 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 
 	@Override
 	public boolean isEmptyContextRepository() {
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
 			return this.contexts.isEmpty();
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
 	public int getNumberOfContexts() {
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
 			return this.contexts.size();
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
 	public boolean containsContext(UUID contextID) {
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
 			return this.contexts.containsKey(contextID);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
-	public synchronized AgentContext createContext(UUID contextID, UUID defaultSpaceUUID) {
+	public AgentContext createContext(UUID contextID, UUID defaultSpaceUUID) {
 		assert contextID != null : "The contextID cannot be null"; //$NON-NLS-1$
 		assert defaultSpaceUUID != null : "The defaultSpaceUUID cannot be null"; //$NON-NLS-1$
 		assert this.contexts != null : "Internal Error: the context container must not be null"; //$NON-NLS-1$
-		final AgentContext context = this.contexts.get(contextID);
+		AgentContext context;
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
+			context = this.contexts.get(contextID);
+		} finally {
+			lock.readLock().unlock();
+		}
 		if (context == null) {
-			final Context ctx = this.contextFactory.newInstance(contextID, defaultSpaceUUID, this.spaceRepositoryFactory,
-					new SpaceEventProxy());
-			assert ctx != null : "The internal Context cannot be null"; //$NON-NLS-1$
-			assert this.contexts != null : "Internal Error: the context container must not be null"; //$NON-NLS-1$
-			this.contexts.put(contextID, ctx);
-			fireContextCreated(ctx);
-			final Space defaultSpace = ctx.postConstruction();
-			assert defaultSpace != null : "The default space in the context " //$NON-NLS-1$
-					+ contextID + " cannot be null"; //$NON-NLS-1$
-			this.defaultSpaces.putIfAbsent(ctx.getID(), defaultSpace.getSpaceID());
-			return ctx;
+			Context ctx = null;
+			lock.writeLock().lock();
+			try {
+				context = this.contexts.get(contextID);
+				if (context == null) {
+					ctx = this.contextFactory.newInstance(contextID, defaultSpaceUUID, this.spaceRepositoryFactory,
+							new SpaceEventProxy());
+					assert ctx != null : "The internal Context cannot be null"; //$NON-NLS-1$
+					this.contexts.put(contextID, ctx);
+					final Space defaultSpace = ctx.postConstruction();
+					assert defaultSpace != null : "The default space in the context " //$NON-NLS-1$
+							+ contextID + " cannot be null"; //$NON-NLS-1$
+					this.defaultSpaces.putIfAbsent(ctx.getID(), defaultSpace.getSpaceID());
+				}
+			} finally {
+				lock.writeLock().unlock();
+			}
+			if (ctx != null) {
+				fireContextCreated(ctx);
+				return ctx;
+			}
 		}
 		return context;
 	}
@@ -241,12 +274,17 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	@Override
 	public void removeContext(UUID contextID) {
 		AgentContext context = null;
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.writeLock().lock();
+		try {
 			this.defaultSpaces.remove(contextID);
 			context = this.contexts.remove(contextID);
 			if (context != null) {
+				assert context instanceof Context;
 				((Context) context).destroy();
 			}
+		} finally {
+			lock.writeLock().unlock();
 		}
 		if (context != null) {
 			fireContextDestroyed(context);
@@ -254,35 +292,52 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	}
 
 	@Override
-	public Collection<AgentContext> getContexts() {
-		synchronized (mutex()) {
-			return Collections.unmodifiableCollection(Collections3.synchronizedCollection(this.contexts.values(), mutex()));
+	public SynchronizedCollection<AgentContext> getContexts() {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
+			return Collections3.unmodifiableSynchronizedCollection(this.contexts.values(), lock);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
-	public Collection<AgentContext> getContexts(final Collection<UUID> contextIDs) {
-		synchronized (mutex()) {
-			return Collections2.filter(this.contexts.values(), new Predicate<AgentContext>() {
+	public SynchronizedCollection<AgentContext> getContexts(final Collection<UUID> contextIDs) {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
+			final Collection<AgentContext> backedCollection = Collections2.filter(this.contexts.values(), new Predicate<AgentContext>() {
 				@Override
 				public boolean apply(AgentContext input) {
 					return contextIDs.contains(input.getID());
 				}
 			});
+			return Collections3.unmodifiableSynchronizedCollection(backedCollection, lock);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
-	public Set<UUID> getContextIDs() {
-		synchronized (mutex()) {
-			return Collections.unmodifiableSet(Collections3.synchronizedSet(this.contexts.keySet(), mutex()));
+	public SynchronizedSet<UUID> getContextIDs() {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
+			return Collections3.unmodifiableSynchronizedSet(this.contexts.keySet(), lock);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
 	@Override
 	public AgentContext getContext(UUID contextID) {
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.readLock().lock();
+		try {
 			return this.contexts.get(contextID);
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 
@@ -377,8 +432,12 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	 */
 	protected void removeDefaultSpaceDefinition(SpaceID spaceID) {
 		AgentContext context = null;
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.writeLock().lock();
+		try {
 			context = this.contexts.remove(spaceID.getContextID());
+		} finally {
+			lock.writeLock().unlock();
 		}
 		if (context != null) {
 			fireContextDestroyed(context);
@@ -387,12 +446,16 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 
 	@Override
 	protected void doStart() {
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.writeLock().lock();
+		try {
 			for (final SpaceID space : this.defaultSpaces.values()) {
 				ensureDefaultSpaceDefinition(space);
 			}
 			this.dmapListener = new ContextDMapListener();
 			this.defaultSpaces.addDMapListener(this.dmapListener);
+		} finally {
+			lock.writeLock().unlock();
 		}
 		notifyStarted();
 	}
@@ -400,7 +463,9 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 	@Override
 	protected void doStop() {
 		final Map<UUID, AgentContext> old;
-		synchronized (mutex()) {
+		final ReadWriteLock lock = getLock();
+		lock.writeLock().lock();
+		try {
 			if (this.dmapListener != null) {
 				this.defaultSpaces.removeDMapListener(this.dmapListener);
 			}
@@ -409,6 +474,8 @@ public class StandardContextSpaceService extends AbstractDependentService implem
 			// Delete the contexts from this repository
 			old = this.contexts;
 			this.contexts = new TreeMap<>();
+		} finally {
+			lock.writeLock().unlock();
 		}
 		for (final AgentContext context : old.values()) {
 			((Context) context).destroy();

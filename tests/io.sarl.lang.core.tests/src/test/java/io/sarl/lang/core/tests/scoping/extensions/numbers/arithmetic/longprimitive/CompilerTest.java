@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,17 @@
 
 package io.sarl.lang.core.tests.scoping.extensions.numbers.arithmetic.longprimitive;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.sarl.SarlPackage;
 import io.sarl.tests.api.AbstractMassiveCompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.CompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.Context;
 
 /**
+ * <p>FIXME: Enable when the speed issue of implicitly imported functions is solved.
+ *
  * @author $Author: sgalland$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
@@ -35,11 +39,12 @@ import io.sarl.tests.api.AbstractMassiveCompilationTest;
  * @see "https://github.com/eclipse/xtext-extras/issues/186"
  */
 @SuppressWarnings("all")
+@Ignore
 public class CompilerTest extends AbstractMassiveCompilationTest {
 
-	@DifferedTest
-	public void operator_minus_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -70,9 +75,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left - right",
@@ -101,9 +106,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Byte) : long {",
 				"    left - right",
@@ -132,9 +137,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Float) : float {",
 				"    left - right",
@@ -163,9 +168,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Integer) : long {",
 				"    left - right",
@@ -194,9 +199,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Short) : long {",
 				"    left - right",
@@ -225,9 +230,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : long, right : AtomicInteger) : long {",
@@ -258,9 +263,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_long_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_long_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : long, right : AtomicLong) : long {",
@@ -291,9 +296,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left + right",
@@ -322,9 +327,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Byte) : long {",
 				"    left + right",
@@ -353,9 +358,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Float) : float {",
 				"    left + right",
@@ -384,9 +389,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Integer) : long {",
 				"    left + right",
@@ -415,9 +420,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Short) : long {",
 				"    left + right",
@@ -446,9 +451,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : long, right : AtomicInteger) : long {",
@@ -479,9 +484,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left + right",
@@ -510,9 +515,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -543,9 +548,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -576,9 +581,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left / right",
@@ -607,9 +612,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Byte) : long {",
 				"    left / right",
@@ -638,9 +643,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Float) : float {",
 				"    left / right",
@@ -669,9 +674,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Integer) : long {",
 				"    left / right",
@@ -700,9 +705,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -733,9 +738,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Short) : long {",
 				"    left / right",
@@ -764,9 +769,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : long, right : AtomicInteger) : long {",
@@ -797,9 +802,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_long_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_long_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : long, right : AtomicLong) : long {",
@@ -830,9 +835,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left * right",
@@ -861,9 +866,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Byte) : long {",
 				"    left * right",
@@ -892,9 +897,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Float) : float {",
 				"    left * right",
@@ -923,9 +928,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Integer) : long {",
 				"    left * right",
@@ -954,9 +959,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -987,9 +992,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Short) : long {",
 				"    left * right",
@@ -1018,9 +1023,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : long, right : AtomicInteger) : long {",
@@ -1051,9 +1056,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_long_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_long_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : long, right : AtomicLong) : long {",
@@ -1084,9 +1089,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Long) : long {",
 				"    left % right",
@@ -1115,9 +1120,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Byte) : long {",
 				"    left % right",
@@ -1146,9 +1151,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Float) : float {",
 				"    left % right",
@@ -1177,9 +1182,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Integer) : long {",
 				"    left % right",
@@ -1208,9 +1213,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : long, right : AtomicDouble) : double {",
@@ -1241,9 +1246,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : long, right : Short) : long {",
 				"    left % right",
@@ -1272,9 +1277,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : long, right : AtomicInteger) : long {",
@@ -1305,9 +1310,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_long_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_long_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : long, right : AtomicLong) : long {",

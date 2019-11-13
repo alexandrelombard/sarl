@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +79,7 @@ public class Bug723 extends AbstractSarlTest {
 			"   */",
 			"  @SyntheticMember",
 			"  @SarlSourceCode(\"null\")",
-			"  private final static Class $DEFAULT_VALUE$GETSYSTEMPROPERTYASCLASS_0 = null;",
+			"  private static final Class $DEFAULT_VALUE$GETSYSTEMPROPERTYASCLASS_0 = null;",
 			"  ",
 			"  @DefaultValueUse(\"java.lang.Class<S>,java.lang.String,java.lang.Class<? extends S>\")",
 			"  @SyntheticMember",
@@ -126,7 +131,7 @@ public class Bug723 extends AbstractSarlTest {
 			"   */",
 			"  @SyntheticMember",
 			"  @SarlSourceCode(\"null\")",
-			"  private final static Enum $DEFAULT_VALUE$GETSYSTEMPROPERTYASENUM_0 = null;",
+			"  private static final Enum $DEFAULT_VALUE$GETSYSTEMPROPERTYASENUM_0 = null;",
 			"  ",
 			"  @DefaultValueUse(\"java.lang.Class<S>,java.lang.String,S\")",
 			"  @SyntheticMember",

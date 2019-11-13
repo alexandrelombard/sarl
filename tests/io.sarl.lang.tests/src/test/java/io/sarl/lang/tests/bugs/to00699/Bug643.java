@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +88,7 @@ public class Bug643 extends AbstractSarlTest {
 			"   */",
 			"  @SyntheticMember",
 			"  @SarlSourceCode(\"null\")",
-			"  private final static TreeNode $DEFAULT_VALUE$NEW_0 = null;",
+			"  private static final TreeNode $DEFAULT_VALUE$NEW_0 = null;",
 			"  ",
 			"  @DefaultValueUse(\"io.sarl.lang.tests.bug643.TreeNode<T>,io.sarl.lang.tests.bug643.Shape2f\")",
 			"  @SyntheticMember",

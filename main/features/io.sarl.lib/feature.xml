@@ -2,7 +2,7 @@
 <feature
       id="io.sarl.lib"
       label="Running Libraries for SARL"
-      version="0.9.0.qualifier"
+      version="0.11.0.qualifier"
       plugin="io.sarl.lang.core">
 
    <description url="http://www.sarl.io/about/">
@@ -222,12 +222,13 @@
    </url>
 
    <requires>
-      <import plugin="io.sarl.lang.core" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.xbase.lib" version="2.15.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.lang.core" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.util" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi" version="3.15.0" match="greaterOrEqual"/>
+      <import plugin="com.google.inject" version="4.1.0" match="greaterOrEqual"/>
       <import plugin="javax.inject" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="io.sarl.util" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="io.sarl.core" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi" version="3.13.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.xbase.lib" version="2.19.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtend.lib" version="2.19.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -255,18 +256,11 @@
          id="com.google.guava"
          download-size="0"
          install-size="0"
-         version="20.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="javax.inject"
-         download-size="0"
-         install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="io.sarl.javafx"
+         id="javax.inject"
          download-size="0"
          install-size="0"
          version="0.0.0"

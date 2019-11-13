@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,12 +42,13 @@ import org.eclipse.xtext.xbase.lib.CollectionLiterals;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1;
 
-import io.sarl.lang.SARLVersion;
 import io.sarl.lang.compiler.GeneratorConfig2;
 import io.sarl.lang.compiler.IGeneratorConfigProvider2;
 import io.sarl.lang.sarl.SarlBehaviorUnit;
 import io.sarl.lang.sarl.actionprototype.ActionParameterTypes;
 import io.sarl.lang.sarl.actionprototype.ActionPrototype;
+import io.sarl.lang.sarl.actionprototype.IActionPrototypeContext;
+import io.sarl.lang.sarl.actionprototype.IActionPrototypeProvider;
 
 /** Describe generation context.
  *
@@ -58,7 +59,7 @@ import io.sarl.lang.sarl.actionprototype.ActionPrototype;
  */
 abstract class GenerationContext {
 
-	private final JvmDeclaredType target;
+	private JvmDeclaredType target;
 
 	/** Compute serial number for serializable objects.
 	 */
@@ -112,7 +113,7 @@ abstract class GenerationContext {
 
 	/** The context object.
 	 */
-	private final EObject contextObject;
+	private EObject contextObject;
 
 	/** The provider of generation configuration.
 	 */
@@ -135,6 +136,8 @@ abstract class GenerationContext {
 	/** Parent context.
 	 */
 	private GenerationContext parent;
+
+	private IActionPrototypeContext actionPrototypeContext;
 
 	/** Construct a information about the generation.
 	 *
@@ -413,8 +416,50 @@ abstract class GenerationContext {
 	 * @return <code>true</code> if the compiler uses Java8 or higher. Otherwise <code>false</code>.
 	 */
 	public boolean isAtLeastJava8() {
-		final JavaVersion javaVersion = JavaVersion.fromQualifier(SARLVersion.MINIMAL_JDK_VERSION);
-		return javaVersion != null && getGeneratorConfig().getJavaSourceVersion().isAtLeast(javaVersion);
+		return getGeneratorConfig().getJavaSourceVersion().isAtLeast(JavaVersion.JAVA8);
+	}
+
+	/** Replies if the compiler is using Java11 or higher.
+	 *
+	 * @return <code>true</code> if the compiler uses Java8 or higher. Otherwise <code>false</code>.
+	 * @since 0.10
+	 */
+	public boolean isAtLeastJava11() {
+		return getGeneratorConfig().getJavaSourceVersion().isAtLeast(JavaVersion.JAVA11);
+	}
+
+	/** Get the context for the action prototype provider.
+	 *
+	 * @param provider the provider for creating the context if it was not created.
+	 * @return the context
+	 */
+	public IActionPrototypeContext getActionPrototypeContext(IActionPrototypeProvider provider) {
+		if (this.actionPrototypeContext == null) {
+			this.actionPrototypeContext = provider.createContext();
+		}
+		return this.actionPrototypeContext;
+	}
+
+	/** Release any allocated resource.
+	 */
+	public void release() {
+		if (this.actionPrototypeContext != null) {
+			this.actionPrototypeContext.release();
+			this.actionPrototypeContext = null;
+		}
+		this.target = null;
+		this.contextObject = null;
+		this.generatorConfig = null;
+		this.generatorConfig2 = null;
+		this.finalOperations.clear();
+		this.generatedCapacityUseFields.clear();
+		this.generatedConstructors.clear();
+		this.finalOperations.clear();
+		this.overridableOperations.clear();
+		this.operationsToImplement.clear();
+		this.preFinalization.clear();
+		this.postFinalization.clear();
+		this.guardEvaluators.clear();
 	}
 
 }

@@ -1,7 +1,12 @@
 /*
  * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * $Id$
  * 
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +110,7 @@ public class Bug383 {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"null\")",
-					"  private final static String $DEFAULT_VALUE$GETINSTANCE_0 = null;",
+					"  private static final String $DEFAULT_VALUE$GETINSTANCE_0 = null;",
 					"  ",
 					"  /**",
 					"   * Testing documentation generator.",

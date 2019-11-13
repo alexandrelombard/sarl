@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@ import org.arakhne.afc.bootique.synopsishelp.annotations.ApplicationDetailedDesc
 
 import io.sarl.lang.SARLConfig;
 import io.sarl.lang.sarlc.Constants;
+import io.sarl.lang.sarlc.commands.CompilerCommand;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
+import io.sarl.maven.bootiqueapp.utils.SystemProperties;
 
 /** Module for configuring the sarlc application information.
  *
@@ -48,13 +51,16 @@ public class SarlcApplicationModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		// Name of the application.
-		bind(String.class).annotatedWith(DefaultApplicationName.class).toInstance(Constants.PROGRAM_NAME);
+		bind(String.class).annotatedWith(DefaultApplicationName.class).toInstance(
+				SystemProperties.getValue(SarlcConfig.PREFIX + ".programName", Constants.PROGRAM_NAME)); //$NON-NLS-1$
 		// Short description of the application.
 		extend(binder()).setApplicationDescription(Messages.SarlcApplicationModule_0);
 		// Long description of the application.
 		bind(String.class).annotatedWith(ApplicationDetailedDescription.class).toProvider(LongDescriptionProvider.class).in(Singleton.class);
 		// Synopsis of the application's arguments.
 		bind(String.class).annotatedWith(ApplicationArgumentSynopsis.class).toInstance(Messages.SarlcApplicationModule_1);
+		// Default command
+		extend(binder()).setDefaultCommand(CompilerCommand.class);
 	}
 
 	/** Provider of the long description of the application.

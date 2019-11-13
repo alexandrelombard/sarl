@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@
 
 package io.sarl.lang.ui.editor;
 
-import com.google.inject.ImplementedBy;
 import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
@@ -32,7 +31,6 @@ import org.eclipse.xtext.ui.editor.model.IXtextDocument;
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
  */
-@ImplementedBy(DocumentAutoFormatter.class)
 public interface IDocumentAutoFormatter {
 
 	/** Create an instance of document auto formatter.

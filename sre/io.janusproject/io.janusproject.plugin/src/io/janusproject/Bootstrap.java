@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,14 @@ package io.janusproject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
+
+import com.google.common.util.concurrent.Service;
 
 import io.janusproject.kernel.Kernel;
 
 import io.sarl.bootstrap.SREBootstrap;
+import io.sarl.lang.annotation.PrivateAPI;
 import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AgentContext;
 
@@ -54,8 +58,32 @@ public final class Bootstrap implements SREBootstrap {
 	 *
 	 * @param kernel the kernel.
 	 */
-	void setKernel(Kernel kernel) {
+	@PrivateAPI
+	public void setKernel(Kernel kernel) {
 		this.kernel = kernel;
+	}
+
+	@Override
+	public boolean isRunning() {
+		return this.kernel != null && this.kernel.isRunning();
+	}
+
+	@Override
+	public void shutdown(boolean blocking) throws InterruptedException {
+		final Kernel kern;
+		synchronized (this) {
+			kern = this.kernel;
+			this.kernel = null;
+		}
+		if (kern != null) {
+			final Runnable stop = kern.getStopBehavior();
+			stop.run();
+			if (blocking) {
+				while (kern.isRunning()) {
+					Thread.yield();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -89,6 +117,18 @@ public final class Bootstrap implements SREBootstrap {
 	}
 
 	@Override
+	public void startAgentWithID(Class<? extends Agent> agentCls, UUID agentId, Object... params) throws Exception {
+		final Kernel kern = this.kernel;
+		if (kern == null) {
+			synchronized (this) {
+				this.kernel = Boot.startJanus(agentCls, params);
+				return;
+			}
+		}
+		kern.spawn(agentId, agentCls, params);
+	}
+
+	@Override
 	public UUID getBootAgentIdentifier() {
 		return Boot.getBootAgentIdentifier();
 	}
@@ -103,6 +143,18 @@ public final class Bootstrap implements SREBootstrap {
 			}
 		}
 		return kern.getJanusContext();
+	}
+
+	@Override
+	public Logger getKernelLogger() {
+		final Kernel kern;
+		synchronized (this) {
+			kern = this.kernel;
+		}
+		if (kern != null) {
+			return kern.getLogger();
+		}
+		return null;
 	}
 
 	@Override
@@ -121,13 +173,29 @@ public final class Bootstrap implements SREBootstrap {
 	}
 
 	@Override
-	public void setDefaultContextUUID() {
+	public void setSpecificContextUUID() {
 		Boot.setDefaultContextUUID();
 	}
 
 	@Override
 	public void setVerboseLevel(int level) {
 		Boot.setVerboseLevel(level);
+	}
+
+	/** {@inheritDoc}
+	 */
+	@Override
+	public <T> T getService(Class<T> serviceType) {
+		if (Service.class.isAssignableFrom(serviceType)) {
+			final Kernel kern;
+			synchronized (this) {
+				kern = this.kernel;
+			}
+			if (kern != null) {
+				return kern.getService(serviceType.asSubclass(Service.class));
+			}
+		}
+		return null;
 	}
 
 }

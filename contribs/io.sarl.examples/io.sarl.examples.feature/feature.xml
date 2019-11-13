@@ -2,7 +2,7 @@
 <feature
       id="io.sarl.examples.feature"
       label="Examples for SARL"
-      version="0.9.0.qualifier"
+      version="0.11.0.qualifier"
       plugin="io.sarl.examples.plugin">
 
    <description url="http://www.sarl.io/about/">
@@ -10,7 +10,7 @@
    </description>
 
    <copyright url="http://www.sarl.io/about/">
-      Copyright (c) 2014-2018 the original authors and authors.
+      Copyright (C) 2014-2019 the original authors and authors.
    </copyright>
 
    <license url="http://www.apache.org/licenses/LICENSE-2.0">
@@ -222,14 +222,14 @@
    </url>
 
    <requires>
-      <import plugin="io.sarl.eclipse" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="io.sarl.m2e" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui" version="3.110.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.runtime" version="3.15.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.emf.common.ui" version="2.14.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.ide" version="3.14.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.debug.ui" version="3.13.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.13.100" match="greaterOrEqual"/>
+      <import plugin="io.sarl.eclipse" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.m2e" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common.ui" version="2.18.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.114.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.16.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.16.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.debug.ui" version="3.14.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.13.500" match="greaterOrEqual"/>
    </requires>
 
    <plugin

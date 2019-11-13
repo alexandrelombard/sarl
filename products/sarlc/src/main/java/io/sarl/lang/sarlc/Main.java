@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,9 @@ import java.util.List;
 
 import io.bootique.help.HelpOption;
 
+import io.sarl.lang.sarlc.modules.general.SarlcApplicationModuleProvider;
+import io.sarl.maven.bootiqueapp.BootiqueMain;
+
 /** Main entry point for the SARL batch compiler.
  *
  * @author $Author: sgalland$
@@ -41,11 +44,25 @@ public final class Main {
 
 	/** Main program of the batch compiler.
 	 *
+	 * <p>This function stops the VM.
+	 *
 	 * @param args the command line arguments.
+	 * @see #run(String[])
 	 */
 	public static void main(String[] args) {
-		final int retCode = createMainObject().runCompiler(args);
-		System.exit(retCode);
+		System.exit(run(args));
+	}
+
+	/** Main program of the batch compiler.
+	 *
+	 * <p>This function does not stop the VM.
+	 *
+	 * @param args the command line arguments.
+	 * @return the exit code.
+	 * @see #main(String[])
+	 */
+	public static int run(String... args) {
+		return createMainObject().runCommand(args);
 	}
 
 	/** Replies the default name of the program.
@@ -60,8 +77,8 @@ public final class Main {
 	 *
 	 * @return the main launcher.
 	 */
-	protected static BootiqueSarlcMain createMainObject() {
-		return new BootiqueSarlcMain();
+	protected static BootiqueMain createMainObject() {
+		return new BootiqueMain(new SarlcApplicationModuleProvider());
 	}
 
 	/** Replies the options of the program.

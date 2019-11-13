@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,6 +110,7 @@ import io.sarl.eclipse.buildpath.SARLClasspathContainerInitializer;
 import io.sarl.eclipse.natures.SARLProjectConfigurator;
 import io.sarl.eclipse.runtime.ISREInstall;
 import io.sarl.eclipse.runtime.SREConfigurationBlock;
+import io.sarl.eclipse.util.classpath.SarlDefaultClassPathProvider;
 import io.sarl.lang.SARLConfig;
 import io.sarl.lang.SARLVersion;
 
@@ -127,7 +128,7 @@ import io.sarl.lang.SARLVersion;
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
  */
-public class MainProjectWizardPage extends WizardPage {
+public class MainProjectWizardPage extends WizardPage implements SarlDefaultClassPathProvider {
 
 	private static final IWorkingSet[] EMPTY_WORKING_SET_ARRAY = new IWorkingSet[0];
 
@@ -374,12 +375,7 @@ public class MainProjectWizardPage extends WizardPage {
 		return this.jreGroup.getSelectedCompilerCompliance();
 	}
 
-	/**
-	 * Returns the default class path entries to be added on new projects.
-	 * By default this is the JRE container as selected by the user.
-	 *
-	 * @param classpathEntries the collection in which the classpath entries will be added.
-	 */
+	@Override
 	public void putDefaultClasspathEntriesIn(Collection<IClasspathEntry> classpathEntries) {
 		final IPath newPath = this.jreGroup.getJREContainerPath();
 		if (newPath != null) {
@@ -859,8 +855,10 @@ public class MainProjectWizardPage extends WizardPage {
 				@Override
 				public int compare(IVMInstall i0, IVMInstall i1) {
 					if (i1 instanceof IVMInstall2 && i0 instanceof IVMInstall2) {
-						final String cc0 = JavaModelUtil.getCompilerCompliance((IVMInstall2) i0, SARLVersion.MINIMAL_JDK_VERSION);
-						final String cc1 = JavaModelUtil.getCompilerCompliance((IVMInstall2) i1, SARLVersion.MINIMAL_JDK_VERSION);
+						final String cc0 = JavaModelUtil.getCompilerCompliance((IVMInstall2) i0,
+								SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
+						final String cc1 = JavaModelUtil.getCompilerCompliance((IVMInstall2) i1,
+								SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
 						final int result = cc1.compareTo(cc0);
 						if (result != 0) {
 							return result;
@@ -882,9 +880,9 @@ public class MainProjectWizardPage extends WizardPage {
 				if (this.installedJVMs[i] instanceof IVMInstall2) {
 					this.jreCompliance[i] = JavaModelUtil.getCompilerCompliance(
 							(IVMInstall2) this.installedJVMs[i],
-							SARLVersion.MINIMAL_JDK_VERSION);
+							SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
 				} else {
-					this.jreCompliance[i] = SARLVersion.MINIMAL_JDK_VERSION;
+					this.jreCompliance[i] = SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH;
 				}
 			}
 			comboField.setItems(jreLabels);
@@ -969,9 +967,9 @@ public class MainProjectWizardPage extends WizardPage {
 
 			final String defaultCC;
 			if (defaultVM instanceof IVMInstall2) {
-				defaultCC = JavaModelUtil.getCompilerCompliance((IVMInstall2) defaultVM, SARLVersion.MINIMAL_JDK_VERSION);
+				defaultCC = JavaModelUtil.getCompilerCompliance((IVMInstall2) defaultVM, SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
 			} else {
-				defaultCC = SARLVersion.MINIMAL_JDK_VERSION;
+				defaultCC = SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH;
 			}
 
 			for (int i = 0; i < environments.length; i++) {
@@ -981,7 +979,7 @@ public class MainProjectWizardPage extends WizardPage {
 				}
 			}
 
-			return "JavaSE-1.6"; //$NON-NLS-1$
+			return SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH;
 		}
 
 		private String getDefaultJVMLabel() {
@@ -1273,9 +1271,10 @@ public class MainProjectWizardPage extends WizardPage {
 			if (selectedJVM == null) {
 				selectedJVM = JavaRuntime.getDefaultVMInstall();
 			}
-			String jvmCompliance = SARLVersion.MINIMAL_JDK_VERSION;
+			String jvmCompliance = SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH;
 			if (selectedJVM instanceof IVMInstall2) {
-				jvmCompliance = JavaModelUtil.getCompilerCompliance((IVMInstall2) selectedJVM, SARLVersion.MINIMAL_JDK_VERSION);
+				jvmCompliance = JavaModelUtil.getCompilerCompliance((IVMInstall2) selectedJVM,
+						SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH);
 			}
 			if (!selectedCompliance.equals(jvmCompliance)
 					&& (JavaModelUtil.is50OrHigher(selectedCompliance)

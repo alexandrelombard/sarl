@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@
 
 package io.janusproject.kernel.space;
 
+import java.util.concurrent.locks.ReadWriteLock;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import io.janusproject.services.contextspace.ContextSpaceService;
 import io.janusproject.services.distributeddata.DistributedDataStructureService;
 
 import io.sarl.lang.core.EventSpace;
@@ -45,7 +48,10 @@ public class EventSpaceSpecificationImpl implements EventSpaceSpecification {
 
 	@Override
 	public EventSpace create(SpaceID id, Object... params) {
-		final EventSpaceImpl space = new EventSpaceImpl(id, this.injector.getInstance(DistributedDataStructureService.class));
+		final EventSpaceImpl space = new EventSpaceImpl(id,
+				this.injector.getInstance(DistributedDataStructureService.class),
+				this.injector.getInstance(ContextSpaceService.class),
+				this.injector.getProvider(ReadWriteLock.class));
 		this.injector.injectMembers(space);
 		return space;
 	}

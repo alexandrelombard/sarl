@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 
 package io.sarl.lang.sarlc.commands;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,11 +38,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.xtext.diagnostics.Severity;
 
 import io.sarl.lang.compiler.batch.SarlBatchCompiler;
-import io.sarl.lang.sarlc.Constants;
 import io.sarl.lang.sarlc.configs.ProgressBarConfig;
-import io.sarl.lang.sarlc.configs.SarlConfig;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
 import io.sarl.lang.sarlc.tools.PathDetector;
 import io.sarl.lang.util.OutParameter;
+import io.sarl.maven.bootiqueapp.BootiqueMain;
 
 /**
  * Command for compiling with SARL.
@@ -60,7 +61,7 @@ public class CompilerCommand extends CommandWithMetadata {
 
 	private final Provider<SarlBatchCompiler> compiler;
 
-	private final Provider<SarlConfig> configuration;
+	private final Provider<SarlcConfig> configuration;
 
 	private final Provider<PathDetector> pathDetector;
 
@@ -73,7 +74,7 @@ public class CompilerCommand extends CommandWithMetadata {
 	 * @param pathDetector the detector of path.
 	 * @param progressConfig the configuration of the progress bar.
 	 */
-	public CompilerCommand(Provider<SarlBatchCompiler> compiler, Provider<SarlConfig> configuration,
+	public CompilerCommand(Provider<SarlBatchCompiler> compiler, Provider<SarlcConfig> configuration,
 			Provider<PathDetector> pathDetector, Provider<ProgressBarConfig> progressConfig) {
 		super(CommandMetadata
 				.builder(CompilerCommand.class)
@@ -88,21 +89,25 @@ public class CompilerCommand extends CommandWithMetadata {
 	@SuppressWarnings("checkstyle:npathcomplexity")
 	public CommandOutcome run(Cli cli) {
 		if (cli.standaloneArguments().isEmpty()) {
-			return CommandOutcome.failed(Constants.ERROR_CODE, Messages.CompilerCommand_1);
+			return CommandOutcome.failed(BootiqueMain.ERROR_CODE, Messages.CompilerCommand_1);
 		}
 
-		final SarlConfig config = this.configuration.get();
+		final SarlcConfig config = this.configuration.get();
 		final PathDetector paths = this.pathDetector.get();
 		paths.setSarlOutputPath(config.getOutputPath());
 		paths.setClassOutputPath(config.getClassOutputPath());
-		paths.setWorkingPath(config.getWorkingPath());
-		paths.resolve(cli.standaloneArguments());
+		paths.setTempDirectory(config.getTempDirectory());
+		try {
+			paths.resolve(cli.standaloneArguments());
+		} catch (IOException exception) {
+			return CommandOutcome.failed(BootiqueMain.ERROR_CODE, exception);
+		}
 
 		final SarlBatchCompiler comp = this.compiler.get();
 
 		comp.setOutputPath(paths.getSarlOutputPath());
 		comp.setClassOutputPath(paths.getClassOutputPath());
-		comp.setTempDirectory(paths.getWorkingPath());
+		comp.setTempDirectory(paths.getTempDirectory());
 
 		for (final String cliArg : cli.standaloneArguments()) {
 			comp.addSourcePath(cliArg);
@@ -145,7 +150,7 @@ public class CompilerCommand extends CommandWithMetadata {
 		}
 		if (!compilationResult) {
 			showErrorAndWarningCount(comp, nbErrors.longValue(), nbWarnings.longValue(), nbFiles.longValue());
-			return CommandOutcome.failed(Constants.ERROR_CODE, Strings.nullToEmpty(firstErrorMessage.get()));
+			return CommandOutcome.failed(BootiqueMain.ERROR_CODE, Strings.nullToEmpty(firstErrorMessage.get()));
 		}
 		showWarningCount(comp, nbWarnings.longValue(), nbFiles.longValue());
 		return CommandOutcome.succeeded();

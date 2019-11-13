@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,17 @@
 
 package io.sarl.lang.core.tests.scoping.extensions.numbers.arithmetic.number;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.sarl.SarlPackage;
 import io.sarl.tests.api.AbstractMassiveCompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.CompilationTest;
+import io.sarl.tests.api.MassiveCompilationSuite.Context;
 
 /**
+ * <p>FIXME: Enable when the speed issue of implicitly imported functions is solved.
+ *
  * @author $Author: sgalland$
  * @version $FullVersion$
  * @mavengroupid $GroupId$
@@ -35,11 +39,12 @@ import io.sarl.tests.api.AbstractMassiveCompilationTest;
  * @see "https://github.com/eclipse/xtext-extras/issues/186"
  */
 @SuppressWarnings("all")
+@Ignore
 public class CompilerTest extends AbstractMassiveCompilationTest {
 
-	@DifferedTest
-	public void operator_minus_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number) : double {",
@@ -69,9 +74,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -102,9 +107,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left - right",
@@ -133,9 +138,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left - right",
@@ -164,9 +169,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left - right",
@@ -195,9 +200,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Byte) : double {",
 				"    left - right",
@@ -226,9 +231,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left - right",
@@ -257,9 +262,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Float) : double {",
 				"    left - right",
@@ -288,9 +293,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left - right",
@@ -319,9 +324,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Integer) : double {",
 				"    left - right",
@@ -350,9 +355,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left - right",
@@ -381,9 +386,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Short) : double {",
 				"    left - right",
@@ -412,9 +417,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Number, right : AtomicInteger) : double {",
@@ -445,9 +450,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_minus_Number_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_minus_Number_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : Number, right : AtomicLong) : double {",
@@ -478,9 +483,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left + right",
@@ -509,9 +514,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left + right",
@@ -540,9 +545,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left + right",
@@ -571,9 +576,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Byte) : double {",
 				"    left + right",
@@ -602,9 +607,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Float) : double {",
 				"    left + right",
@@ -633,9 +638,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left + right",
@@ -664,9 +669,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Integer) : double {",
 				"    left + right",
@@ -695,9 +700,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left + right",
@@ -726,9 +731,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left + right",
@@ -757,9 +762,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Short) : double {",
 				"    left + right",
@@ -788,9 +793,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Number, right : AtomicInteger) : double {",
@@ -821,9 +826,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left + right",
@@ -852,9 +857,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_plus_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_plus_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -885,9 +890,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -918,9 +923,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left ** right",
@@ -949,9 +954,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left ** right",
@@ -980,9 +985,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left ** right",
@@ -1011,9 +1016,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left ** right",
@@ -1042,9 +1047,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left ** right",
@@ -1073,9 +1078,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_power_Number_double() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_power_Number_double(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : double) : double {",
 				"    left ** right",
@@ -1104,9 +1109,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left / right",
@@ -1135,9 +1140,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left / right",
@@ -1166,9 +1171,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left / right",
@@ -1197,9 +1202,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Byte) : double {",
 				"    left / right",
@@ -1228,9 +1233,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left / right",
@@ -1259,9 +1264,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Float) : double {",
 				"    left / right",
@@ -1290,9 +1295,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left / right",
@@ -1321,9 +1326,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Integer) : double {",
 				"    left / right",
@@ -1352,9 +1357,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -1385,9 +1390,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left / right",
@@ -1416,9 +1421,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Short) : double {",
 				"    left / right",
@@ -1447,9 +1452,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Number, right : AtomicInteger) : double {",
@@ -1480,9 +1485,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_divide_Number_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_divide_Number_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : Number, right : AtomicLong) : double {",
@@ -1513,9 +1518,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left * right",
@@ -1544,9 +1549,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left * right",
@@ -1575,9 +1580,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left * right",
@@ -1606,9 +1611,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Byte) : double {",
 				"    left * right",
@@ -1637,9 +1642,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left * right",
@@ -1668,9 +1673,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Float) : double {",
 				"    left * right",
@@ -1699,9 +1704,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left * right",
@@ -1730,9 +1735,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Integer) : double {",
 				"    left * right",
@@ -1761,9 +1766,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -1794,9 +1799,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left * right",
@@ -1825,9 +1830,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Short) : double {",
 				"    left * right",
@@ -1856,9 +1861,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Number, right : AtomicInteger) : double {",
@@ -1889,9 +1894,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_multiply_Number_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_multiply_Number_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : Number, right : AtomicLong) : double {",
@@ -1922,9 +1927,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : long) : double {",
 				"    left % right",
@@ -1953,9 +1958,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Long() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Long(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Long) : double {",
 				"    left % right",
@@ -1984,9 +1989,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Byte) : double {",
 				"    left % right",
@@ -2015,9 +2020,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_byte() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_byte(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : byte) : double {",
 				"    left % right",
@@ -2046,9 +2051,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : float) : double {",
 				"    left % right",
@@ -2077,9 +2082,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Float() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Float(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Float) : double {",
 				"    left % right",
@@ -2108,9 +2113,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_int() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_int(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : int) : double {",
 				"    left % right",
@@ -2139,9 +2144,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Integer() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Integer(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Integer) : double {",
 				"    left % right",
@@ -2170,9 +2175,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Number() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Number(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import com.google.common.util.concurrent.AtomicDouble",
 				"class A {",
 				"  def fct(left : Number, right : AtomicDouble) : double {",
@@ -2203,9 +2208,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : short) : double {",
 				"    left % right",
@@ -2234,9 +2239,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_Short() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_Short(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"class A {",
 				"  def fct(left : Number, right : Short) : double {",
 				"    left % right",
@@ -2265,9 +2270,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_AtomicInteger() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_AtomicInteger(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicInteger",
 				"class A {",
 				"  def fct(left : Number, right : AtomicInteger) : double {",
@@ -2298,9 +2303,9 @@ public class CompilerTest extends AbstractMassiveCompilationTest {
 						""));
 	}
 
-	@DifferedTest
-	public void operator_modulo_Number_AtomicLong() throws Exception {
-		diffSingleTypeCompileTo(multilineString(
+	@CompilationTest
+	public static void operator_modulo_Number_AtomicLong(Context ctx) throws Exception {
+		ctx.compileTo(multilineString(
 				"import java.util.concurrent.atomic.AtomicLong",
 				"class A {",
 				"  def fct(left : Number, right : AtomicLong) : double {",

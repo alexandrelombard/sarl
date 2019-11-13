@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,8 @@ public final class M2EUtilities {
 	public static final Pattern SNAPSHOT_VERSION_PATTERN = Pattern.compile("^(.*)" //$NON-NLS-1$
 			+ Pattern.quote("-" + Artifact.SNAPSHOT_VERSION) //$NON-NLS-1$
 			+ "$"); //$NON-NLS-1$
+
+	private static final int MAX_NUMBER = 999999999;
 
 	private M2EUtilities() {
 		//
@@ -120,6 +122,40 @@ public final class M2EUtilities {
 			return new Version(numbers[0], numbers[1], numbers[2], SNAPSHOT_QUALIFIER);
 		}
 		return new Version(numbers[0], numbers[1], numbers[2]);
+	}
+
+	/** Compute the theoretic version just before the given one.
+	 *
+	 * @param vers the version.
+	 * @return the previous version.
+	 * @since 0.10
+	 */
+	@SuppressWarnings("checkstyle:magicnumber")
+	public static String getPreviousOsgiVersion(String vers) {
+		return getPreviousOsgiVersion(vers).toString();
+	}
+
+	/** Compute the theoretic version just before the given one.
+	 *
+	 * @param vers the version.
+	 * @return the previous version.
+	 * @since 0.10
+	 */
+	@SuppressWarnings("checkstyle:magicnumber")
+	public static Version getPreviousOsgiVersion(Version vers) {
+		int major = vers.getMajor();
+		int minor = vers.getMinor();
+		int micro = vers.getMicro();
+		if (micro <= 0) {
+			micro = MAX_NUMBER;
+			--minor;
+		}
+		if (minor <= 0) {
+			micro = MAX_NUMBER;
+			minor = MAX_NUMBER;
+			--major;
+		}
+		return new Version(major, minor, micro);
 	}
 
 }

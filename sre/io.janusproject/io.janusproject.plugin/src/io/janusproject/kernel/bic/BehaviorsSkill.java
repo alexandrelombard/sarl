@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,8 @@ import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.Skill;
 import io.sarl.lang.util.ClearableReference;
 import io.sarl.lang.util.SynchronizedIterable;
-import io.sarl.util.Collections3;
+import io.sarl.util.concurrent.Collections3;
+import io.sarl.util.concurrent.NoReadWriteLock;
 
 /**
  * Janus implementation of SARL's {@link Behaviors} built-in capacity.
@@ -105,7 +106,12 @@ public class BehaviorsSkill extends BuiltinSkill implements Behaviors {
 		return $castSkill(SchedulesSkill.class, this.skillBufferSchedules);
 	}
 
+	/** {@inheritDoc}
+	 *
+	 * @deprecated since 0.10
+	 */
 	@Override
+	@Deprecated
 	public int getInstallationOrder() {
 		if (installationOrder < 0) {
 			installationOrder = installationOrder(this);
@@ -122,7 +128,7 @@ public class BehaviorsSkill extends BuiltinSkill implements Behaviors {
 	public SynchronizedIterable<Behavior> getRegisteredBehaviors() {
 		final Collection<Behavior> behaviors = new ArrayList<>();
 		getSkill(InternalEventBusCapacity.class).getRegisteredEventListeners(Behavior.class, behaviors);
-		return Collections3.unmodifiableSynchronizedIterable(behaviors, behaviors);
+		return Collections3.unmodifiableSynchronizedIterable(behaviors, NoReadWriteLock.SINGLETON);
 	}
 
 	@Override

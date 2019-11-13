@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.sarl</groupId>
 		<artifactId>io.sarl.tycho-parent</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.11.0-SNAPSHOT</version>
 		<relativePath>../tycho-parent</relativePath>
 	</parent>
 
@@ -27,7 +27,7 @@
 		<module>sarl-maven-plugin.tests</module>
 		<module>io.sarl.maven.docs.generator.tests</module>
 
-		<!-- Included when Xtext 2.12 is available:
+		<!-- To be included after refactoring
 
 		<module>io.sarl.tests.api.ui</module>
 		<module>io.sarl.lang.ui.tests</module>

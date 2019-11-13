@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
 import org.eclipse.xtext.xbase.typesystem.references.LightweightTypeReference;
+
+import io.sarl.lang.sarl.actionprototype.IActionPrototypeContext;
+import io.sarl.lang.sarl.actionprototype.IActionPrototypeProvider;
 
 /** The generator from SARL to the Python language.
  *
@@ -104,6 +107,14 @@ public interface IExtraLanguageGeneratorContext extends IGeneratorContext {
 	 * @return the file system access.
 	 */
 	IFileSystemAccess2 getFileSystemAccess();
+
+	/** Replies the context for the action prototype provider.
+	 *
+	 * @param provider the provider for creating the context if it was not created.
+	 * @return the context.
+	 * @since 0.10
+	 */
+	IActionPrototypeContext getActionPrototypeContext(IActionPrototypeProvider provider);
 
 	/** Replies the stored data with the given identifier.
 	 * If the data was not found, the default value is replied.

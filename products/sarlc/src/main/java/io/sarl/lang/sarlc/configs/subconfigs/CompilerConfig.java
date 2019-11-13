@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import io.bootique.annotation.BQConfigProperty;
 import io.sarl.lang.SARLVersion;
 import io.sarl.lang.compiler.GeneratorConfig2;
 import io.sarl.lang.compiler.batch.OptimizationLevel;
-import io.sarl.lang.sarlc.configs.SarlConfig;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
 
 /**
  * Configuration for the compiler.
@@ -46,7 +46,7 @@ public class CompilerConfig {
 	/**
 	 * Prefix for the configuration entries of the path modules.
 	 */
-	public static final String PREFIX = SarlConfig.PREFIX + ".compiler"; //$NON-NLS-1$
+	public static final String PREFIX = SarlcConfig.PREFIX + ".compiler"; //$NON-NLS-1$
 
 	/**
 	 * Name of the property that contains the file encoding.
@@ -117,7 +117,7 @@ public class CompilerConfig {
 
 	private String fileEncoding;
 
-	private String javaVersion = SARLVersion.MINIMAL_JDK_VERSION;
+	private String javaVersion = SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH;
 
 	private JavaCompiler javaCompiler;
 
@@ -318,21 +318,23 @@ public class CompilerConfig {
 	 *
 	 * @return the optimization level.
 	 * @since 0.8
+	 * @see #getOptimizationLevelObject()
 	 */
-	public OptimizationLevel getOptimizationLevel() {
+	public String getOptimizationLevel() {
+		return getOptimizationLevelObject().toString().toLowerCase();
+	}
+
+	/** Replies the optimization level for the compilers, incl. the Java compiler.
+	 *
+	 * @return the optimization level.
+	 * @since 0.8
+	 * @see #getOptimizationLevel()
+	 */
+	public OptimizationLevel getOptimizationLevelObject() {
 		if (this.optimizationLevel == null) {
 			this.optimizationLevel = OptimizationLevel.getDefault();
 		}
 		return this.optimizationLevel;
-	}
-
-	/** Change the optimization level for the compilers, incl. the Java compiler.
-	 *
-	 * @param level the optimization level. If {@code null}, the default optimization level is assumed.
-	 * @since 0.8
-	 */
-	public void setOptimizationLevel(OptimizationLevel level) {
-		this.optimizationLevel = level;
 	}
 
 	/** Change the optimization level for the compilers, incl. the Java compiler.

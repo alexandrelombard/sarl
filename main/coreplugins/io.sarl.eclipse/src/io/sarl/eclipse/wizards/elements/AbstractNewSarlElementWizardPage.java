@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,6 +155,30 @@ public abstract class AbstractNewSarlElementWizardPage extends NewTypeWizardPage
 	/** Name of the SARL MemberLeft event.
 	 */
 	protected static final String MEMBERLEFT_EVENT_NAME = "io.sarl.core.MemberLeft"; //$NON-NLS-1$
+
+	/** Name of the SARL SpaceCreated event.
+	 *
+	 * @since 0.10
+	 */
+	protected static final String SPACECREATED_EVENT_NAME = "io.sarl.core.SpaceCreated"; //$NON-NLS-1$
+
+	/** Name of the SARL SpaceDestroyed event.
+	 *
+	 * @since 0.10
+	 */
+	protected static final String SPACEDESTROYED_EVENT_NAME = "io.sarl.core.SpaceDestroyed"; //$NON-NLS-1$
+
+	/** Name of the SARL ParticipantJoined event.
+	 *
+	 * @since 0.10
+	 */
+	protected static final String PARTICIPANTJOINED_EVENT_NAME = "io.sarl.core.ParticipantJoined"; //$NON-NLS-1$
+
+	/** Name of the SARL ParticipantLeft event.
+	 *
+	 * @since 0.10
+	 */
+	protected static final String PARTICIPANTLEFT_EVENT_NAME = "io.sarl.core.ParticipantLeft"; //$NON-NLS-1$
 
 	/** Name of the SARL AgentSpawned event.
 	 */
@@ -1278,6 +1302,36 @@ public abstract class AbstractNewSarlElementWizardPage extends NewTypeWizardPage
 			block = unit.getExpression();
 			block.setInnerDocumentation(MessageFormat.format(
 					Messages.AbstractNewSarlElementWizardPage_16,
+					elementTypeName));
+
+			unit = behaviorUnitAdder.apply(MEMBERLEFT_EVENT_NAME);
+			block = unit.getExpression();
+			block.setInnerDocumentation(MessageFormat.format(
+					Messages.AbstractNewSarlElementWizardPage_16,
+					elementTypeName));
+
+			unit = behaviorUnitAdder.apply(SPACECREATED_EVENT_NAME);
+			block = unit.getExpression();
+			block.setInnerDocumentation(MessageFormat.format(
+					Messages.AbstractNewSarlElementWizardPage_21,
+					elementTypeName));
+
+			unit = behaviorUnitAdder.apply(SPACEDESTROYED_EVENT_NAME);
+			block = unit.getExpression();
+			block.setInnerDocumentation(MessageFormat.format(
+					Messages.AbstractNewSarlElementWizardPage_22,
+					elementTypeName));
+
+			unit = behaviorUnitAdder.apply(PARTICIPANTJOINED_EVENT_NAME);
+			block = unit.getExpression();
+			block.setInnerDocumentation(MessageFormat.format(
+					Messages.AbstractNewSarlElementWizardPage_23,
+					elementTypeName));
+
+			unit = behaviorUnitAdder.apply(PARTICIPANTLEFT_EVENT_NAME);
+			block = unit.getExpression();
+			block.setInnerDocumentation(MessageFormat.format(
+					Messages.AbstractNewSarlElementWizardPage_24,
 					elementTypeName));
 
 			return true;

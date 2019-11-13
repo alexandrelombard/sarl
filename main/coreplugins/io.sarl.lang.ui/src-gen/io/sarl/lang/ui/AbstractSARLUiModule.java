@@ -7,7 +7,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,8 @@ import io.sarl.lang.ui.contentassist.imports.SARLImportingTypesProposalProvider;
 import io.sarl.lang.ui.contentassist.javadoc.SARLJavaDocContentAssistProcessor;
 import io.sarl.lang.ui.contentassist.templates.SARLTemplateContextType;
 import io.sarl.lang.ui.contentassist.templates.SARLTemplateProposalProvider;
+import io.sarl.lang.ui.editor.DocumentAutoFormatter;
+import io.sarl.lang.ui.editor.IDocumentAutoFormatter;
 import io.sarl.lang.ui.editor.SARLEditorErrorTickUpdater;
 import io.sarl.lang.ui.editor.SARLNatureAddingEditorCallback;
 import io.sarl.lang.ui.editor.SARLSourceViewer;
@@ -59,6 +61,7 @@ import io.sarl.lang.ui.extralanguage.preferences.PreferenceBasedFeatureNameConve
 import io.sarl.lang.ui.extralanguage.preferences.PreferenceBasedTypeConverterRuleReader;
 import io.sarl.lang.ui.highlighting.SARLHighlightingCalculator;
 import io.sarl.lang.ui.highlighting.SARLHighlightingConfiguration;
+import io.sarl.lang.ui.hover.SARLHoverProvider;
 import io.sarl.lang.ui.hover.SARLHoverSerializer;
 import io.sarl.lang.ui.hover.SARLHoverSignatureProvider;
 import io.sarl.lang.ui.hover.SARLHoverUIStrings;
@@ -67,6 +70,7 @@ import io.sarl.lang.ui.labeling.SARLDescriptionLabelProvider;
 import io.sarl.lang.ui.labeling.SARLDiagnosticLabelDecorator;
 import io.sarl.lang.ui.labeling.SARLHyperLinkingLabelProvider;
 import io.sarl.lang.ui.labeling.SARLLabelProvider;
+import io.sarl.lang.ui.macro.SarlJdtProcessorInstanceForJvmTypeProvider;
 import io.sarl.lang.ui.outline.SARLBehaviorUnitOutlineFilter;
 import io.sarl.lang.ui.outline.SARLFieldOutlineFilter;
 import io.sarl.lang.ui.outline.SARLOperationOutlineFilter;
@@ -79,6 +83,7 @@ import io.sarl.lang.ui.preferences.SARLPreferenceStoreInitializer;
 import io.sarl.lang.ui.preferences.SARLValidatorConfigurationBlock;
 import io.sarl.lang.ui.quickfix.SARLQuickfixProvider;
 import io.sarl.lang.ui.refactoring.rename.SARLRenameStrategyProvider;
+import io.sarl.lang.ui.tasks.SarlTaskFinder;
 import io.sarl.lang.ui.tasks.SarlTaskTagProvider;
 import io.sarl.lang.ui.validation.SARLUIStrings;
 import io.sarl.lang.ui.validation.SARLUIValidator;
@@ -93,6 +98,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.xtend.core.macro.AbstractFileSystemSupport;
+import org.eclipse.xtend.core.macro.ProcessorInstanceForJvmTypeProvider;
 import org.eclipse.xtend.core.macro.declaration.IResourceChangeRegistry;
 import org.eclipse.xtend.ide.XtendResourceUiServiceProvider;
 import org.eclipse.xtend.ide.autoedit.AutoEditStrategyProvider;
@@ -114,7 +120,6 @@ import org.eclipse.xtend.ide.editor.SingleLineCommentHelper;
 import org.eclipse.xtend.ide.editor.XtendDoubleClickStrategyProvider;
 import org.eclipse.xtend.ide.editor.XtendSourceViewerConfiguration;
 import org.eclipse.xtend.ide.hover.XtendAnnotationHover;
-import org.eclipse.xtend.ide.hover.XtendHoverProvider;
 import org.eclipse.xtend.ide.hover.XtendHoverSerializer;
 import org.eclipse.xtend.ide.hyperlinking.XtendHyperlinkHelper;
 import org.eclipse.xtend.ide.macro.EclipseFileSystemSupportImpl;
@@ -153,6 +158,7 @@ import org.eclipse.xtext.resource.IResourceDescriptions;
 import org.eclipse.xtext.resource.containers.IAllContainersState;
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.service.SingletonBinding;
+import org.eclipse.xtext.tasks.ITaskFinder;
 import org.eclipse.xtext.tasks.ITaskTagProvider;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.LanguageSpecific;
@@ -539,6 +545,11 @@ public abstract class AbstractSARLUiModule extends DefaultXbaseWithAnnotationsUi
 	}
 	
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
+	public Class<? extends ProcessorInstanceForJvmTypeProvider> bindProcessorInstanceForJvmTypeProvider() {
+		return SarlJdtProcessorInstanceForJvmTypeProvider.class;
+	}
+	
+	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
 	public Class<? extends XtendJavaDocContentAssistProcessor> bindXtendJavaDocContentAssistProcessor() {
 		return SARLJavaDocContentAssistProcessor.class;
 	}
@@ -571,6 +582,11 @@ public abstract class AbstractSARLUiModule extends DefaultXbaseWithAnnotationsUi
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
 	public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
 		return SARLNatureAddingEditorCallback.class;
+	}
+	
+	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
+	public Class<? extends IDocumentAutoFormatter> bindIDocumentAutoFormatter() {
+		return DocumentAutoFormatter.class;
 	}
 	
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
@@ -701,6 +717,16 @@ public abstract class AbstractSARLUiModule extends DefaultXbaseWithAnnotationsUi
 	}
 	
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
+	public Class<? extends ITaskFinder> bindITaskFinder() {
+		return SarlTaskFinder.class;
+	}
+	
+	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
+	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		return SARLHoverProvider.class;
+	}
+	
+	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings provided by SARL API]
 	public void configureIPreferenceStoreInitializer(Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("RefactoringPreferences")).to(SARLPreferenceStoreInitializer.class);
 	}
@@ -769,11 +795,6 @@ public abstract class AbstractSARLUiModule extends DefaultXbaseWithAnnotationsUi
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings required by extended Xtend API]
 	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
 		return FlexProposalConflictHelper.class;
-	}
-	
-	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings required by extended Xtend API]
-	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
-		return XtendHoverProvider.class;
 	}
 	
 	// contributed by io.sarl.lang.mwe2.binding.InjectionFragment2 [Bindings required by extended Xtend API]

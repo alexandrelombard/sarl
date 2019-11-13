@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,13 +46,13 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 	 *
 	 * @param agent the owner of this trait.
 	 */
-	AgentTrait(Agent agent) {
+	protected AgentTrait(Agent agent) {
 		this.agentRef = new WeakReference<>(agent);
 	}
 
 	/** Construct a trait.
 	 */
-	AgentTrait() {
+	protected AgentTrait() {
 		this.agentRef = new WeakReference<>(null);
 	}
 
@@ -76,7 +76,7 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 	 * @return the owner.
 	 */
 	@Pure
-	protected Agent getOwner() {
+	public Agent getOwner() {
 		return this.agentRef.get();
 	}
 
@@ -87,7 +87,7 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 	 */
 	@Pure
 	@Inline("getOwner().getID()")
-	protected final UUID getID() {
+	public UUID getID() {
 		return getOwner().getID();
 	}
 
@@ -162,7 +162,7 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 
 	@Override
 	@Pure
-	protected boolean isMe(Address address) {
+	public boolean isMe(Address address) {
 		final Agent owner = getOwner();
 		if (owner == null) {
 			return false;
@@ -172,7 +172,7 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 
 	@Override
 	@Pure
-	protected boolean isMe(UUID uID) {
+	public boolean isMe(UUID uID) {
 		final Agent owner = getOwner();
 		if (owner == null) {
 			return false;
@@ -182,7 +182,7 @@ public abstract class AgentTrait extends AgentProtectedAPIObject {
 
 	@Override
 	@Pure
-	protected boolean isFromMe(Event event) {
+	public boolean isFromMe(Event event) {
 		final Agent owner = getOwner();
 		if (owner == null) {
 			return false;

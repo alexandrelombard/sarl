@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Singleton;
 import org.apache.commons.io.output.WriterOutputStream;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.xtext.util.JavaVersion;
 import org.eclipse.xtext.util.Strings;
 import org.slf4j.Logger;
 
@@ -88,25 +90,28 @@ public class JavacBatchCompiler implements IJavaBatchCompiler {
 		if (progress.isCanceled()) {
 			return false;
 		}
-		if (!bootClassPathEntries.isEmpty()) {
-			final StringBuilder cmd = new StringBuilder();
-			boolean first = true;
-			for (final File entry : bootClassPathEntries) {
-				if (progress.isCanceled()) {
-					return false;
-				}
-				if (entry.exists()) {
-					if (first) {
-						first = false;
-					} else {
-						cmd.append(File.pathSeparator);
+		if (!bootClassPathEntries.isEmpty() && !Strings.isEmpty(javaVersion)) {
+			final JavaVersion jversion = JavaVersion.fromQualifier(javaVersion);
+			if (!jversion.isAtLeast(JavaVersion.JAVA9)) {
+				final StringBuilder cmd = new StringBuilder();
+				boolean first = true;
+				for (final File entry : bootClassPathEntries) {
+					if (progress.isCanceled()) {
+						return false;
 					}
-					cmd.append(entry.getAbsolutePath());
+					if (entry.exists()) {
+						if (first) {
+							first = false;
+						} else {
+							cmd.append(File.pathSeparator);
+						}
+						cmd.append(entry.getAbsolutePath());
+					}
 				}
-			}
-			if (cmd.length() > 0) {
-				commandLineArguments.add("-bootclasspath"); //$NON-NLS-1$
-				commandLineArguments.add(cmd.toString());
+				if (cmd.length() > 0) {
+					commandLineArguments.add("-bootclasspath"); //$NON-NLS-1$
+					commandLineArguments.add(cmd.toString());
+				}
 			}
 		}
 		final Iterator<File> classPathIterator = classPathEntries.iterator();
@@ -173,7 +178,7 @@ public class JavacBatchCompiler implements IJavaBatchCompiler {
 			return false;
 		}
 
-		final OutputStream stdout = new WriterOutputStream(outWriter);
+		final OutputStream stdout = new WriterOutputStream(outWriter, Charset.defaultCharset());
 
 		final OutputStream stderr = new JavacErrorStream(errWriter, logger);
 
@@ -242,7 +247,7 @@ public class JavacBatchCompiler implements IJavaBatchCompiler {
 		 * @param logger the logger to use for printing out special messages.
 		 */
 		JavacErrorStream(PrintWriter writer, Logger logger) {
-			super(writer);
+			super(writer, Charset.defaultCharset());
 			this.logger = logger;
 		}
 

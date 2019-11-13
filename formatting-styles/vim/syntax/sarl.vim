@@ -1,6 +1,6 @@
 " Vim syntax file
 " Language: SARL
-" Version: 0.9
+" Version: 0.11
 " 
 "  $Id$
 " 
@@ -10,7 +10,7 @@
 "  SARL is an general-purpose agent programming language.
 "  More details on http://www.sarl.io
 " 
-"  Copyright (C) 2014-2018 the original authors or authors.
+"  Copyright (C) 2014-2019 the original authors or authors.
 " 
 "  Licensed under the Apache License, Version 2.0 (the "License");
 "  you may not use this file except in compliance with the License.
@@ -94,12 +94,15 @@ syn keyword sarlTypeDeclaration agent annotation artifact behavior capacity clas
 syn cluster sarlTop add=sarlTypeDeclaration
 
 " keywords for the 'sarlModifier' family.
-syn keyword sarlModifier abstract def dispatch final native override private protected public static strictfp synchronized transient val var volatile
+syn keyword sarlModifier abstract def dispatch extension final native override private protected public static strictfp synchronized transient val var volatile
 syn cluster sarlTop add=sarlModifier
 
 " keywords for the 'sarlKeyword' family.
-syn keyword sarlKeyword as assert assume break case catch continue default do else extends extension finally fires for if implements instanceof new on requires return super switch throw throws try typeof uses while with
+syn keyword sarlKeyword as assert assume break case catch continue default do else extends finally fires for if implements instanceof new on requires return super switch throw throws try typeof uses while with
 syn cluster sarlTop add=sarlKeyword
+
+" punctuation
+syn match sarlPunctuation "\([!#%&()*+,-./:;<=>?@\[\\\]\^{\|}]\)"
 
 " catch errors caused by wrong parenthesis
 syn region sarlParenT transparent matchgroup=sarlParen  start="(" end=")" contains=@sarlTop,sarlParenT1
@@ -120,18 +123,19 @@ endif
 exec "syn sync ccomment sarlComment minlines=" . sarl_minlines
 
 " The default highlighting.
-SarlHiLink sarlComment Comment
 SarlHiLink sarlNumber Constant
-SarlHiLink sarlString Constant
+SarlHiLink sarlPunctuation Operator
 SarlHiLink sarlTypeDeclaration Type
 SarlHiLink sarlLineComment Comment
 SarlHiLink sarlLiteral Identifier
-SarlHiLink sarlKeyword Statement
 SarlHiLink sarlAnnotation PreProc
 SarlHiLink sarlArrayDeclaration Special
-SarlHiLink sarlSpecial Special
 SarlHiLink sarlPrimitiveType Special
 SarlHiLink sarlModifier Statement
+SarlHiLink sarlComment Comment
+SarlHiLink sarlString Constant
+SarlHiLink sarlKeyword Statement
+SarlHiLink sarlSpecial Special
 
 delcommand SarlHiLink
 

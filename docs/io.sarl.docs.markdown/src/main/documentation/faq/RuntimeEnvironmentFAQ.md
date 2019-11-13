@@ -1,4 +1,4 @@
-# FAQ related to the Runtime Environment 
+    # FAQ related to the Runtime Environment 
 
 [:Outline:]
 
@@ -15,9 +15,9 @@ run a SARL program. The official standard SRE supported by the SARL developers i
 ### What is Janus?
 
 Janus is an open-source multi-agent platform fully implemented 
-in Java [:compiler.level!]. Janus enables developers to quickly create 
+in Java [:sarl-dsl.min.jdk.version!]. Janus enables developers to quickly create 
 web, enterprise and desktop agent-based applications.
-[:Fact:]("[:compiler.level!]".shouldBeAtLeastJava)
+[:Fact:]("[:sarl-dsl.min.jdk.version!]".shouldBeAtLeastJava)
 
 __Janus is an agent execution platform not an agent-oriented language.__
 
@@ -37,7 +37,8 @@ Official website: [www.janusproject.io](http://www.janusproject.io)
 If you cannot find an answer to your question in the FAQ, nor the reference documents, nor
 the [existing SARL issues](https://github.com/sarl/sarl/issues),
 you may ask the SARL developers on 
-[the SARL forum](https://groups.google.com/forum/#!forum/sarl).
+[the SARL forum](https://groups.google.com/forum/#!forum/sarl), or 
+on the [instant messaging forum](https://gitter.im/sarl/Lobby).
 
 
 ### Where can I found information on the release planning of Janus?
@@ -52,18 +53,20 @@ on Github.
 
 The [Janus runtime platform](http://www.janusproject.io)
 is a Java application. Every operating system which has 
-a Java Virtual Machine with at least with the [:compiler.level!]
+a Java Virtual Machin, especially the Java Development Kit (JDK),
+with at least with the [:sarl-run.min.jdk.version!]
 standard may be used to run Janus. 
-[:Fact:]("[:compiler.level!]".shouldBeAtLeastJava)
+[:Fact:]("[:sarl-run.min.jdk.version!]".shouldBeAtLeastJava)
 
 
 ### What is the version of the Java virtual machine to install?
 
-Janus requires the JRE and the JDK [:compiler.level!] or higher to run and compile.
+Janus requires the JDK [:sarl-run.min.jdk.version!] or higher
+(and strictly lower than [:sarl-run.next.unsupported.jdk.version!]) to run and compile.
 Note that if you plan to create Android applications, you may 
-configure your JDK to produce 1.6 class files from [:compiler.level!] Java code,
+configure your JDK to produce 1.6 class files from [:sarl-run.min.jdk.version!] Java code,
 depending of the current supported standard on Android platforms.
-[:Fact:]("[:compiler.level!]".shouldBeAtLeastJava)
+[:Fact:]("[:sarl-run.min.jdk.version!]".shouldBeAtLeastJava)
 
 
 ### How to launch an agent in Janus?
@@ -75,6 +78,37 @@ Three methods are available for launching one or more agents in the Janus platfo
 * [From a Java program](../gettingstarted/RunSARLAgentJava.md).
 
 
+### In the Eclipse SARL product, what is the difference between the launch configurations "SARL Agent" and "SARL Application"?
+
+There is two methods for starting an application that will run SARL agents:
+
+* start an agent that will create all the components of the application, or
+* start a standard Java application that will start the SRE later during its execution. 
+
+For the first case, the qualified name of the agent type to be launched must be provided.
+This case is supported by the *SARL Agent* launch configuration.
+
+For the second case, the `main()` function of the application should be launched in 
+order to start it. This case is supported by the *SARL Application* launch configuration.
+
+Both launch configurations adds the SARL Run-time Environment into the run-time classpath.
+The selected SRE depends on the configuration of your Eclipse SARL product.
+
+
+### In the Eclipse SARL product, what is the difference between the launch configurations "Java Application" and "SARL Application"?
+
+Both "Java Application" and "SARL Application" are launch configurations for starting 
+a Java application, i.e. invoking the `main()` function for starting up.
+
+The difference between them is that the "SARL Application" launch configuration is 
+automatically adding in the application classpath the SARL Run-time Environment that
+is configured into your Eclipse SARL project.
+The "Java Application" does not.
+
+Consequently, if you need to run agents and if you start your application with a "Java 
+Application" launch configuration, you must add manually the SRE libraries in the classpath.
+ 
+
 ### Error: "The SRE is not standalone. It does not contain the Java dependencies."
 
 This error occurs when there is no SARL Runtime Environment (SRE) installed on your
@@ -84,9 +118,6 @@ version of the SARL tools, which are embedded in Eclipse.
 For solving this problem, you must download the latest
 [Janus platform](http://www.janusproject.io), and install it in your Eclipse
 (Menu <code>Window&gt; Preferences&gt; SARL&gt; Installed SREs</code>).
-
-<caution>If the latest stable version of Janus is not working, you should
-download the latest development version.</caution>
 
 
 ### Error: "Incompatible SRE with SARL 1.1.1.1. Version must be lower than 0.0.0."
@@ -130,13 +161,14 @@ The Jar archiver uses the default file encoding of the operating system.
 On Linux and MacOS 10, it is almost UTF-8. On Windows, it is Latin1. And on MacOS (before 10),
 it is Mac-Roman.
 
-Unfortunately, the Janus Jar file is generated on a Linux operating system (UTF-8).
+The Janus Jar file is generated on a Linux operating system (UTF-8).
 When the Java virtual machine tries to uncompress and use the content of the Jar, it
-complains about an invalid charset format.
+may complain about an invalid charset format.
 
 For solving this issue, you could launch your Eclipse with the command line option
 `-Dfile.encoding=UTF-8`, which is forcing the Eclipse product to consider the
 file as encoded with the UTF-8 charset.
+Note that this option is defined into the Eclipse SARL product since version 0.4.
 
 
 ## Runtime Behavior of Janus
@@ -152,6 +184,44 @@ environment. For example, the
 [Janus runtime environment](http://www.janusproject.io) executes
 the event handlers in parallel. The real order of execution depends on
 how the Java executor is running the handlers on the threads.
+
+
+
+### How events are treated by the run-time environment?
+
+When the event `e` of type `E` is received by an agent the following algorithm is applied:
+```
+if "on Initialize" is currently running then
+   add e to a buffer of events.
+else if "on Destroy" is currently running then
+   ignore the event.
+else
+   [:firefct]{fire(e)}
+fi
+```
+The function [:firefct:] retrieves all the `on E` and runs them in parallel, and
+there is a synchronization point after the running of all the `on E` if `E` is
+`Initialize` or `Destroy` (for forcing synchronous execution of `on Initialize`
+and `on Destroy`). At the end of the `on Initialize` (after synchronization point),
+all the buffered events are fired.
+
+Observe that if the event is fired from within the `on Initialize`, the same algorithm
+is applied whatever the receiving agent.
+
+
+
+### How the spawn function is run by the run-time environment?
+
+Regarding `spawn()`, the function runs in two parts:
+
+1. First, the spawn agent is created. This part is run in the same thread as the
+   caller of spawn, so the spawn call blocks.
+2. Once the spawn agent has been created, the initialization process runs
+   within a separated thread from the spawner agent. So, the call `spawn()` is
+   not locked. Then, the created thread runs all the initialization process,
+   including the synchronous execution of `on Initialize` (see previous question).
+   Consequently, the `on Initialize` of the spawn agent will not block the spawn caller.
+
 
 
 ### Must I configure the Janus kernels to be connected to other Janus kernels?

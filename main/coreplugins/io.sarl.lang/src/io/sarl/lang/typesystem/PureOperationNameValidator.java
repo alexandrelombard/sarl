@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ public class PureOperationNameValidator implements IPureOperationNameValidator {
 	 * @return {@code true} if the operation has a side effects.
 	 */
 	protected boolean isNamePatternForPureOperation(String name) {
-		return name != null && this.purePattern.matcher(name).find();
+		return name != null && this.purePattern.matcher(name).matches();
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class PureOperationNameValidator implements IPureOperationNameValidator {
 	 * @return {@code true} if the operation has a side effects.
 	 */
 	protected boolean isNamePatternForNotPureOperation(String name) {
-		return name != null && this.notPurePattern.matcher(name).find();
+		return name != null && this.notPurePattern.matcher(name).matches();
 	}
 
 	@Override

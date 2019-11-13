@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,9 @@ import org.eclipse.xtext.resource.XtextResourceSet;
  */
 class MavenProjectResourceSetProvider implements Provider<ResourceSet> {
 
-	private MavenProject project;
+	private final MavenProject project;
+
+	private ResourceSet resourceSet;
 
 	/** Constructor.
 	 *
@@ -44,13 +46,19 @@ class MavenProjectResourceSetProvider implements Provider<ResourceSet> {
 	 */
 	MavenProjectResourceSetProvider(MavenProject project) {
 		super();
+		assert project != null;
 		this.project = project;
 	}
 
 	@Override
 	public ResourceSet get() {
-		final ResourceSet rs = new XtextResourceSet();
-		MavenProjectAdapter.install(rs, this.project);
+		ResourceSet rs = this.resourceSet;
+		if (rs == null) {
+			rs = new XtextResourceSet();
+			MavenProjectAdapter.install(rs, this.project);
+			this.resourceSet = rs;
+		}
+		assert rs != null;
 		return rs;
 	}
 

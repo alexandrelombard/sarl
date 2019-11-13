@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import com.google.inject.Module;
 import io.bootique.BQModule;
 import io.bootique.BQModuleProvider;
 
-import io.sarl.lang.sarlc.configs.SarlConfig;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
 
 /** Provider of the module for the sarlc configuration.
  *
@@ -48,7 +48,7 @@ public class SarlcConfigModuleProvider implements BQModuleProvider {
 
 	@Override
 	public Map<String, Type> configs() {
-		return Collections.singletonMap(SarlConfig.PREFIX, SarlConfig.class);
+		return Collections.singletonMap(SarlcConfig.PREFIX, SarlcConfig.class);
 	}
 
 	@Override

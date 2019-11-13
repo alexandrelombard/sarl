@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -548,7 +548,9 @@ public class PyGenerator extends AbstractExtraLanguageGenerator {
 		final QualifiedActionName actionName = prototypeProvider.createQualifiedActionName(
 				(JvmIdentifiableElement) getJvmModelAssociations().getPrimaryJvmElement(executable.getDeclaringType()),
 				name);
-		final InferredPrototype inferredPrototype = getActionPrototypeProvider().createPrototypeFromSarlModel(actionName,
+		final InferredPrototype inferredPrototype = getActionPrototypeProvider().createPrototypeFromSarlModel(
+				context.getActionPrototypeContext(getActionPrototypeProvider()),
+				actionName,
 				Utils.isVarArg(executable.getParameters()), executable.getParameters());
 		for (final Entry<ActionParameterTypes, List<InferredStandardParameter>> types : inferredPrototype.getInferredParameterTypes().entrySet()) {
 			final List<InferredStandardParameter> argumentsToOriginal = types.getValue();

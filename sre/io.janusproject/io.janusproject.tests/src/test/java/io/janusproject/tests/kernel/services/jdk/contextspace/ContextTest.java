@@ -19,11 +19,6 @@
  */
 package io.janusproject.tests.kernel.services.jdk.contextspace;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -55,15 +50,16 @@ import io.janusproject.services.logging.LogService;
 import io.janusproject.tests.testutils.AbstractJanusTest;
 import io.janusproject.util.TwoStepConstruction;
 
+import io.sarl.core.OpenEventSpace;
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.core.SpaceCreated;
 import io.sarl.lang.core.Event;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.lang.util.SynchronizedCollection;
 import io.sarl.tests.api.Nullable;
-import io.sarl.util.Collections3;
-import io.sarl.util.OpenEventSpace;
-import io.sarl.util.OpenEventSpaceSpecification;
+import io.sarl.util.concurrent.Collections3;
+import io.sarl.util.concurrent.NoReadWriteLock;
 
 /**
  * @author $Author: sgalland$
@@ -166,7 +162,7 @@ public class ContextTest extends AbstractJanusTest {
 								c.add(space);
 							}
 						}
-						return Collections3.synchronizedCollection(c, c);
+						return Collections3.synchronizedCollection(c, NoReadWriteLock.SINGLETON);
 					}
 				});
 		when(this.spaceRepository.getSpace(ArgumentMatchers.any(SpaceID.class))).thenAnswer(new Answer<Space>() {
@@ -181,7 +177,7 @@ public class ContextTest extends AbstractJanusTest {
 			}
 		});
 		when(this.spaceRepository.getSpaces())
-				.thenReturn(Collections3.synchronizedCollection((Collection) this.spaces.values(), this.spaces));
+				.thenReturn(Collections3.synchronizedCollection((Collection) this.spaces.values(), NoReadWriteLock.SINGLETON));
 
 		Context.DefaultSpaceRepositoryFactory spaceRepoFactory = new TestFactory(this);
 		spaceRepoFactory = spy(spaceRepoFactory);

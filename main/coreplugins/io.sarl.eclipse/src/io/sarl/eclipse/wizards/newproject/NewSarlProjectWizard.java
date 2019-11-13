@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -293,7 +293,8 @@ public class NewSarlProjectWizard extends NewElementWizard implements IExecutabl
 		// Get the template resource.
 		final URL templateUrl = getPomTemplateLocation();
 		if (templateUrl != null) {
-			final String compliance = Strings.isNullOrEmpty(compilerCompliance) ? SARLVersion.MINIMAL_JDK_VERSION : compilerCompliance;
+			final String compliance = Strings.isNullOrEmpty(compilerCompliance)
+					? SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH : compilerCompliance;
 			final String groupId = getDefaultMavenGroupId();
 			// Read the template and do string replacement.
 			final StringBuilder content = new StringBuilder();

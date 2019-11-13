@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,7 +84,6 @@ public class Messages extends NLS {
 	public static String SARLValidator_47;
 	public static String SARLValidator_48;
 	public static String SARLValidator_49;
-	public static String SARLValidator_5;
 	public static String SARLValidator_50;
 	public static String SARLValidator_51;
 	public static String SARLValidator_52;
@@ -130,6 +129,11 @@ public class Messages extends NLS {
 	public static String SARLValidator_91;
 	public static String SARLValidator_92;
 	public static String SARLValidator_93;
+	public static String SARLValidator_94;
+	public static String SARLValidator_95;
+	public static String SARLValidator_96;
+	public static String SARLValidator_97;
+	public static String SARLValidator_98;
 	public static String SARLSyntaxErrorMessageProvider_0;
 	public static String SARLSyntaxErrorMessageProvider_1;
 }

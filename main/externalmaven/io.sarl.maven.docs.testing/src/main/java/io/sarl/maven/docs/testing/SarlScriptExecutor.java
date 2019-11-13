@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ import org.eclipse.xtext.xbase.validation.IssueCodes;
 import org.junit.ComparisonFailure;
 import org.slf4j.helpers.NOPLogger;
 
+import io.sarl.lang.compiler.batch.CleaningPolicy;
 import io.sarl.lang.compiler.batch.ICompilatedResourceReceiver;
 import io.sarl.lang.compiler.batch.SarlBatchCompiler;
 import io.sarl.lang.sarl.SarlClass;
@@ -139,7 +140,7 @@ public class SarlScriptExecutor implements ScriptExecutor {
 		compiler.setGenerateGeneratedAnnotation(false);
 		compiler.setGenerateInlineAnnotation(false);
 		compiler.setGenerateSyntheticSuppressWarnings(true);
-		compiler.setDeleteTempDirectory(false);
+		compiler.setCleaningPolicy(CleaningPolicy.NO_CLEANING);
 		compiler.setClassPath(this.classpath);
 		compiler.setBootClassPath(this.bootClasspath);
 		compiler.setJavaSourceVersion(this.sourceVersion);

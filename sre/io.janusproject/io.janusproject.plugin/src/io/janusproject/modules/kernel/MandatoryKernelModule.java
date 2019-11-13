@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,12 +45,12 @@ import io.janusproject.services.IServiceManager;
 import io.janusproject.services.contextspace.ContextSpaceService;
 import io.janusproject.services.executor.ExecutorService;
 
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.lang.core.AgentContext;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.EventSpaceSpecification;
 import io.sarl.sarlspecification.SarlSpecificationChecker;
 import io.sarl.sarlspecification.StandardSarlSpecificationChecker;
-import io.sarl.util.OpenEventSpaceSpecification;
 import io.sarl.util.RestrictedAccessEventSpaceSpecification;
 
 /**

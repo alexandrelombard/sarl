@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -190,7 +195,7 @@ public class Bug846 extends AbstractSarlTest {
 			"@SuppressWarnings(\"all\")",
 			"public class SomeAgent extends Agent {",
 			"  private void $behaviorUnit$Initialize$0(final Initialize occurrence) {",
-			"    double result = Math.pow(((double) (-1)), 2);",
+			"    double result = Math.pow((-1), 2);",
 			"  }",
 			"  ",
 			"  @SyntheticMember",

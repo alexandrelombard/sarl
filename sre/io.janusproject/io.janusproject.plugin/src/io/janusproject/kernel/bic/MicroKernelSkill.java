@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,12 @@ public class MicroKernelSkill extends BuiltinSkill implements MicroKernelCapacit
 		this.kernel = new WeakReference<>(kernel);
 	}
 
+	/** {@inheritDoc}
+	 *
+	 * @deprecated since 0.10
+	 */
 	@Override
+	@Deprecated
 	public int getInstallationOrder() {
 		if (installationOrder < 0) {
 			installationOrder = installationOrder(this);

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,6 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.Version;
 
 import io.sarl.eclipse.SARLEclipseConfig;
 import io.sarl.eclipse.SARLEclipsePlugin;
@@ -59,6 +58,7 @@ import io.sarl.eclipse.runtime.ProjectSREProviderFactory;
 import io.sarl.eclipse.runtime.SARLRuntime;
 import io.sarl.eclipse.runtime.SREConfigurationBlock;
 import io.sarl.lang.SARLVersion;
+import io.sarl.lang.util.Utils;
 
 /**
  * Configuration tab for the JRE and the SARL runtime environment.
@@ -256,14 +256,13 @@ public class SARLRuntimeEnvironmentTab extends JavaJRETab {
 						Messages.RuntimeEnvironmentTab_3, install.getName()));
 				return false;
 			}
-			final Version jreVersion = Version.parseVersion(version);
-			final Version minVersion = Version.parseVersion(SARLVersion.MINIMAL_JDK_VERSION);
-			if (jreVersion.compareTo(minVersion) < 0) {
+			if (!Utils.isCompatibleJDKVersionWhenInSARLProjectClasspath(version)) {
 				setErrorMessage(MessageFormat.format(
 						Messages.RuntimeEnvironmentTab_4,
 						install.getName(),
 						version,
-						SARLVersion.MINIMAL_JDK_VERSION));
+						SARLVersion.MINIMAL_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH,
+						SARLVersion.INCOMPATIBLE_JDK_VERSION_IN_SARL_PROJECT_CLASSPATH));
 				return false;
 			}
 		}

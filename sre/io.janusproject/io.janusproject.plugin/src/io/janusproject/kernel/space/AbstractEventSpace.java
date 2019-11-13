@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,10 @@ package io.janusproject.kernel.space;
 
 import java.text.MessageFormat;
 import java.util.UUID;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import io.janusproject.kernel.repository.UniqueAddressParticipantRepository;
 import io.janusproject.services.distributeddata.DistributedDataStructureService;
@@ -39,8 +41,8 @@ import io.sarl.lang.core.Scope;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.lang.util.SynchronizedCollection;
 import io.sarl.lang.util.SynchronizedSet;
-import io.sarl.util.Collections3;
 import io.sarl.util.Scopes;
+import io.sarl.util.concurrent.Collections3;
 
 /**
  * Abstract implementation of an event space.
@@ -82,11 +84,13 @@ public abstract class AbstractEventSpace extends SpaceBase {
 	 *
 	 * @param id identifier of the space.
 	 * @param factory factory that is used to create the internal data structure.
+	 * @param lockProvider a provider of synchronization locks.
 	 */
-	public AbstractEventSpace(SpaceID id, DistributedDataStructureService factory) {
+	public AbstractEventSpace(SpaceID id, DistributedDataStructureService factory,
+			Provider<ReadWriteLock> lockProvider) {
 		super(id);
 		this.participants = new UniqueAddressParticipantRepository<>(getSpaceID().getID().toString() + "-participants", //$NON-NLS-1$
-				factory);
+				factory, lockProvider);
 	}
 
 	/** Replies the internal datastructure that stores the participants to this space.
@@ -174,13 +178,17 @@ public abstract class AbstractEventSpace extends SpaceBase {
 		assert event != null;
 		final UniqueAddressParticipantRepository<Address> particips = getParticipantInternalDataStructure();
 		final SynchronizedCollection<EventListener> listeners = particips.getListeners();
-		synchronized (listeners.mutex()) {
+		final ReadWriteLock lock = listeners.getLock();
+		lock.readLock().lock();
+		try {
 			for (final EventListener listener : listeners) {
 				final Address adr = getAddress(listener);
 				if (scope.matches(adr)) {
 					this.executorService.submit(new AsyncRunner(listener, event));
 				}
 			}
+		} finally {
+			lock.readLock().unlock();
 		}
 	}
 

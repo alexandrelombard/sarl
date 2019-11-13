@@ -48,6 +48,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import io.janusproject.Boot;
+import io.janusproject.Bootstrap;
 import io.janusproject.kernel.Kernel;
 import io.janusproject.modules.StandardJanusPlatformModule;
 import io.janusproject.services.executor.EarlyExitException;
@@ -389,7 +390,7 @@ public abstract class AbstractJanusRunTest extends AbstractJanusTest {
 	 * @throws Exception - if the kernel cannot be launched.
 	 */
 	protected Module prepareJanus(boolean enableLogging, boolean offline, Module module) throws Exception {
-		Boot.setConsoleLogger(new PrintStream(new OutputStream() {
+		PrintStream cons = new PrintStream(new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 				//
@@ -402,7 +403,9 @@ public abstract class AbstractJanusRunTest extends AbstractJanusTest {
 			public void write(byte[] b, int off, int len) throws IOException {
 				//
 			}
-		}));
+		});
+		Boot.setErrorConsoleLogger(cons);
+		Boot.setStandardConsoleLogger(cons);
 		this.results = new TreeMap<>();
 		Module injectionModule = module;
 		if (!enableLogging) {
@@ -474,7 +477,8 @@ public abstract class AbstractJanusRunTest extends AbstractJanusTest {
 			isJanusRunning = this.janusKernel.isRunning();
 			Thread.yield();
 		}
-		Boot.setConsoleLogger(null);
+		Boot.setErrorConsoleLogger(null);
+		Boot.setStandardConsoleLogger(null);
 		if (isJanusRunning) {
 			throw new TimeoutException();
 		}
@@ -500,10 +504,21 @@ public abstract class AbstractJanusRunTest extends AbstractJanusTest {
 			isJanusRunning = this.janusKernel.isRunning() || !(predicate.apply(this.results));
 			Thread.yield();
 		}
-		Boot.setConsoleLogger(null);
+		Boot.setErrorConsoleLogger(null);
+		Boot.setStandardConsoleLogger(null);
 		if (isJanusRunning) {
 			throw new TimeoutException();
 		}
+	}
+
+	protected Bootstrap getTestingBootstrap() {
+		Bootstrap b = new Bootstrap();
+		b.setKernel(getTestingKernel());
+		return b;
+	}
+	
+	protected final Kernel getTestingKernel() {
+		return this.janusKernel;
 	}
 
 	/**

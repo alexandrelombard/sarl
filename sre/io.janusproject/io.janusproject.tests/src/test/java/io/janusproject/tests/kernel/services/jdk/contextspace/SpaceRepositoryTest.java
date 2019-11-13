@@ -19,48 +19,47 @@
  */
 package io.janusproject.tests.kernel.services.jdk.contextspace;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.concurrent.locks.ReadWriteLock;
 
 import com.google.inject.Injector;
+import com.google.inject.Provider;
+import javassist.Modifier;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.internal.verification.Times;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import io.janusproject.kernel.services.jdk.contextspace.SpaceRepository;
 import io.janusproject.services.contextspace.SpaceRepositoryListener;
 import io.janusproject.services.distributeddata.DMap;
 import io.janusproject.services.distributeddata.DistributedDataStructureService;
 import io.janusproject.tests.testutils.AbstractJanusTest;
 import io.janusproject.util.TwoStepConstruction;
-import javassist.Modifier;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.mockito.internal.verification.Times;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
+import io.sarl.core.OpenEventSpace;
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.lang.core.EventSpace;
 import io.sarl.lang.core.EventSpaceSpecification;
 import io.sarl.lang.core.Space;
 import io.sarl.lang.core.SpaceID;
 import io.sarl.tests.api.Nullable;
-import io.sarl.util.Collections3;
-import io.sarl.util.OpenEventSpace;
-import io.sarl.util.OpenEventSpaceSpecification;
 import io.sarl.util.RestrictedAccessEventSpace;
 import io.sarl.util.RestrictedAccessEventSpaceSpecification;
+import io.sarl.util.concurrent.Collections3;
+import io.sarl.util.concurrent.NoReadWriteLock;
 
 /**
  * @author $Author: sgalland$
@@ -100,37 +99,44 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 
 	@Before
 	public void setUp() throws Exception {
-		this.spaceIDs = Mockito.mock(DMap.class);
-		this.dds = Mockito.mock(DistributedDataStructureService.class);
-		this.injector = Mockito.mock(Injector.class);
-		this.listener = Mockito.mock(SpaceRepositoryListener.class);
+		this.spaceIDs = mock(DMap.class);
+		this.dds = mock(DistributedDataStructureService.class);
+		this.injector = mock(Injector.class);
+		when(this.injector.getProvider(any(Class.class))).thenAnswer((it) -> {
+			Provider<?> provider = null;
+			if (ReadWriteLock.class.equals(it.getArgument(0))) {
+				provider = () -> NoReadWriteLock.SINGLETON;
+			}
+			return provider;
+		});
+		this.listener = mock(SpaceRepositoryListener.class);
 		this.spaceID = new SpaceID(UUID.randomUUID(), UUID.randomUUID(), OpenEventSpaceSpecification.class);
 		this.params = new Object[] { "PARAM" }; //$NON-NLS-1$
 		//
-		Mockito.when(this.dds.<SpaceID, Object[]> getMap(ArgumentMatchers.any(), ArgumentMatchers.any()))
+		when(this.dds.<SpaceID, Object[]> getMap(ArgumentMatchers.any(), ArgumentMatchers.any()))
 				.thenReturn(this.spaceIDs);
-		Mockito.when(this.dds.<SpaceID, Object[]> getMap(ArgumentMatchers.any())).thenReturn(this.spaceIDs);
+		when(this.dds.<SpaceID, Object[]> getMap(ArgumentMatchers.any())).thenReturn(this.spaceIDs);
 		//
 		this.repository = this.reflect.newInstance(SpaceRepository.class, "thename", //$NON-NLS-1$
 				this.dds, this.injector, this.listener);
 	}
 
 	private void initMocks() throws Exception {
-		Mockito.when(this.spaceIDs.containsKey(this.spaceID)).thenReturn(true);
-		Mockito.when(this.spaceIDs.keySet()).thenReturn(new HashSet<>(Collections.singleton(this.spaceID)));
-		this.spaceSpecification = Mockito.mock(OpenEventSpaceSpecification.class);
-		Mockito.when(this.injector.getInstance(OpenEventSpaceSpecification.class)).thenReturn(this.spaceSpecification);
-		this.space = Mockito.mock(OpenEventSpace.class);
-		Mockito.when(this.spaceSpecification.create(this.spaceID, this.params)).thenReturn(this.space);
-		Mockito.when(this.space.getSpaceID()).thenReturn(this.spaceID);
+		when(this.spaceIDs.containsKey(this.spaceID)).thenReturn(true);
+		when(this.spaceIDs.keySet()).thenReturn(new HashSet<>(Collections.singleton(this.spaceID)));
+		this.spaceSpecification = mock(OpenEventSpaceSpecification.class);
+		when(this.injector.getInstance(OpenEventSpaceSpecification.class)).thenReturn(this.spaceSpecification);
+		this.space = mock(OpenEventSpace.class);
+		when(this.spaceSpecification.create(this.spaceID, this.params)).thenReturn(this.space);
+		when(this.space.getSpaceID()).thenReturn(this.spaceID);
 	}
 
 	private void baseInit() throws Exception {
-		this.spaceSpecification = Mockito.mock(OpenEventSpaceSpecification.class);
-		Mockito.when(this.injector.getInstance(OpenEventSpaceSpecification.class)).thenReturn(this.spaceSpecification);
-		this.space = Mockito.mock(OpenEventSpace.class);
-		Mockito.when(this.spaceSpecification.create(this.spaceID, this.params)).thenReturn(this.space);
-		Mockito.when(this.space.getSpaceID()).thenReturn(this.spaceID);
+		this.spaceSpecification = mock(OpenEventSpaceSpecification.class);
+		when(this.injector.getInstance(OpenEventSpaceSpecification.class)).thenReturn(this.spaceSpecification);
+		this.space = mock(OpenEventSpace.class);
+		when(this.spaceSpecification.create(this.spaceID, this.params)).thenReturn(this.space);
+		when(this.space.getSpaceID()).thenReturn(this.spaceID);
 	}
 
 	private void initRepository() throws Exception {
@@ -146,14 +152,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		//
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertFalse(argument4.getValue());
 	}
@@ -182,14 +188,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		//
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertFalse(argument4.getValue());
 	}
@@ -197,8 +203,8 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 	@Test
 	public void removeSpaceDefinition() throws Exception {
 		initRepository();
-		Mockito.when(this.space.getParticipants()).thenReturn(Collections3.<UUID> emptySynchronizedSet());
-		Mockito.when(this.spaceIDs.containsKey(this.spaceID)).thenReturn(false);
+		when(this.space.getParticipants()).thenReturn(Collections3.<UUID> emptySynchronizedSet());
+		when(this.spaceIDs.containsKey(this.spaceID)).thenReturn(false);
 		//
 		this.reflect.invoke(this.repository, "removeLocalSpaceDefinition", this.spaceID, true);
 		//
@@ -206,7 +212,7 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceDestroyed(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceDestroyed(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -228,7 +234,7 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		Space space = this.repository.getSpace(this.spaceID);
 		assertSame(this.space, space);
 		//
-		assertNull(this.repository.getSpace(Mockito.mock(SpaceID.class)));
+		assertNull(this.repository.getSpace(mock(SpaceID.class)));
 	}
 
 	@Test
@@ -270,14 +276,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertSame(this.space, space);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -293,14 +299,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertNull(space2);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 	}
 
@@ -314,14 +320,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertSame(this.space, space);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -339,14 +345,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertSame(this.space, space2);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -361,14 +367,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertSame(this.space, space);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -386,14 +392,14 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		assertSame(this.space, space2);
 		ArgumentCaptor<SpaceID> argument1 = ArgumentCaptor.forClass(SpaceID.class);
 		ArgumentCaptor<Object[]> argument2 = ArgumentCaptor.forClass(Object[].class);
-		Mockito.verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
+		verify(this.spaceSpecification, new Times(1)).create(argument1.capture(), argument2.capture());
 		assertSame(this.spaceID, argument1.getValue());
 		assertEquals("PARAM", argument2.getValue()); //$NON-NLS-1$
 		assertSame(this.space, this.repository.getSpace(this.spaceID));
 		//
 		ArgumentCaptor<Space> argument3 = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceCreated(argument3.capture(), argument4.capture());
 		assertSame(this.space, argument3.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -401,31 +407,31 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 	@Test
 	public void destroy_notinit() throws Exception {
 		this.repository.destroy();
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 	}
 
 	@Test
 	public void destroy_baseinit() throws Exception {
 		baseInit();
 		this.repository.destroy();
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 	}
 
 	@Test
 	public void destroy_initmocks() throws Exception {
 		initMocks();
 		this.repository.destroy();
-		Mockito.verifyZeroInteractions(this.listener);
+		verifyZeroInteractions(this.listener);
 	}
 
 	@Test
 	public void destroy_initrepository() throws Exception {
 		initRepository();
-		Mockito.when(this.space.getParticipants()).thenReturn(Collections3.<UUID> emptySynchronizedSet());
+		when(this.space.getParticipants()).thenReturn(Collections3.<UUID> emptySynchronizedSet());
 		this.repository.destroy();
 		ArgumentCaptor<Space> argument = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceDestroyed(argument.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceDestroyed(argument.capture(), argument4.capture());
 		assertSame(this.space, argument.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -433,11 +439,11 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 	@Test
 	public void destroy_hasparticipant() throws Exception {
 		initRepository();
-		Mockito.when(this.space.getParticipants()).thenReturn(Collections3.synchronizedSingleton(UUID.randomUUID()));
+		when(this.space.getParticipants()).thenReturn(Collections3.synchronizedSingleton(UUID.randomUUID()));
 		this.repository.destroy();
 		ArgumentCaptor<Space> argument = ArgumentCaptor.forClass(Space.class);
 		ArgumentCaptor<Boolean> argument4 = ArgumentCaptor.forClass(Boolean.class);
-		Mockito.verify(this.listener, new Times(1)).spaceDestroyed(argument.capture(), argument4.capture());
+		verify(this.listener, new Times(1)).spaceDestroyed(argument.capture(), argument4.capture());
 		assertSame(this.space, argument.getValue());
 		assertTrue(argument4.getValue());
 	}
@@ -447,13 +453,13 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		initMocks();
 		//
 		final UUID contextID = UUID.randomUUID();
-		Mockito.when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
+		when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
 			@Override
 			public Space answer(InvocationOnMock invocation) throws Throwable {
-				Space sp = Mockito.mock(OpenEventSpace.class);
+				Space sp = mock(OpenEventSpace.class);
 				SpaceID spId = (SpaceID) invocation.getArguments()[0];
-				Mockito.when(sp.getSpaceID()).thenReturn(spId);
-				Mockito.when(sp.toString()).thenReturn(spId.toString());
+				when(sp.getSpaceID()).thenReturn(spId);
+				when(sp.toString()).thenReturn(spId.toString());
 				return sp;
 			}
 		});
@@ -480,13 +486,13 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		initMocks();
 		//
 		final UUID contextID = UUID.randomUUID();
-		Mockito.when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
+		when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
 			@Override
 			public Space answer(InvocationOnMock invocation) throws Throwable {
-				Space sp = Mockito.mock(OpenEventSpace.class);
+				Space sp = mock(OpenEventSpace.class);
 				SpaceID spId = (SpaceID) invocation.getArguments()[0];
-				Mockito.when(sp.getSpaceID()).thenReturn(spId);
-				Mockito.when(sp.toString()).thenReturn(spId.toString());
+				when(sp.getSpaceID()).thenReturn(spId);
+				when(sp.toString()).thenReturn(spId.toString());
 				return sp;
 			}
 		});
@@ -513,13 +519,13 @@ public class SpaceRepositoryTest extends AbstractJanusTest {
 		initMocks();
 		//
 		final UUID contextID = UUID.randomUUID();
-		Mockito.when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
+		when(this.spaceSpecification.create(ArgumentMatchers.any())).thenAnswer(new Answer<Space>() {
 			@Override
 			public Space answer(InvocationOnMock invocation) throws Throwable {
-				Space sp = Mockito.mock(OpenEventSpace.class);
+				Space sp = mock(OpenEventSpace.class);
 				SpaceID spId = (SpaceID) invocation.getArguments()[0];
-				Mockito.when(sp.getSpaceID()).thenReturn(spId);
-				Mockito.when(sp.toString()).thenReturn(spId.toString());
+				when(sp.getSpaceID()).thenReturn(spId);
+				when(sp.toString()).thenReturn(spId.toString());
 				return sp;
 			}
 		});

@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import io.janusproject.services.distributeddata.DistributedDataStructureService;
 import io.janusproject.services.logging.LogService;
 import io.janusproject.util.TwoStepConstruction;
 
+import io.sarl.core.OpenEventSpace;
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.core.SpaceCreated;
 import io.sarl.core.SpaceDestroyed;
 import io.sarl.lang.core.Address;
@@ -41,9 +43,7 @@ import io.sarl.lang.core.SpaceID;
 import io.sarl.lang.core.SpaceSpecification;
 import io.sarl.lang.util.SynchronizedCollection;
 import io.sarl.lang.util.SynchronizedIterable;
-import io.sarl.util.Collections3;
-import io.sarl.util.OpenEventSpace;
-import io.sarl.util.OpenEventSpaceSpecification;
+import io.sarl.util.concurrent.Collections3;
 
 /**
  * Implementation of an agent context in the Janus platform.
@@ -107,6 +107,8 @@ public class Context implements AgentContext {
 			this.defaultSpace = (OpenEventSpace) this.spaceRepository
 					.getSpace(new SpaceID(this.id, this.defaultSpaceID, OpenEventSpaceSpecification.class));
 		}
+		// Notify the space repository that the default space is available.
+		this.spaceRepository.setDefaultSpace(this.defaultSpace);
 		return this.defaultSpace;
 	}
 
@@ -130,13 +132,13 @@ public class Context implements AgentContext {
 	@Override
 	public <S extends Space> SynchronizedIterable<S> getSpaces(Class<? extends SpaceSpecification<S>> spec) {
 		final SynchronizedCollection<S> col = this.spaceRepository.getSpaces(spec);
-		return Collections3.unmodifiableSynchronizedIterable(col, col.mutex());
+		return Collections3.unmodifiableSynchronizedIterable(col, col.getLock());
 	}
 
 	@Override
 	public SynchronizedIterable<? extends io.sarl.lang.core.Space> getSpaces() {
 		final SynchronizedCollection<? extends io.sarl.lang.core.Space> col = this.spaceRepository.getSpaces();
-		return Collections3.unmodifiableSynchronizedIterable(col, col.mutex());
+		return Collections3.unmodifiableSynchronizedIterable(col, col.getLock());
 	}
 
 	@Override

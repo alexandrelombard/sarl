@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>io.sarl.docs</artifactId>
 		<groupId>io.sarl</groupId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.11.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>io.sarl.docs</groupId>
@@ -38,6 +38,10 @@
 		<dependency>
 			<groupId>io.sarl</groupId>
 			<artifactId>io.sarl.lang.sarlc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.sarl</groupId>
+			<artifactId>io.sarl.sarldoc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.sarl.maven</groupId>

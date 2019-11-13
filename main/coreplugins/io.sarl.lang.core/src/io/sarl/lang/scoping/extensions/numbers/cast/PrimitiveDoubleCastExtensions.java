@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 
 package io.sarl.lang.scoping.extensions.numbers.cast;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -43,13 +45,24 @@ public final class PrimitiveDoubleCastExtensions {
 		//
 	}
 
+	/** Convert the given value to {@code String}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code String} type.
+	 */
+	@Pure
+	@Inline(value = "$2.toString($1)", imported = Double.class)
+	public static String toString(double number) {
+		return Double.toString(number);
+	}
+
 	/** Convert the given value to {@code AtomicLong}.
 	 *
 	 * @param number a number of {@code double} type.
 	 * @return the equivalent value to {@code number} of {@code AtomicLong} type.
 	 */
 	@Pure
-	@Inline(value = "new $2((long)$1)", imported = AtomicLong.class)
+	@Inline(value = "new $2(($3) $1)", imported = {AtomicLong.class, long.class})
 	public static AtomicLong toAtomicLong(double number) {
 		return new AtomicLong((long) number);
 	}
@@ -60,7 +73,7 @@ public final class PrimitiveDoubleCastExtensions {
 	 * @return the equivalent value to {@code number} of {@code AtomicInteger} type.
 	 */
 	@Pure
-	@Inline(value = "new $2((int)$1)", imported = AtomicInteger.class)
+	@Inline(value = "new $2(($3) $1)", imported = {AtomicInteger.class, int.class})
 	public static AtomicInteger toAtomicInteger(double number) {
 		return new AtomicInteger((int) number);
 	}
@@ -74,6 +87,83 @@ public final class PrimitiveDoubleCastExtensions {
 	@Inline(value = "new $2($1)", imported = AtomicDouble.class)
 	public static AtomicDouble toAtomicDouble(double number) {
 		return new AtomicDouble(number);
+	}
+
+	/** Convert the given value to {@code BigInteger}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code BigInteger} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {BigInteger.class, long.class})
+	public static BigInteger toBigInteger(double number) {
+		return BigInteger.valueOf((long) number);
+	}
+
+	/** Convert the given value to {@code BigDecimal}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code BigDecimal} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf($1)", imported = BigDecimal.class)
+	public static BigDecimal toBigDecimal(double number) {
+		return BigDecimal.valueOf(number);
+	}
+
+	/** Convert the given value to {@code Byte}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code Byte} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {Byte.class, byte.class})
+	public static Byte toByte(double number) {
+		return Byte.valueOf((byte) number);
+	}
+
+	/** Convert the given value to {@code Integer}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code Integer} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {Short.class, short.class})
+	public static Short toShort(double number) {
+		return Short.valueOf((short) number);
+	}
+
+	/** Convert the given value to {@code Integer}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code Integer} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {Integer.class, int.class})
+	public static Integer toInteger(double number) {
+		return Integer.valueOf((int) number);
+	}
+
+	/** Convert the given value to {@code Long}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code Long} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {Long.class, long.class})
+	public static Long toLong(double number) {
+		return Long.valueOf((long) number);
+	}
+
+	/** Convert the given value to {@code Float}.
+	 *
+	 * @param number a number of {@code double} type.
+	 * @return the equivalent value to {@code number} of {@code Float} type.
+	 */
+	@Pure
+	@Inline(value = "$2.valueOf(($3) $1)", imported = {Float.class, float.class})
+	public static Float toFloat(double number) {
+		return Float.valueOf((float) number);
 	}
 
 }

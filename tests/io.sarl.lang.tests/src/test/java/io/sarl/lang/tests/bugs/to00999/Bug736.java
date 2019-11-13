@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +99,7 @@ public class Bug736 extends AbstractSarlTest {
 			"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
 			"@SuppressWarnings(\"all\")",
 			"public class Test {",
-			"  private final static int X;",
+			"  private static final int X;",
 			"  ",
 			"  static {",
 			"    Test.X = 1;",
@@ -211,7 +216,7 @@ public class Bug736 extends AbstractSarlTest {
 			"@SarlElementType(" + SarlPackage.SARL_CLASS + ")",
 			"@SuppressWarnings(\"all\")",
 			"public final class Messages {",
-			"  private final static String BUNDLE_NAME = (Messages.class.getPackage().getName() + \".messages\");",
+			"  private static final String BUNDLE_NAME = (Messages.class.getPackage().getName() + \".messages\");",
 			"  ",
 			"  static {",
 			"    System.out.println(Messages.BUNDLE_NAME);",

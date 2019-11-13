@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,8 @@
  */
 package io.sarl.tests.api;
 
-import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.any;
-import static com.google.common.collect.Iterables.isEmpty;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static com.google.common.collect.Iterables.filter;
 
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
@@ -47,6 +41,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Provider;
 
@@ -65,7 +61,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.xtend.core.macro.ProcessorInstanceForJvmTypeProvider;
 import org.eclipse.xtend.core.xtend.XtendParameter;
 import org.eclipse.xtend.core.xtend.XtendTypeDeclaration;
 import org.eclipse.xtext.common.types.JvmConstructor;
@@ -78,7 +73,6 @@ import org.eclipse.xtext.testing.XtextRunner;
 import org.eclipse.xtext.testing.util.ParseHelper;
 import org.eclipse.xtext.testing.validation.ValidationTestHelper;
 import org.eclipse.xtext.util.JavaVersion;
-import org.eclipse.xtext.util.ReflectionUtil;
 import org.eclipse.xtext.validation.Issue;
 import org.eclipse.xtext.xbase.XExpression;
 import org.eclipse.xtext.xbase.XNullLiteral;
@@ -102,8 +96,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.matchers.InstanceOf;
-import org.mockito.internal.matchers.Null;
-import org.mockito.internal.matchers.Or;
 import org.mockito.internal.util.Primitives;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -175,6 +167,15 @@ public abstract class AbstractSarlTest extends Assert {
 	@Inject
 	private Provider<SarlJvmModelAssociations> associations;
 
+	/** Replies the injector.
+	 *
+	 * @return the injector.
+	 * @since 0.10
+	 */
+	protected Injector getInjector() {
+		return this.injector;
+	}
+	
 	/** Temporary fixing a bug in the class loading of Mockito 2.
 	 * 
 	 * @param type the type to mock.
@@ -238,36 +239,47 @@ public abstract class AbstractSarlTest extends Assert {
 	 */
 	@Rule
 	public TestWatcher rootSarlWatchter = new TestWatcher() {
-		private boolean isMockable() {
-			boolean isMockable = false;
+		private int getMockableFeatures() {
+			int features = 0;
 			Class<?> type = AbstractSarlTest.this.getClass();
 			while (type != null && !AbstractSarlTest.class.equals(type)) {
 				if (type.getAnnotation(ManualMocking.class) != null) {
-					return false;
+					return 0;
 				}
 				for (Field field : type.getDeclaredFields()) {
-					if (field.getAnnotation(Mock.class) != null
-							|| field.getAnnotation(InjectMocks.class) != null) {
-						isMockable = true;
+					if (field.getAnnotation(Mock.class) != null) {
+						features |= 0x1;
+					} else if (field.getAnnotation(InjectMocks.class) != null) {
+						features |= 0x2;
 					}
 				}
 				type = type.getSuperclass();
 			}
-			return isMockable;
+			return features;
 		}
 		@Override
 		protected void starting(Description description) {
 			// Check if the minimal version of Java is used for running the tests.
 			final JavaVersion cVersion = JavaVersion.fromQualifier(System.getProperty("java.specification.version"));
-			final JavaVersion mVersion = JavaVersion.fromQualifier(SARLVersion.MINIMAL_JDK_VERSION);
-			if (!cVersion.isAtLeast(mVersion)) {
-				throw new Error("You must use JDK " + SARLVersion.MINIMAL_JDK_VERSION + " for running the tests.");
+			if (cVersion == null) {
+				throw new Error("You must use JDK " + SARLVersion.MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT + " or higher for running the tests.");
+			}
+			final JavaVersion mVersion = JavaVersion.fromQualifier(SARLVersion.MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT);
+			if (mVersion == null || !cVersion.isAtLeast(mVersion)) {
+				throw new Error("You must use JDK " + SARLVersion.MINIMAL_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT + " or higher for running the tests.");
+			}
+			final JavaVersion xVersion = JavaVersion.fromQualifier(SARLVersion.INCOMPATIBLE_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT);
+			// If null the max version that is specified into the SARL configuration is not yey supported by Xtext enumeration
+			if (xVersion != null && cVersion.isAtLeast(xVersion)) {
+				throw new Error("You must use JDK strictly below " + SARLVersion.INCOMPATIBLE_JDK_VERSION_FOR_SARL_COMPILATION_ENVIRONMENT + " for running the tests.");
 			}
 			//
-			if (isMockable()) {
+			final int mockFeaturing = getMockableFeatures();
+			if (mockFeaturing != 0) {
 				MockitoAnnotations.initMocks(AbstractSarlTest.this);
 			}
 		}
+
 		@Override
 		public Statement apply(Statement base, Description description) {
 			setGlobalLogLevel(Level.WARN);
@@ -1314,12 +1326,24 @@ public abstract class AbstractSarlTest extends Assert {
 	/** Create an instance of class.
 	 */
 	protected SarlScript file(String string, boolean validate) throws Exception {
-		SarlScript script = getParseHelper().parse(string);
+		return file(string, null, validate);
+	}
+
+	/** Create an instance of class.
+	 * @since 0.9
+	 */
+	protected SarlScript file(String string, ResourceSet resourceSet, boolean validate) throws Exception {
+		SarlScript script;
+		if (resourceSet == null) {
+			script = getParseHelper().parse(string);
+		} else {
+			script = getParseHelper().parse(string, resourceSet);
+		}
 		if (validate) {
 			Resource resource = script.eResource();
-			ResourceSet resourceSet = resource.getResourceSet();
-			if (resourceSet instanceof XtextResourceSet) {
-				((XtextResourceSet) resourceSet).setClasspathURIContext(getClass());
+			ResourceSet resourceSet0 = resource.getResourceSet();
+			if (resourceSet0 instanceof XtextResourceSet) {
+				((XtextResourceSet) resourceSet0).setClasspathURIContext(getClass());
 			}
 			assertEquals(resource.getErrors().toString(), 0, resource.getErrors().size());
 			Collection<Issue> issues = Collections2.filter(issues(resource), new Predicate<Issue>() {
@@ -1354,7 +1378,7 @@ public abstract class AbstractSarlTest extends Assert {
 	/** Validate the given resource and reply the validator.
 	 */
 	protected Validator validate(Resource resource) {
-		Validator validator = new XtextValidator(resource);
+		Validator validator = new XtextValidator(resource, this.validationHelper);
 		this.injector.injectMembers(validator);
 		return validator;
 	}
@@ -1808,18 +1832,20 @@ public abstract class AbstractSarlTest extends Assert {
 	 * @mavengroupid $GroupId$
 	 * @mavenartifactid $ArtifactId$
 	 */
-	private class XtextValidator implements Validator {
+	static class XtextValidator implements Validator {
 
 		private Resource resource;
 
 		private ValidationTestHelper testHelper;
 
-		/**
+		/** Constructor.
+		 *
 		 * @param resource the resource to validate.
+		 * @param testHelper the validator.
 		 */
-		private XtextValidator(Resource resource) {
+		XtextValidator(Resource resource, ValidationTestHelper testHelper) {
 			this.resource = resource;
-			this.testHelper = AbstractSarlTest.this.validationHelper;
+			this.testHelper = testHelper;
 		}
 
 		@Override
@@ -2273,4 +2299,97 @@ public abstract class AbstractSarlTest extends Assert {
 		}
 	}
 
+	/** Start a time out on the operation.
+	 *
+	 * @param enable programmatic flag for enabling the time out.
+	 * @return the time out manager.
+	 * @since 0.10
+	 */
+	protected TimeOutHandler startTimeOut(boolean enable) {
+		final TimeOutHandler handler = new TimeOutHandler();
+		if (enable) {
+			handler.start();
+		}
+		return handler;
+	}
+
+	/** Start a time out on the operation.
+	 *
+	 * @return the time out manager.
+	 * @since 0.9
+	 */
+	protected TimeOutHandler startTimeOut() {
+		return startTimeOut(true);
+	}
+
+	/** An object for managing the time out of operations.
+	 * 
+	 * @author $Author: sgalland$
+	 * @version $FullVersion$
+	 * @mavengroupid $GroupId$
+	 * @mavenartifactid $ArtifactId$
+	 * @since 0.9
+	 */
+	protected static class TimeOutHandler {
+
+		private static final int TIME_OUT = 10000;
+		
+		private Thread thread;
+
+		private Thread threadToBreak;
+
+		private final AtomicBoolean continueLoop = new AtomicBoolean(true);
+		
+		private final AtomicBoolean timeout = new AtomicBoolean();
+
+		/** Constructor.
+		 */
+		TimeOutHandler() {
+			//
+		}
+
+		/** Start the time out process.
+		 */
+		void start() {
+			this.threadToBreak = Thread.currentThread();
+			this.thread = new Thread() {
+				@Override
+				public void run() {
+					final long endTime = System.currentTimeMillis() + TIME_OUT;
+					while (TimeOutHandler.this.continueLoop.get()
+							&& System.currentTimeMillis() <= endTime) {
+						Thread.yield();
+					}
+					if (TimeOutHandler.this.continueLoop.get()) {
+						TimeOutHandler.this.timeout.set(true);
+						TimeOutHandler.this.stop();
+					}
+				}
+			};
+			this.thread.setDaemon(true);
+			this.thread.setName("Test TimeOut Manager");
+			this.thread.start();
+		}
+
+		/** Stop the time out process.
+		 */
+		public synchronized void stop() {
+			this.continueLoop.set(false);
+			if (this.thread != null) {
+				this.thread = null;
+				if (this.threadToBreak != null) {
+					try {
+						this.threadToBreak.stop();
+					} catch (ThreadDeath exception) {
+						if (this.timeout.get()) {
+							throw new RuntimeException(new TimeoutException());
+						}
+					} finally {
+						this.threadToBreak = null;
+					}
+				}
+			}
+		}
+
+	}
 }

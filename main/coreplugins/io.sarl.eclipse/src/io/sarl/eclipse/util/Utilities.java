@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
  */
 
 package io.sarl.eclipse.util;
+
+import java.util.Iterator;
 
 import com.google.common.base.Strings;
 import org.eclipse.core.runtime.IPath;
@@ -52,6 +54,23 @@ public final class Utilities {
 
 	private Utilities() {
 		//
+	}
+
+	/** Replies if the given path is nested in one of the given paths.
+	 *
+	 * @param path the path to search for.
+	 * @param rootPaths the root paths.
+	 * @return {@code true} if the {@code path} is nested into one of the {@code rootPaths}.
+	 * @since 0.10
+	 */
+	public static boolean isNested(IPath path, Iterator<IPath> rootPaths) {
+		while (rootPaths.hasNext()) {
+			final IPath other = rootPaths.next();
+			if (other.isPrefixOf(path)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Null-safe version parser.

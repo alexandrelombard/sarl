@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,15 +37,16 @@ import io.sarl.core.ExternalContextAccess;
 import io.sarl.core.InnerContextAccess;
 import io.sarl.core.Lifecycle;
 import io.sarl.core.Logging;
+import io.sarl.core.OpenEventSpaceSpecification;
 import io.sarl.core.Schedules;
 import io.sarl.core.Time;
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.Capacity;
+import io.sarl.lang.core.DynamicSkillProvider;
 import io.sarl.lang.core.Skill;
 import io.sarl.lang.core.SpaceID;
-import io.sarl.util.OpenEventSpaceSpecification;
 
 /**
  * Provider of the built-in capacities of the Janus platform.
@@ -55,7 +56,9 @@ import io.sarl.util.OpenEventSpaceSpecification;
  * @version $FullVersion$
  * @mavengroupid $GroupId$
  * @mavenartifactid $ArtifactId$
+ * @deprecated Replacement is {@link DynamicSkillProvider} since 0.6
  */
+@Deprecated
 public class StandardBuiltinCapacitiesProvider implements BuiltinCapacitiesProvider {
 
 	/** Order of installation of the BIC skills.

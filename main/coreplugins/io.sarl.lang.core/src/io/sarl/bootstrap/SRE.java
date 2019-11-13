@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +113,7 @@ public final class SRE {
 	 * @return the set of libraries.
 	 * @since 0.7
 	 */
+	@Pure
 	public static Set<URL> getBootstrappedLibraries() {
 		final String name = PREFIX + SREBootstrap.class.getName();
 		final Set<URL> result = new TreeSet<>();
@@ -213,6 +214,11 @@ public final class SRE {
 		}
 
 		@Override
+		public void startAgentWithID(Class<? extends Agent> agentCls, UUID agentID, Object... params) throws Exception {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
 		public UUID getBootAgentIdentifier() {
 			throw new UnsupportedOperationException();
 		}
@@ -220,6 +226,21 @@ public final class SRE {
 		@Override
 		public boolean isActive() {
 			return false;
+		}
+
+		@Override
+		public boolean isRunning() {
+			return false;
+		}
+
+		@Override
+		public void shutdown(boolean blocking) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public <T> T getService(Class<T> serviceType) {
+			return null;
 		}
 
 	}

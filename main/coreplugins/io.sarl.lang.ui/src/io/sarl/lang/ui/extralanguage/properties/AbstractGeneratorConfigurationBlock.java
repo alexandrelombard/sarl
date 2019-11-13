@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.FocusAdapter;
@@ -58,7 +59,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.EclipseOutputConfigurationProvider;
 import org.eclipse.xtext.builder.preferences.BuilderPreferenceAccess;
 import org.eclipse.xtext.generator.OutputConfiguration;
@@ -398,7 +398,7 @@ public abstract class AbstractGeneratorConfigurationBlock extends OptionsConfigu
 		final ImageRegistry registry = activator.getImageRegistry();
 		ImageDescriptor descriptor = registry.getDescriptor(imagePath);
 		if (descriptor == null) {
-			descriptor = AbstractUIPlugin.imageDescriptorFromPlugin(activator.getBundle().getSymbolicName(), imagePath);
+			descriptor = ResourceLocator.imageDescriptorFromBundle(activator.getBundle().getSymbolicName(), imagePath).orElse(null);
 			if (descriptor != null) {
 				registry.put(imagePath, descriptor);
 			}

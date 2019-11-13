@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +84,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void secondExampleMethod(@DefaultValue(\"io.sarl.lang.tests.bug729.Example#SECONDEXAMPLEMETHOD_0\") final boolean paramWithDefault);", 
@@ -89,7 +94,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"true\")", 
-			"  public final static boolean $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = true;", 
+			"  public static final boolean $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = true;", 
 			"  ", 
 			"  @DefaultValueUse(\"io.sarl.lang.core.Scope<io.sarl.lang.core.Address>\")", 
 			"  @SyntheticMember", 
@@ -189,7 +194,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void secondExampleMethod(@DefaultValue(\"io.sarl.lang.tests.bug729.Example#SECONDEXAMPLEMETHOD_0\") final String paramWithDefault);", 
@@ -199,7 +204,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"\\\"\\\"\")", 
-			"  public final static String $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = \"\";", 
+			"  public static final String $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = \"\";", 
 			"  ", 
 			"  @DefaultValueUse(\"io.sarl.lang.core.Scope<io.sarl.lang.core.Address>\")", 
 			"  @SyntheticMember", 
@@ -282,7 +287,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void firstExampleMethod(final int a, @DefaultValue(\"io.sarl.lang.tests.bug729.Example#FIRSTEXAMPLEMETHOD_1\") final Scope<Address> scopeWithDefault);",
@@ -292,7 +297,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_1 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_1 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void secondExampleMethod(@DefaultValue(\"io.sarl.lang.tests.bug729.Example#SECONDEXAMPLEMETHOD_0\") final boolean paramWithDefault);", 
@@ -302,7 +307,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"true\")", 
-			"  public final static boolean $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = true;", 
+			"  public static final boolean $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = true;", 
 			"  ", 
 			"  @DefaultValueUse(\"io.sarl.lang.core.Scope<io.sarl.lang.core.Address>\")", 
 			"  @SyntheticMember", 
@@ -429,7 +434,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_0 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void firstExampleMethod(final int a, @DefaultValue(\"io.sarl.lang.tests.bug729.Example#FIRSTEXAMPLEMETHOD_1\") final Scope<Address> scopeWithDefault);",
@@ -439,7 +444,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"Scopes.<Address>allParticipants\")", 
-			"  public final static Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_1 = Scopes.<Address>allParticipants();", 
+			"  public static final Scope $DEFAULT_VALUE$FIRSTEXAMPLEMETHOD_1 = Scopes.<Address>allParticipants();", 
 			"  ", 
 			"  @DefaultValueSource", 
 			"  public abstract void secondExampleMethod(@DefaultValue(\"io.sarl.lang.tests.bug729.Example#SECONDEXAMPLEMETHOD_0\") final String paramWithDefault);", 
@@ -449,7 +454,7 @@ public class Bug729 extends AbstractSarlTest {
 			"   */", 
 			"  @SyntheticMember", 
 			"  @SarlSourceCode(\"new String\")", 
-			"  public final static String $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = new String();", 
+			"  public static final String $DEFAULT_VALUE$SECONDEXAMPLEMETHOD_0 = new String();", 
 			"  ", 
 			"  @DefaultValueUse(\"io.sarl.lang.core.Scope<io.sarl.lang.core.Address>\")", 
 			"  @SyntheticMember", 

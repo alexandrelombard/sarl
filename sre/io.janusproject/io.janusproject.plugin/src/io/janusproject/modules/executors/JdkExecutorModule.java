@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import io.janusproject.kernel.services.jdk.executors.JdkUncaughtExceptionHandler
 import io.janusproject.services.executor.ExecutorService;
 
 /**
- * Configure the module for the {@code ExecutorService} based on the JDF.
+ * Configure the module for the {@code ExecutorService} based on the JDK.
  *
  * @author $Author: srodriguez$
  * @author $Author: sgalland$
@@ -113,7 +113,7 @@ public class JdkExecutorModule extends AbstractModule {
 						keepAliveDuration, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
 			} else {
 				// Use the default thread executor
-				executor = Executors.newCachedThreadPool();
+				executor = Executors.newFixedThreadPool(JanusConfig.MAX_NUMBER_OF_THREADS_IN_EXECUTOR_VALUE);
 			}
 
 			if (this.rejectedExecutionHandler != null && executor instanceof ThreadPoolExecutor) {

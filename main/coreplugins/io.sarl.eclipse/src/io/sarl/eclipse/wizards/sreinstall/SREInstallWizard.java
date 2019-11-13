@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,8 @@ import org.eclipse.jface.wizard.Wizard;
 import io.sarl.eclipse.SARLEclipseConfig;
 import io.sarl.eclipse.SARLEclipsePlugin;
 import io.sarl.eclipse.runtime.ISREInstall;
+import io.sarl.eclipse.runtime.ManifestBasedSREInstall;
 import io.sarl.eclipse.runtime.SREException;
-import io.sarl.eclipse.runtime.StandardSREInstall;
 
 /**
  * Wiazrd for SRE installation.
@@ -128,7 +128,7 @@ public abstract class SREInstallWizard extends Wizard {
 			}
 		}
 
-		if (sre == null || sre instanceof StandardSREInstall) {
+		if (sre == null || sre instanceof ManifestBasedSREInstall) {
 			final StandardSREPage standardVMPage = new StandardSREPage();
 			standardVMPage.setExistingNames(this.names);
 			return standardVMPage;

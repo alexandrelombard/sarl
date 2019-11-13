@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@
 
 package io.sarl.core
 
-import io.sarl.lang.annotation.PrivateAPI
+import io.sarl.lang.^annotation.PrivateAPI
 import io.sarl.lang.core.Agent
 import io.sarl.lang.core.SRESpecificDataContainer
 
 /**
  * Description of a task an agent has schedule to be performed at a later time.
+ * This class is not thread-safe.
  *
  * @author $Author: srodriguez$
  * @author $Author: sgalland$

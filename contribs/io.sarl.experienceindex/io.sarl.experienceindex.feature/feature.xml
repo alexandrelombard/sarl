@@ -2,7 +2,7 @@
 <feature
       id="io.sarl.experienceindex.feature"
       label="SARL Experience Index"
-      version="0.9.0.qualifier"
+      version="0.11.0.qualifier"
       plugin="io.sarl.experienceindex.plugin">
 
    <description url="http://www.sarl.io/about/">
@@ -10,7 +10,7 @@
    </description>
 
    <copyright url="http://www.sarl.io/about/">
-      Copyright (c) 2014-2018 the original authors and authors.
+      Copyright (C) 2014-2019 the original authors and authors.
    </copyright>
 
    <license url="http://www.apache.org/licenses/LICENSE-2.0">
@@ -222,16 +222,16 @@
    </url>
 
    <requires>
-      <import plugin="io.sarl.lang.core" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="io.sarl.eclipse" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="io.sarl.lang.ui" version="0.9.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.xtext.ui" version="2.15.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.osgi" version="3.13.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.commands" version="3.9.200" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.runtime" version="3.15.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jface" version="3.14.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui" version="3.110.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.lang.core" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.eclipse" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="io.sarl.lang.ui" version="0.11.0" match="greaterOrEqual"/>
       <import plugin="com.google.inject" version="4.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.ui" version="2.19.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi" version="3.15.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.commands" version="3.9.500" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.16.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.17.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.114.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

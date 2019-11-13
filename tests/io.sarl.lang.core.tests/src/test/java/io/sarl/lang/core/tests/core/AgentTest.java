@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,6 @@
  */
 package io.sarl.lang.core.tests.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,8 +35,8 @@ import org.junit.Test;
 
 import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
-import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.Capacity;
+import io.sarl.lang.core.DefaultSkill;
 import io.sarl.lang.core.Event;
 import io.sarl.lang.core.Skill;
 import io.sarl.lang.core.UnimplementedCapacityException;
@@ -436,6 +430,39 @@ public class AgentTest extends AbstractSarlTest {
 		assertEquals(1, s4.uninstallPostCalls());
 	}
 
+	@Test(expected = UnimplementedCapacityException.class)
+	public void getSkill_noSetSkill() {
+		this.agent.$getSkill(Capacity1.class);
+	}
+
+	@Test
+	public void getSkill_setSkill() {
+		Skill1 so = new Skill1();
+		this.agent.setSkill_Fake(so);
+		//
+		ClearableReference<Skill> ref0 = this.agent.$getSkill(Capacity1.class);
+		assertNotNull(ref0);
+		Skill s0 = ref0.get();
+		assertSame(so, s0);
+		//
+		ClearableReference<Skill> ref1 = this.agent.$getSkill(Capacity1.class);
+		assertNotNull(ref1);
+		assertSame(ref0, ref1);
+	}
+
+	@Test
+	public void getSkill_defaultskill() {
+		ClearableReference<Skill> ref0 = this.agent.$getSkill(Capacity3.class);
+		assertNotNull(ref0);
+		Skill s0 = ref0.get();
+		assertNotNull(s0);
+		assertInstanceOf(Skill5.class, s0);
+		//
+		ClearableReference<Skill> ref1 = this.agent.$getSkill(Capacity3.class);
+		assertNotNull(ref1);
+		assertSame(ref0, ref1);
+	}
+
 	/** Only for making public several protected methods.
 	 *
 	 * @author $Author: sgalland$
@@ -449,7 +476,7 @@ public class AgentTest extends AbstractSarlTest {
 		 * @param parentID
 		 */
 		public AgentMock(UUID parentID) {
-			super(mock(BuiltinCapacitiesProvider.class), parentID, null);
+			super(parentID, null);
 		}
 
 		public <S extends Skill> S setSkill_Fake(S skill, Class<? extends Capacity>... capacity) {
@@ -511,6 +538,17 @@ public class AgentTest extends AbstractSarlTest {
 	 * @mavenartifactid $ArtifactId$
 	 */
 	private static interface Capacity2 extends Capacity {
+		//
+	}
+
+	/**
+	 * @author $Author: sgalland$
+	 * @version $FullVersion$
+	 * @mavengroupid $GroupId$
+	 * @mavenartifactid $ArtifactId$
+	 */
+	@DefaultSkill(Skill5.class)
+	private static interface Capacity3 extends Capacity {
 		//
 	}
 
@@ -585,6 +623,18 @@ public class AgentTest extends AbstractSarlTest {
 		}
 		public int uninstallPostCalls() {
 			return this.uninstallPostCalls.getAndSet(0);
+		}
+	}
+
+	/**
+	 * @author $Author: sgalland$
+	 * @version $FullVersion$
+	 * @mavengroupid $GroupId$
+	 * @mavenartifactid $ArtifactId$
+	 */
+	private static class Skill5 extends Skill implements Capacity3 {
+		public Skill5() {
+			//
 		}
 	}
 

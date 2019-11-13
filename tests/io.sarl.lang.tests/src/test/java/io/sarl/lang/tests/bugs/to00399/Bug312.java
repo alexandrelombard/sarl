@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +87,7 @@ public class Bug312 {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"false\")",
-					"  public final static boolean $DEFAULT_VALUE$MOVE_0 = false;",
+					"  public static final boolean $DEFAULT_VALUE$MOVE_0 = false;",
 					"  ",
 					"  @DefaultValueSource",
 					"  public abstract void move(final Vector2i direction2, @DefaultValue(\"C1#MOVE_1\") final boolean changeHeading2);",
@@ -92,7 +97,7 @@ public class Bug312 {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"false\")",
-					"  public final static boolean $DEFAULT_VALUE$MOVE_1 = false;",
+					"  public static final boolean $DEFAULT_VALUE$MOVE_1 = false;",
 					"  ",
 					"  @DefaultValueUse(\"Vector2f,boolean\")",
 					"  @SyntheticMember",

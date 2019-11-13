@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.annotation.Generated;
 import javax.inject.Inject;
 
 import com.google.inject.Provider;
@@ -67,6 +66,7 @@ import org.eclipse.xtext.xbase.ui.contentassist.ReplacingAppendable;
 import org.eclipse.xtext.xbase.ui.document.DocumentSourceAppender.Factory.OptionalParameters;
 
 import io.sarl.lang.annotation.FiredEvent;
+import io.sarl.lang.annotation.Generated;
 import io.sarl.lang.annotation.SyntheticMember;
 import io.sarl.lang.jvmmodel.SarlJvmModelAssociations;
 import io.sarl.lang.sarl.actionprototype.FormalParameterProvider;
@@ -183,6 +183,8 @@ public final class MissedMethodAddModification extends SARLSemanticModification 
 						declaringType,
 						operation.getSimpleName());
 				final InferredPrototype prototype = this.actionPrototypeProvider.createPrototypeFromJvmModel(
+						// TODO More general context?
+						this.actionPrototypeProvider.createContext(),
 						qualifiedActionName,
 						operation.isVarArgs(),
 						operation.getParameters());

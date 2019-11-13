@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.sarl</groupId>
 		<artifactId>io.sarl.tests</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.11.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>sarl-maven-plugin.tests</artifactId>
@@ -12,8 +12,18 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>io.sarl.maven</groupId>
+			<artifactId>sarl-maven-plugin</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>io.sarl.lang</groupId>
 			<artifactId>io.sarl.lang.core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.sarl.lang</groupId>
+			<artifactId>io.sarl.lang</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -60,7 +70,7 @@
 					<replacements>
 						<replacement>
 							<token>%javaversion%</token>
-							<value>${compiler.level}</value>
+							<value>${sarl-dsl.min.jdk.version}</value>
 						</replacement>
 						<replacement>
 							<token>%fileencoding%</token>

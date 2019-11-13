@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
 import io.sarl.lang.compiler.batch.SarlBatchCompiler;
 import io.sarl.lang.sarlc.commands.CompilerCommand;
 import io.sarl.lang.sarlc.configs.ProgressBarConfig;
-import io.sarl.lang.sarlc.configs.SarlConfig;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
 import io.sarl.lang.sarlc.tools.PathDetector;
 
 /** Module for the compiler command.
@@ -56,9 +56,9 @@ public class CompilerCommandModule extends AbstractModule {
 		extend(binder())
 			.addOption(OptionMetadata.builder(
 				CompilerCommand.PROGRESS_OPTION_NAME, Messages.CompilerCommandModule_0)
-				.configPath(ProgressBarConfig.ENABLE)
-				.defaultValue(Boolean.TRUE.toString())
-				.build());
+				.valueOptionalWithDefault(Boolean.TRUE.toString())
+				.build())
+			.mapConfigPath(CompilerCommand.PROGRESS_OPTION_NAME, ProgressBarConfig.ENABLE);
 
 		extend(binder()).addCommand(CompilerCommand.class);
 
@@ -78,7 +78,7 @@ public class CompilerCommandModule extends AbstractModule {
 	@Provides
 	@Singleton
 	public CompilerCommand provideSarlcCompilerCommand(Provider<SarlBatchCompiler> compiler,
-			Provider<SarlConfig> configuration, Provider<PathDetector> pathDetector,
+			Provider<SarlcConfig> configuration, Provider<PathDetector> pathDetector,
 			Provider<ProgressBarConfig> commandConfig) {
 		return new CompilerCommand(compiler, configuration, pathDetector, commandConfig);
 	}

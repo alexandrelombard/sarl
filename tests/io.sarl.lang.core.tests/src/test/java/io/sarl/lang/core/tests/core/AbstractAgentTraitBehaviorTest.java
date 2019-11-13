@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -219,7 +219,7 @@ public abstract class AbstractAgentTraitBehaviorTest extends AbstractSarlTest {
 	public static class AgentMock extends Agent {
 
 		public AgentMock() {
-			super(null, UUID.randomUUID(), UUID.randomUUID());
+			super(UUID.randomUUID(), UUID.randomUUID());
 		}
 		
 		public <S extends Skill> S setSkill_Fake(S skill, Class<? extends Capacity>... capacity) {

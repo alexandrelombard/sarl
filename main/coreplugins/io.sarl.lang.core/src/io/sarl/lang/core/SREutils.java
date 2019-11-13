@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,6 +127,19 @@ public final class SREutils {
 		return agent.$castSkill(type, reference);
 	}
 
+	/** Set the internal skill of an agent.
+	 *
+	 * @param agent the agent.
+	 * @param skill the skill instance to attach to the agent.
+	 * @param capacities the list of implemented capacities. This array cannot be {@code null}.
+	 * @return the reference to the skill.
+	 * @since 0.10
+	 */
+	public static ClearableReference<Skill> setInternalSkill(Agent agent, Skill skill, Class<? extends Capacity>[] capacities) {
+		assert capacities != null;
+		return agent.$setSkill(skill, capacities);
+	}
+
 	/** Replies the internal skill of an agent.
 	 *
 	 * @param <S> the type of the capacity.
@@ -143,7 +156,7 @@ public final class SREutils {
 
 	/** Create the mapping between the capacity and the skill.
 	 *
-	 * <p>This function does not call {@link Skill#install()}.
+	 * <p>This function does not call neither {@link Skill#install()} nor {@link AgentTrait#setOwner(Agent)}.
 	 *
 	 * @param agent the agent.
 	 * @param capacity the capacity to map.
@@ -151,14 +164,16 @@ public final class SREutils {
 	 * @return the created mapping, never {@code null}.
 	 * @since 0.6
 	 * @see #createSkillMappingGetOld(Agent, Class, Skill)
+	 * @deprecated since 0.10, no replacement
 	 */
+	@Deprecated
 	public static ClearableReference<Skill> createSkillMapping(Agent agent, Class<? extends Capacity> capacity, Skill skill) {
 		return agent.$mapCapacityGetNew(capacity, skill);
 	}
 
 	/** Create the mapping between the capacity and the skill.
 	 *
-	 * <p>This function does not call {@link Skill#install()}.
+	 * <p>This function does not call neither {@link Skill#install()} nor {@link AgentTrait#setOwner(Agent)}.
 	 *
 	 * @param agent the agent.
 	 * @param capacity the capacity to map.
@@ -167,7 +182,9 @@ public final class SREutils {
 	 *     there is no previous mapping.
 	 * @since 0.6
 	 * @see #createSkillMapping(Agent, Class, Skill)
+	 * @deprecated since 0.10, no replacement
 	 */
+	@Deprecated
 	public static ClearableReference<Skill> createSkillMappingGetOld(Agent agent, Class<? extends Capacity> capacity, Skill skill) {
 		return agent.$mapCapacityGetOld(capacity, skill);
 	}
@@ -196,6 +213,8 @@ public final class SREutils {
 
 	/** Do the installation of the given skill.
 	 *
+	 * <p>This function invokes {@link Skill#install()} and nothing more.
+	 *
 	 * @param skill the skill to be installed.
 	 * @since 0.6
 	 */
@@ -204,6 +223,8 @@ public final class SREutils {
 	}
 
 	/** Do the uninstallation of the given skill.
+	 *
+	 * <p>This function invokes {@link Skill#uninstall(UninstallationStage)} and nothing more.
 	 *
 	 * @param skill the skill to be uninstalled.
 	 * @param stage the uninstallation stage, never {@code null}.

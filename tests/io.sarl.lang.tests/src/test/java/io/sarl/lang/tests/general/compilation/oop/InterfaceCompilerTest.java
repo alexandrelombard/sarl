@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +95,7 @@ public class InterfaceCompilerTest {
 					"@SarlElementType(" + SarlPackage.SARL_INTERFACE + ")",
 					"@SuppressWarnings(\"all\")",
 					"public interface I1 {",
-					"  public final static int v = 45;",
+					"  public static final int v = 45;",
 					"}",
 					""
 					);
@@ -178,7 +183,7 @@ public class InterfaceCompilerTest {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"6\")",
-					"  public final static int $DEFAULT_VALUE$FCT_0 = 6;",
+					"  public static final int $DEFAULT_VALUE$FCT_0 = 6;",
 					"  ",
 					"  @DefaultValueUse(\"int\")",
 					"  @SyntheticMember",
@@ -241,7 +246,7 @@ public class InterfaceCompilerTest {
 					"   */",
 					"  @SyntheticMember",
 					"  @SarlSourceCode(\"6\")",
-					"  public final static int $DEFAULT_VALUE$FCT_0 = 6;",
+					"  public static final int $DEFAULT_VALUE$FCT_0 = 6;",
 					"  ",
 					"  @DefaultValueUse(\"int\")",
 					"  @SyntheticMember",
@@ -329,7 +334,7 @@ public class InterfaceCompilerTest {
 					"  @SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
 					"  @SarlElementType(" + SarlPackage.SARL_INTERFACE + ")",
 					"  public interface I1 {",
-					"    public final static int v = 45;",
+					"    public static final int v = 45;",
 					"  }",
 					"  ",
 					"  @SyntheticMember",
@@ -456,7 +461,7 @@ public class InterfaceCompilerTest {
 					"     */",
 					"    @SyntheticMember",
 					"    @SarlSourceCode(\"6\")",
-					"    public final static int $DEFAULT_VALUE$FCT_0 = 6;",
+					"    public static final int $DEFAULT_VALUE$FCT_0 = 6;",
 					"    ",
 					"    @DefaultValueUse(\"int\")",
 					"    @SyntheticMember",
@@ -590,7 +595,7 @@ public class InterfaceCompilerTest {
 					"  @SarlSpecification(\"" + SARLVersion.SPECIFICATION_RELEASE_VERSION_STRING + "\")",
 					"  @SarlElementType(" + SarlPackage.SARL_INTERFACE + ")",
 					"  protected interface I1 {",
-					"    public final static int v = 45;",
+					"    public static final int v = 45;",
 					"  }",
 					"  ",
 					"  @SyntheticMember",
@@ -789,7 +794,7 @@ public class InterfaceCompilerTest {
 					"     */",
 					"    @SyntheticMember",
 					"    @SarlSourceCode(\"6\")",
-					"    public final static int $DEFAULT_VALUE$FCT_0 = 6;",
+					"    public static final int $DEFAULT_VALUE$FCT_0 = 6;",
 					"    ",
 					"    @DefaultValueUse(\"int\")",
 					"    @SyntheticMember",

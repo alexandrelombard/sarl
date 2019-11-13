@@ -4,7 +4,7 @@
  * SARL is an general-purpose agent programming language.
  * More details on http://www.sarl.io
  *
- * Copyright (C) 2014-2018 the original authors or authors.
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import org.eclipse.xtext.diagnostics.Severity;
 
-import io.sarl.lang.sarlc.configs.SarlConfig;
+import io.sarl.lang.sarlc.configs.SarlcConfig;
 
 /**
  * Configuration for the validator.
@@ -45,7 +45,7 @@ public class ValidatorConfig {
 	/**
 	 * Prefix for the configuration entries of the path modules.
 	 */
-	public static final String PREFIX = SarlConfig.PREFIX + ".validator"; //$NON-NLS-1$
+	public static final String PREFIX = SarlcConfig.PREFIX + ".validator"; //$NON-NLS-1$
 
 	/**
 	 * Name of the property that indicates if warnings are ignored.

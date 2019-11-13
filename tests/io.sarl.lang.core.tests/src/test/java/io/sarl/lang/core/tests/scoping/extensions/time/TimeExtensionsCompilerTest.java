@@ -1,5 +1,10 @@
 /*
- * Copyright (C) 2014-2018 the original authors or authors.
+ * $Id$
+ *
+ * SARL is an general-purpose agent programming language.
+ * More details on http://www.sarl.io
+ *
+ * Copyright (C) 2014-2019 the original authors or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +67,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234));",
+				"    return Long.valueOf((long) (1234));",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -107,6 +112,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"import io.sarl.lang.core.Agent;",
 				"import io.sarl.lang.core.BuiltinCapacitiesProvider;",
 				"import io.sarl.lang.core.DynamicSkillProvider;",
+				"import io.sarl.lang.scoping.extensions.time.TimeExtensions;",
 				"import java.util.UUID;",
 				"import javax.inject.Inject;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
@@ -117,7 +123,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234) * 1000);",
+				"    return Long.valueOf((1234) * TimeExtensions.MILLIS_IN_SECOND);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -162,6 +168,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"import io.sarl.lang.core.Agent;",
 				"import io.sarl.lang.core.BuiltinCapacitiesProvider;",
 				"import io.sarl.lang.core.DynamicSkillProvider;",
+				"import io.sarl.lang.scoping.extensions.time.TimeExtensions;",
 				"import java.util.UUID;",
 				"import javax.inject.Inject;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
@@ -172,7 +179,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234) * 60000);",
+				"    return Long.valueOf((1234) * TimeExtensions.MILLIS_IN_MINUTE);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -217,6 +224,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"import io.sarl.lang.core.Agent;",
 				"import io.sarl.lang.core.BuiltinCapacitiesProvider;",
 				"import io.sarl.lang.core.DynamicSkillProvider;",
+				"import io.sarl.lang.scoping.extensions.time.TimeExtensions;",
 				"import java.util.UUID;",
 				"import javax.inject.Inject;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
@@ -227,7 +235,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234) * 3600000);",
+				"    return Long.valueOf((1234) * TimeExtensions.MILLIS_IN_HOUR);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -272,6 +280,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"import io.sarl.lang.core.Agent;",
 				"import io.sarl.lang.core.BuiltinCapacitiesProvider;",
 				"import io.sarl.lang.core.DynamicSkillProvider;",
+				"import io.sarl.lang.scoping.extensions.time.TimeExtensions;",
 				"import java.util.UUID;",
 				"import javax.inject.Inject;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
@@ -282,7 +291,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234) * 86400000);",
+				"    return Long.valueOf((1234) * TimeExtensions.MILLIS_IN_DAY);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",
@@ -327,6 +336,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"import io.sarl.lang.core.Agent;",
 				"import io.sarl.lang.core.BuiltinCapacitiesProvider;",
 				"import io.sarl.lang.core.DynamicSkillProvider;",
+				"import io.sarl.lang.scoping.extensions.time.TimeExtensions;",
 				"import java.util.UUID;",
 				"import javax.inject.Inject;",
 				"import org.eclipse.xtext.xbase.lib.Pure;",
@@ -337,7 +347,7 @@ public class TimeExtensionsCompilerTest extends AbstractSarlTest {
 				"public class A1 extends Agent {",
 				"  @Pure",
 				"  protected Object myaction0() {",
-				"    return Long.valueOf((1234) * 604800000);",
+				"    return Long.valueOf((1234) * TimeExtensions.MILLIS_IN_WEEK);",
 				"  }",
 				"  ",
 				"  @SyntheticMember",

@@ -19,26 +19,23 @@
  */
 package io.janusproject.tests.kernel.repository;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.locks.ReadWriteLock;
 
-import io.janusproject.kernel.repository.ParticipantRepository;
-import io.janusproject.tests.testutils.AbstractJanusTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import io.janusproject.kernel.repository.ParticipantRepository;
+import io.janusproject.tests.testutils.AbstractJanusTest;
+
 import io.sarl.lang.core.EventListener;
 import io.sarl.tests.api.Nullable;
+import io.sarl.util.concurrent.NoReadWriteLock;
 
 /**
  * @author $Author: sgalland$
@@ -59,8 +56,8 @@ public class ParticipantRepositoryTest extends AbstractJanusTest {
 	public void setUp() {
 		this.repository = new ParticipantRepository<String>() {
 			@Override
-			public Object mutex() {
-				return this;
+			public ReadWriteLock getLock() {
+				return NoReadWriteLock.SINGLETON;
 			}
 		};
 		this.listeners = new TreeMap<>();
