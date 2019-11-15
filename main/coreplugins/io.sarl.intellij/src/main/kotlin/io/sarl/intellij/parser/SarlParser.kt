@@ -7,7 +7,9 @@ import com.intellij.openapi.progress.ProgressIndicatorProvider
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.IFileElementType
 import io.sarl.intellij.SarlLanguage
+import io.sarl.intellij.antlr.lexer.PSITokenSource
 import io.sarl.lang.parser.antlr.internal.InternalSARLParser
+import org.antlr.runtime.CommonTokenStream
 import org.antlr.runtime.debug.ParseTreeBuilder
 import org.antlr.runtime.tree.ParseTree
 
@@ -15,7 +17,18 @@ class SarlParser(private val internalSarlParser: InternalSARLParser) : PsiParser
     override fun parse(root: IElementType, builder: PsiBuilder): ASTNode {
         ProgressIndicatorProvider.checkCanceled()
 
+        val source = PSITokenSource(builder)
+        val tokens = CommonTokenStream(source)
+
         val rollbackMarker = builder.mark()
+
+        // TODO Generate parse tree
+
+        rollbackMarker.rollbackTo()
+
+        val rootMarker = builder.mark()
+
+        // TODO Walk parse tree
 
         if(root is IFileElementType) {
 
@@ -24,6 +37,17 @@ class SarlParser(private val internalSarlParser: InternalSARLParser) : PsiParser
                 it.
             }
         }
+
+        while (!builder.eof()) {
+            ProgressIndicatorProvider.checkCanceled()
+
+            if(builder.tokenType)
+
+            builder.advanceLexer()
+        }
+
+        rootMarker.done(root)
+        return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
 
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

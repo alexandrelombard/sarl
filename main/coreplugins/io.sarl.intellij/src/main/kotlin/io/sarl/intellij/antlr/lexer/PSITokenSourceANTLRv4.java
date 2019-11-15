@@ -5,10 +5,7 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.Project;
 import io.sarl.intellij.antlr.misc.Pair;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonToken;
-import org.antlr.runtime.Token;
-import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.*;
 
 /** Make a PsiBuilder look like a source of ANTLR tokens. PsiBuilder
  *  provides tokens created by the lexer created in
@@ -19,21 +16,22 @@ import org.antlr.runtime.TokenSource;
  *  is how we hook them together. When IDE ask ParserDefinition for a
  *  parser, we will create one of these attached to the PsiBuilder.
  */
-public class PSITokenSource implements TokenSource {
+public class PSITokenSourceANTLRv4 implements TokenSource {
 	protected PsiBuilder builder;
+	protected TokenFactory tokenFactory = CommonTokenFactory.DEFAULT;
 
-	public PSITokenSource(PsiBuilder builder) {
+	public PSITokenSourceANTLRv4(PsiBuilder builder) {
 		this.builder = builder;
 	}
 
 	@Override
-	public String getSourceName() {
-		return null;
+	public int getCharPositionInLine() {
+		return 0;
 	}
 
 	/** Create an ANTLR Token from the current token type of the builder
 	 *  then advance the builder to next token (which ultimately calls an
-	 *  ANTLR lexer). The {@link ANTLRLexerAdaptor} creates tokens via
+	 *  ANTLR lexer).  The {@link ANTLRLexerAdaptor} creates tokens via
 	 *  an ANTLR lexer but converts to {@link TokenIElementType} and here
 	 *  we have to convert back to an ANTLR token using what info we
 	 *  can get from the builder. We lose info such as the original channel.
@@ -50,7 +48,7 @@ public class PSITokenSource implements TokenSource {
 		int type = ideaTType!=null ? ideaTType.getANTLRTokenType() : Token.EOF;
 
 		int channel = Token.DEFAULT_CHANNEL;
-		Pair<TokenSource, CharStream> source = new Pair<>(this, null);
+		Pair<TokenSource, CharStream> source = new Pair<TokenSource, CharStream>(this, null);
 		String text = builder.getTokenText();
 		int start = builder.getCurrentOffset();
 		int length = text != null ? text.length() : 0;
@@ -58,13 +56,33 @@ public class PSITokenSource implements TokenSource {
 		// PsiBuilder doesn't provide line, column info
 		int line = 0;
 		int charPositionInLine = 0;
-		CommonToken t = new CommonToken(type, text);
-//		Token t = tokenFactory.create(source, type, text, channel, start, stop, line, charPositionInLine);
+		Token t = tokenFactory.create(source, type, text, channel, start, stop, line, charPositionInLine);
 		builder.advanceLexer();
 //		System.out.println("TOKEN: "+t);
 		return t;
 	}
 
+	@Override
+	public int getLine() { return 0; }
 
+	@Override
+	public CharStream getInputStream() {
+		CharSequence text = builder.getOriginalText();
+		return new CharSequenceCharStream(text, text.length(), getSourceName());
+	}
 
+	@Override
+	public String getSourceName() {
+		return "<unknown>";
+	}
+
+	@Override
+	public void setTokenFactory(TokenFactory<?> tokenFactory) {
+		this.tokenFactory = tokenFactory;
+	}
+
+	@Override
+	public TokenFactory<?> getTokenFactory() {
+		return tokenFactory;
+	}
 }

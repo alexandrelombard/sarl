@@ -4,14 +4,9 @@ import com.intellij.lang.Language;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.antlr.runtime.Token;
-import org.antlr.misc.Utils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** The factory that automatically maps all tokens and rule names into
  *  IElementType objects: {@link TokenIElementType} and {@link RuleIElementType}.
