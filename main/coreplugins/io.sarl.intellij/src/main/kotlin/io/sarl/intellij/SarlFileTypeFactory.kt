@@ -5,6 +5,6 @@ import com.intellij.openapi.fileTypes.FileTypeFactory
 
 class SarlFileTypeFactory : FileTypeFactory() {
     override fun createFileTypes(consumer: FileTypeConsumer) {
-        consumer.consume(SarlFileType, "sarl;sarl")
+        consumer.consume(SarlFileType, SarlFileType.defaultExtension)
     }
 }

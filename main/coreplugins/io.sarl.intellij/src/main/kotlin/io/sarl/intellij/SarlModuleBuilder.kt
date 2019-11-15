@@ -1,22 +1,14 @@
 package io.sarl.intellij
 
-import com.intellij.framework.addSupport.FrameworkSupportInModuleProvider
-import com.intellij.framework.detection.impl.FrameworkDetectionManager
-import com.intellij.ide.util.frameworkSupport.FrameworkSupportProvider
-import com.intellij.ide.util.frameworkSupport.FrameworkSupportUtil
 import com.intellij.ide.util.projectWizard.ModuleBuilder
 import com.intellij.ide.util.projectWizard.ModuleWizardStep
 import com.intellij.ide.util.projectWizard.WizardContext
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.module.ModuleType
 import com.intellij.openapi.options.ConfigurationException
-import com.intellij.openapi.roots.ContentEntry
 import com.intellij.openapi.roots.ModifiableRootModel
-import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-
 import java.io.IOException
 import java.util.logging.Logger
 
@@ -61,7 +53,8 @@ class SarlModuleBuilder : ModuleBuilder() {
 
 
         // region Add maven framework
-        val frameworkSupportProviderList = FrameworkSupportUtil.getAllProviders()
+        // FIXME
+//        val frameworkSupportProviderList = FrameworkSupportUtil.getAllProviders()
         // endregion
     }
 
@@ -76,7 +69,6 @@ class SarlModuleBuilder : ModuleBuilder() {
     }
 
     companion object {
-
         val INSTANCE = SarlModuleBuilder()
     }
 }

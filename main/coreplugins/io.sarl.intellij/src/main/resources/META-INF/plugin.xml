@@ -18,7 +18,7 @@
         <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
 
         <!-- Parser -->
-        <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.grammar.SarlParserDefinition"/>
+        <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.parser.SarlParserDefinition"/>
 
         <!-- Highlighter -->
         <lang.syntaxHighlighterFactory language="Sarl" implementationClass="io.sarl.intellij.ide.highlighter.SarlSyntaxHighlighterFactory" />"
