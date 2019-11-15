@@ -1,8 +1,4 @@
-import org.jetbrains.grammarkit.tasks.GenerateLexer
-import org.gradle.api.tasks.SourceSet
 import org.gradle.api.JavaVersion.VERSION_1_8
-import org.jetbrains.grammarkit.tasks.GenerateParser
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "io.sarl"
 version = "0.9.0-SNAPSHOT"
@@ -10,9 +6,8 @@ version = "0.9.0-SNAPSHOT"
 plugins {
     idea
     java
-    kotlin("jvm") version "1.3.10"
-    id("org.jetbrains.intellij") version "0.3.12"
-    id("org.jetbrains.grammarkit") version "2018.2.1"
+    kotlin("jvm") version "1.3.20"
+    id("org.jetbrains.intellij") version "0.4.12"
 }
 
 idea {
@@ -23,6 +18,7 @@ idea {
 
 allprojects {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 
@@ -35,7 +31,7 @@ allprojects {
     intellij {
         updateSinceUntilBuild = false
         instrumentCode = true
-        version = "2018.2.4"
+        version = "2019.2.3"
     }
 
     configure<JavaPluginConvention> {
@@ -49,29 +45,15 @@ allprojects {
 }
 
 project(":") {
-
     intellij {
         pluginName = "intellij-sarl"
     }
 
     sourceSets["main"].java.srcDirs.add(file("src/main/gen"))
+}
 
-    val generateSarlLexer = task<GenerateLexer>("generateSarlLexer") {
-        source = "src/main/grammars/SarlLexer.flex"
-        targetDir = "src/main/java/io/sarl/intellij/parser"
-        targetClass = "_SarlLexer"
-        purgeOldFiles = true
-    }
-
-    val generateSarlParser = task<GenerateParser>("generateSarlParser") {
-        source = "src/main/grammars/SarlParser.bnf"
-        targetRoot = "src/main/java"
-        pathToParser = "/io/sarl/intellij/parser/SarlParser.java"
-        pathToPsiRoot = "/io/sarl/intellij/psi"
-        purgeOldFiles = true
-    }
-
-    tasks.withType<KotlinCompile> {
-        dependsOn(generateSarlLexer, generateSarlParser)
-    }
+dependencies {
+    implementation("org.antlr:antlr:3.5.2")
+    implementation("org.eclipse.xtext:org.eclipse.xtext:2.19.0")
+    implementation ("io.sarl.lang:io.sarl.lang:0.11.0-SNAPSHOT")
 }
