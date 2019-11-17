@@ -8,17 +8,15 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
-import com.intellij.psi.tree.IElementType
 import io.sarl.intellij.SarlLanguage
-import io.sarl.intellij.antlr.lexer.PSIElementTypeFactory
+import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.lexer.SarlLexer
 import io.sarl.intellij.psi.SarlPsiFileRoot
 import io.sarl.lang.parser.antlr.internal.InternalSARLParser
-import io.sarl.intellij.antlr.psi.ANTLRPsiNode
+import io.sarl.intellij.antlr.psi.AntlrPsiNode
 import io.sarl.intellij.antlr.lexer.RuleIElementType
 import io.sarl.intellij.antlr.lexer.TokenIElementType
 
@@ -53,14 +51,14 @@ class SarlParserDefinition : ParserDefinition {
         val elType = node.elementType
 
         if (elType is TokenIElementType) {
-            return ANTLRPsiNode(node)
+            return AntlrPsiNode(node)
         }
         if (elType !is RuleIElementType) {
-            return ANTLRPsiNode(node)
+            return AntlrPsiNode(node)
         }
 
         // FIXME: this is a kind of "default" behavior
-        return ANTLRPsiNode(node)
+        return AntlrPsiNode(node)
     }
 
     override fun getCommentTokens(): TokenSet {
@@ -69,14 +67,14 @@ class SarlParserDefinition : ParserDefinition {
 
     companion object {
         val FILE = IFileElementType(SarlLanguage.INSTANCE)
-        val COMMENTS = PSIElementTypeFactory.createTokenSet(
+        val COMMENTS = PsiElementTypeFactory.createTokenSet(
                 SarlLanguage.INSTANCE,
                 InternalSARLLexer.RULE_ML_COMMENT,
                 InternalSARLLexer.RULE_SL_COMMENT)
-        val WS = PSIElementTypeFactory.createTokenSet(
+        val WS = PsiElementTypeFactory.createTokenSet(
                 SarlLanguage.INSTANCE,
                 InternalSARLLexer.RULE_WS)
-        val STRING = PSIElementTypeFactory.createTokenSet(
+        val STRING = PsiElementTypeFactory.createTokenSet(
                 SarlLanguage.INSTANCE,
                 InternalSARLLexer.RULE_STRING)
     }

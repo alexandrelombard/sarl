@@ -17,7 +17,7 @@ class SarlPsiFileRoot(viewProvider: FileViewProvider) :
         return SarlFileType
     }
 
-    override fun resolve(element: PsiNamedElement?): PsiElement? {
+    override fun resolve(element: PsiNamedElement): PsiElement? {
         // FIXME: What should I return?
         return null
     }

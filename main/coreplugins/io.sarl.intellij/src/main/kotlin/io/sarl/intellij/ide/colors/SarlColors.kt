@@ -9,7 +9,8 @@ enum class SarlColor(val humanName: String, val default: TextAttributesKey) {
     DOCUMENTATION_COMMENT("DocumentationComment", Default.DOC_COMMENT),
     COMMENT("Comment", Default.BLOCK_COMMENT),
     NUMBER("Number", Default.NUMBER),
-    DEFAULT("Default", Default.STRING);
+    STRING("String", Default.STRING),
+    DEFAULT("Default", Default.TEMPLATE_LANGUAGE_COLOR);
 
     val textAttributesKey = TextAttributesKey.createTextAttributesKey("io.sarl.$name", default)
     val attributesDescriptor = AttributesDescriptor(humanName, textAttributesKey)

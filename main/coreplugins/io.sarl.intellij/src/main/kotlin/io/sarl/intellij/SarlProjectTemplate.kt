@@ -14,7 +14,6 @@ abstract class SarlProjectTemplate {
                                  baseDir: VirtualFile): Collection<VirtualFile>
 
     companion object {
-
         val DEFAULT: SarlProjectTemplate = object : SarlProjectTemplate() {
             @Throws(IOException::class)
             override fun generateProject(
