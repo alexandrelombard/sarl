@@ -21,7 +21,9 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0
     private var endOffset: Int = 0
-    private var currentToken: CommonToken? = null
+    private var tokenStart: Int = 0
+    private var tokenEnd: Int = 0
+    private var currentToken: Token? = null
 
     override fun getState(): Int {
         return 0
@@ -66,17 +68,25 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
     }
 
     override fun getTokenStart(): Int {
-        return this.startOffset + this.currentToken!!.startIndex
+        return this.tokenStart
     }
 
     override fun getTokenEnd(): Int {
-        return this.startOffset + this.currentToken!!.stopIndex + 1
+        locateToken()
+        return this.tokenEnd
     }
 
     private fun locateToken() {
-        if (currentToken != null) return;
+        if (currentToken != null) return
 
-        this.currentToken = this.internalSarlLexer.nextToken() as CommonToken
+        val token = this.internalSarlLexer.nextToken() as CommonToken
+        this.currentToken = token
+        if(token != Token.EOF_TOKEN) {
+            this.tokenStart = this.startOffset + token.startIndex
+            this.tokenEnd = this.startOffset + token.stopIndex + 1
+        } else {
+            this.tokenEnd = this.endOffset
+        }
     }
 
     companion object {

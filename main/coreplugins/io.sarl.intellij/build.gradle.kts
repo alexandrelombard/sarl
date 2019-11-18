@@ -53,7 +53,7 @@ project(":") {
 }
 
 dependencies {
-    implementation("org.antlr:antlr:3.5.2")
+    //implementation("org.antlr:antlr:3.5.2")
     implementation("org.eclipse.xtext:org.eclipse.xtext:2.19.0")
     implementation ("io.sarl.lang:io.sarl.lang:0.11.0-SNAPSHOT")
 }
