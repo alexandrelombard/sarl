@@ -1,6 +1,7 @@
 package io.sarl.intellij.lexer
 
 import com.intellij.lexer.LexerBase
+import com.intellij.lexer.LexerPosition
 import com.intellij.psi.tree.IElementType
 import io.sarl.intellij.SarlLanguage
 import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
@@ -38,6 +39,10 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
     }
 
     override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+        this.currentToken = null
+        this.tokenStart = 0
+        this.tokenEnd = 0
+
         this.startOffset = startOffset
         this.endOffset = endOffset
         this.buffer = buffer
@@ -81,6 +86,7 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
 
         val token = this.internalSarlLexer.nextToken() as CommonToken
         this.currentToken = token
+
         if(token != Token.EOF_TOKEN) {
             this.tokenStart = this.startOffset + token.startIndex
             this.tokenEnd = this.startOffset + token.stopIndex + 1
