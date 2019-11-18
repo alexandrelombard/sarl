@@ -1,11 +1,8 @@
 package io.sarl.intellij.lexer
 
 import com.intellij.lexer.LexerBase
-import com.intellij.lexer.LexerPosition
 import com.intellij.psi.tree.IElementType
-import io.sarl.intellij.SarlLanguage
-import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
-import io.sarl.intellij.antlr.lexer.TokenIElementType
+import io.sarl.intellij.antlr.SarlPsiElementType
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CommonToken
@@ -16,8 +13,6 @@ import org.antlr.runtime.Token
  * @author Alexandre Lombard
  */
 class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() {
-
-    //private val tokenElementTypes = PsiElementTypeFactory.getTokenIElementTypes(SarlLanguage.INSTANCE)
 
     private var buffer: CharSequence = ""
     private var startOffset: Int = 0
@@ -59,12 +54,7 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
             return null
         }
 
-        if(tokenElementTypes[currentToken] == null) {
-            tokenElementTypes[currentToken] =
-                    TokenIElementType(currentToken.type, currentToken.text, SarlLanguage.INSTANCE)
-        }
-
-        return tokenElementTypes[currentToken]
+        return SarlPsiElementType.getIElementType(currentToken.type)
     }
 
     override fun advance() {
@@ -93,11 +83,6 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
         } else {
             this.tokenEnd = this.endOffset
         }
-    }
-
-    companion object {
-        // FIXME Avoid using a map if possible
-        val tokenElementTypes = hashMapOf<Token, TokenIElementType>()
     }
 
 }

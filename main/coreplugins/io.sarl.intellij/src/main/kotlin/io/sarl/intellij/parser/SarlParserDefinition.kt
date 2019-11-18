@@ -12,6 +12,7 @@ import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.intellij.SarlLanguage
+import io.sarl.intellij.antlr.SarlPsiElementType
 import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.lexer.SarlLexer
 import io.sarl.intellij.psi.SarlPsiFileRoot
@@ -19,6 +20,7 @@ import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import io.sarl.intellij.antlr.psi.AntlrPsiNode
 import io.sarl.intellij.antlr.lexer.RuleIElementType
 import io.sarl.intellij.antlr.lexer.TokenIElementType
+import io.sarl.lang.services.SARLGrammarAccess
 
 class SarlParserDefinition : ParserDefinition {
     override fun createParser(project: Project?): PsiParser {
@@ -67,15 +69,12 @@ class SarlParserDefinition : ParserDefinition {
 
     companion object {
         val FILE = IFileElementType(SarlLanguage.INSTANCE)
-        val COMMENTS = PsiElementTypeFactory.createTokenSet(
-                SarlLanguage.INSTANCE,
+        val COMMENTS = SarlPsiElementType.createTokenSet(
                 InternalSARLLexer.RULE_ML_COMMENT,
                 InternalSARLLexer.RULE_SL_COMMENT)
-        val WS = PsiElementTypeFactory.createTokenSet(
-                SarlLanguage.INSTANCE,
+        val WS = SarlPsiElementType.createTokenSet(
                 InternalSARLLexer.RULE_WS)
-        val STRING = PsiElementTypeFactory.createTokenSet(
-                SarlLanguage.INSTANCE,
+        val STRING = SarlPsiElementType.createTokenSet(
                 InternalSARLLexer.RULE_STRING)
     }
 }
