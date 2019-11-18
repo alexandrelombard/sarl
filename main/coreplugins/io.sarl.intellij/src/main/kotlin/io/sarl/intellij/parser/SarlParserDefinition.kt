@@ -1,5 +1,6 @@
 package io.sarl.intellij.parser
 
+import com.google.inject.Inject
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -20,9 +21,14 @@ import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import io.sarl.intellij.antlr.psi.AntlrPsiNode
 import io.sarl.intellij.antlr.lexer.RuleIElementType
 import io.sarl.intellij.antlr.lexer.TokenIElementType
+import io.sarl.lang.SARLStandaloneSetup
 import io.sarl.lang.services.SARLGrammarAccess
+import org.eclipse.core.internal.runtime.Activator
 
 class SarlParserDefinition : ParserDefinition {
+
+    //@Inject lateinit var sarlGrammarAccess: SARLGrammarAccess
+
     override fun createParser(project: Project?): PsiParser {
         val internalParser = InternalSARLParser(null)
         return SarlParser(internalParser)

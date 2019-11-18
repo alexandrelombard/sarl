@@ -1,7 +1,7 @@
 import org.gradle.api.JavaVersion.VERSION_1_8
 
 group = "io.sarl"
-version = "0.9.0-SNAPSHOT"
+version = "0.11.0-SNAPSHOT"
 
 plugins {
     idea

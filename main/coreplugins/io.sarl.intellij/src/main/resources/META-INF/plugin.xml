@@ -10,6 +10,8 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <preloadingActivity implementation="io.sarl.intellij.SarlPluginPreloadingActivity"/>
+
         <moduleType id="SARL_MODULE" implementationClass="io.sarl.intellij.SarlModuleType"/>
 
         <!-- Project creation -->
