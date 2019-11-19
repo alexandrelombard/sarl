@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.tree.IFileElementType
 import io.sarl.intellij.SarlLanguage
 import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
@@ -66,7 +67,16 @@ class SarlParser : PsiParser {
 
         if(parseResult != null) {
             val rootNode = parseResult.rootNode
-            walk(rootNode, builder)
+            val rootMarker = builder.mark()
+            for(child in rootNode.children) {
+                if(child is ICompositeNode) {
+                    walk(child, builder)
+                } else {
+                    val leafMarker = builder.mark()
+                    leafMarker.done(IElementType(child.text, SarlLanguage.INSTANCE))
+                }
+            }
+            rootMarker.done(IFileElementType(SarlLanguage.INSTANCE))
         }
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
@@ -80,7 +90,7 @@ class SarlParser : PsiParser {
                 walk(child, builder)
             } else {
                 val leafMarker = builder.mark()
-                leafMarker.done(IElementType(node.text, SarlLanguage.INSTANCE))
+                leafMarker.done(IElementType(child.text, SarlLanguage.INSTANCE))
             }
         }
 
