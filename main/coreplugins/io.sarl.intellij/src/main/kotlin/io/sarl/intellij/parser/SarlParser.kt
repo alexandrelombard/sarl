@@ -13,6 +13,9 @@ import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import org.antlr.runtime.BaseRecognizer
 import org.antlr.runtime.CommonTokenStream
+import org.eclipse.xtext.nodemodel.BidiIterable
+import org.eclipse.xtext.nodemodel.BidiTreeIterable
+import org.eclipse.xtext.nodemodel.ICompositeNode
 import org.eclipse.xtext.nodemodel.INode
 import org.eclipse.xtext.parser.DefaultEcoreElementFactory
 import org.eclipse.xtext.parser.IAstFactory
@@ -51,8 +54,6 @@ class SarlParser : PsiParser {
 //
 //        rootMarker.done(root)
 
-
-
         val source = PsiTokenSource(builder)
         val tokens = XtextTokenStream(source, 0)
 
@@ -65,35 +66,25 @@ class SarlParser : PsiParser {
 
         if(parseResult != null) {
             val rootNode = parseResult.rootNode
-            var previousNode: INode? = null
-            for(abstractNode in rootNode.asTreeIterable) {
-                println(abstractNode.text)
-
-                previousNode = abstractNode
-            }
+            walk(rootNode, builder)
         }
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
     }
 
-//    fun walk(node: ICompositeNode, builder: PsiBuilder) {
-//        markers.push(builder.mark())
-//
-//        node.semanticElement
-//
-//        if(node.hasChildren()) {
-//            for(child in node.children) {
-//                if(child is ICompositeNode) {
-//                    walk(child, builder)
-//                }
-//            }
-//        }
-//
-//        val marker = markers.pop()
-//        //marker.done()
-//    }
-//
-//    fun parseLight(t: IElementType, b: PsiBuilder) {
-//
-//    }
+    private fun walk(node: ICompositeNode, builder: PsiBuilder) {
+        val m = builder.mark()
+
+        for(child in node.children) {
+            if(child is ICompositeNode) {
+                walk(child, builder)
+            } else {
+                val leafMarker = builder.mark()
+                leafMarker.done(IElementType(node.text, SarlLanguage.INSTANCE))
+            }
+        }
+
+        m.done(IElementType(node.text, SarlLanguage.INSTANCE))
+    }
+
 }
