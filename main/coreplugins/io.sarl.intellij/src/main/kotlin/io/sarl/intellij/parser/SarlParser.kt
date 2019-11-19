@@ -65,6 +65,8 @@ class SarlParser : PsiParser {
         if(parseResult != null) {
             val rootNode = parseResult.rootNode
             for(abstractNode in rootNode.asTreeIterable) {
+                if(abstractNode.hasDirectSemanticElement())
+                    if(abstractNode.)
                 println(abstractNode.text)
             }
         }
