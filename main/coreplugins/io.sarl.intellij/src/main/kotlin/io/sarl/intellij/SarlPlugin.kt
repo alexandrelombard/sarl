@@ -1,11 +1,12 @@
 package io.sarl.intellij
 
 import com.google.inject.Injector
-import io.sarl.lang.parser.antlr.SARLParser
+import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.lang.services.SARLGrammarAccess
 
 object SarlPlugin {
     lateinit var injector: Injector
-    lateinit var sarlGrammarAccess: SARLGrammarAccess
-    lateinit var sarlParser: SARLParser
+
+    fun sarlGrammarAccess() = SarlPlugin.injector.getInstance(SARLGrammarAccess::class.java)
+    fun internalSarlLexer() = SarlPlugin.injector.getInstance(InternalSARLLexer::class.java)
 }
