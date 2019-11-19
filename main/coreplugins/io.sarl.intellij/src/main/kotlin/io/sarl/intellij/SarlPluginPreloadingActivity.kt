@@ -17,7 +17,7 @@ class SarlPluginPreloadingActivity : PreloadingActivity() {
 
     override fun preload(indicator: ProgressIndicator) {
         try {
-            SarlPlugin.injector = SARLStandaloneSetup().createInjectorAndDoEMFRegistration()
+            SarlPlugin.injector
         } catch (t: Throwable) {
             LOG.severe("Error while initializing the SARL plugin")
             t.printStackTrace()

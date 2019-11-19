@@ -13,6 +13,7 @@ import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import org.antlr.runtime.BaseRecognizer
 import org.antlr.runtime.CommonTokenStream
+import org.eclipse.xtext.nodemodel.INode
 import org.eclipse.xtext.parser.DefaultEcoreElementFactory
 import org.eclipse.xtext.parser.IAstFactory
 import org.eclipse.xtext.parser.antlr.IUnorderedGroupHelper
@@ -64,10 +65,11 @@ class SarlParser : PsiParser {
 
         if(parseResult != null) {
             val rootNode = parseResult.rootNode
+            var previousNode: INode? = null
             for(abstractNode in rootNode.asTreeIterable) {
-                if(abstractNode.hasDirectSemanticElement())
-                    if(abstractNode.)
                 println(abstractNode.text)
+
+                previousNode = abstractNode
             }
         }
 
