@@ -13,6 +13,7 @@ import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.intellij.SarlLanguage
+import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.antlr.SarlPsiElementType
 import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.lexer.SarlLexer
@@ -27,11 +28,8 @@ import org.eclipse.core.internal.runtime.Activator
 
 class SarlParserDefinition : ParserDefinition {
 
-    //@Inject lateinit var sarlGrammarAccess: SARLGrammarAccess
-
     override fun createParser(project: Project?): PsiParser {
-        val internalParser = InternalSARLParser(null)
-        return SarlParser(internalParser)
+        return SarlParser()
     }
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile {
