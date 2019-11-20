@@ -32,29 +32,6 @@ class SarlParser : PsiParser {
     private var internalParser: InternalSARLParser? = null
 
     override fun parse(root: IElementType, builder: PsiBuilder): ASTNode {
-//        ProgressIndicatorProvider.checkCanceled()
-//
-//        val source = PsiTokenSource(builder)
-//        val tokens = CommonTokenStream(source)
-//
-//        internalSarlParser.input = tokens
-//
-//        // Generate parse tree
-//        val rollbackMarker = builder.mark()
-//        val parseResult = internalSarlParser.parse()
-//        val tree = parseResult.rootNode
-//        rollbackMarker.rollbackTo()
-//
-//        val rootMarker = builder.mark()
-//        walk(tree, builder)
-//
-//        while (!builder.eof()) {
-//            ProgressIndicatorProvider.checkCanceled()
-//            builder.advanceLexer()
-//        }
-//
-//        rootMarker.done(root)
-
         val source = PsiTokenSource(builder)
         val tokens = XtextTokenStream(source, 0)
 
@@ -63,21 +40,28 @@ class SarlParser : PsiParser {
         parser.unorderedGroupHelper = SarlPlugin.injector.getInstance(IUnorderedGroupHelper::class.java)
         parser.unorderedGroupHelper.initializeWith(SarlPlugin.injector.getInstance(InternalSARLLexer::class.java))
 
-        val parseResult = parser.parse()
+//        val initMarker = builder.mark()
+//        val parseResult = parser.parse()
+//        initMarker.rollbackTo()
+//
+//        if(parseResult != null) {
+//            val rootNode = parseResult.rootNode
+//            val rootMarker = builder.mark()
+//            for(child in rootNode.children) {
+//                if(child is ICompositeNode) {
+//                    walk(child, builder)
+//                } else {
+//                    val leafMarker = builder.mark()
+//                    leafMarker.done(IElementType(child.text, SarlLanguage.INSTANCE))
+//                }
+//            }
+//            rootMarker.done(IFileElementType(SarlLanguage.INSTANCE))
+//        }
+        val rootMarker = builder.mark()
 
-        if(parseResult != null) {
-            val rootNode = parseResult.rootNode
-            val rootMarker = builder.mark()
-            for(child in rootNode.children) {
-                if(child is ICompositeNode) {
-                    walk(child, builder)
-                } else {
-                    val leafMarker = builder.mark()
-                    leafMarker.done(IElementType(child.text, SarlLanguage.INSTANCE))
-                }
-            }
-            rootMarker.done(IFileElementType(SarlLanguage.INSTANCE))
-        }
+        parser.parse()
+
+        rootMarker.done(root)
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
     }
@@ -90,6 +74,7 @@ class SarlParser : PsiParser {
                 walk(child, builder)
             } else {
                 val leafMarker = builder.mark()
+//                builder.advanceLexer()
                 leafMarker.done(IElementType(child.text, SarlLanguage.INSTANCE))
             }
         }

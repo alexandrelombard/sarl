@@ -54,7 +54,7 @@ class SarlLexer(private val internalSarlLexer: InternalSARLLexer) : LexerBase() 
             return null
         }
 
-        return SarlPsiElementType.getIElementType(currentToken.type)
+        return SarlPsiElementType.getTokenIElementType(currentToken.type)
     }
 
     override fun advance() {

@@ -64,6 +64,7 @@ class SarlParserDefinition : ParserDefinition {
         }
 
         // FIXME: this is a kind of "default" behavior
+        // FIXME: For more details, look at https://github.com/alexandrelombard/sarl/blob/idea_plugin/main/coreplugins/io.sarl.lang.intellij/src-gen/io/sarl/lang/idea/lang/parser/SARLParserDefinition.java
         return AntlrPsiNode(node)
     }
 

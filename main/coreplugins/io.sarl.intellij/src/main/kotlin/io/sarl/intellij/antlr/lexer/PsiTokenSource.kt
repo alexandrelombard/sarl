@@ -9,6 +9,8 @@ import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonToken
 import org.antlr.runtime.Token
 import org.antlr.runtime.TokenSource
+import org.eclipse.xtext.parser.antlr.XtextTokenStream
+import java.io.InputStream
 
 /** Make a PsiBuilder look like a source of ANTLR tokens. PsiBuilder
  * provides tokens created by the lexer created in
@@ -51,12 +53,28 @@ class PsiTokenSource(protected var builder: PsiBuilder) : TokenSource {
         // PsiBuilder doesn't provide line, column info
         val line = 0
         val charPositionInLine = 0
-        val t = CommonToken(type, text)
-        //		Token t = tokenFactory.create(source, type, text, channel, start, stop, line, charPositionInLine);
+        val t = createToken(source, type, text, channel, start, stop, line, charPositionInLine)
         builder.advanceLexer()
-        //		System.out.println("TOKEN: "+t);
         return t
     }
 
+    private fun createToken(
+            source: Pair<TokenSource, CharStream?>,
+            type: Int,
+            text: String?,
+            channel: Int,
+            start: Int,
+            stop: Int,
+            line: Int,
+            charPositionInLine: Int): CommonToken {
+        val token = CommonToken(type,  text)
+        token.startIndex = start
+        token.stopIndex = stop
+        token.line = line
+        token.charPositionInLine = charPositionInLine
+        token.channel = channel
+        token.inputStream = source.b
+        return token
+    }
 
 }
