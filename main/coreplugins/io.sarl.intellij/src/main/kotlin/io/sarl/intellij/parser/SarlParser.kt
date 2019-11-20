@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.IFileElementType
 import io.sarl.intellij.SarlLanguage
 import io.sarl.intellij.SarlPlugin
+import io.sarl.intellij.antlr.SarlPsiElementType
 import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.antlr.lexer.PsiTokenSource
 import io.sarl.lang.parser.antlr.SARLParser
@@ -20,6 +21,7 @@ import org.eclipse.xtext.nodemodel.ICompositeNode
 import org.eclipse.xtext.nodemodel.INode
 import org.eclipse.xtext.parser.DefaultEcoreElementFactory
 import org.eclipse.xtext.parser.IAstFactory
+import org.eclipse.xtext.parser.antlr.ISyntaxErrorMessageProvider
 import org.eclipse.xtext.parser.antlr.IUnorderedGroupHelper
 import org.eclipse.xtext.parser.antlr.XtextTokenStream
 import java.util.*
@@ -37,8 +39,10 @@ class SarlParser : PsiParser {
 
         val parser = InternalSARLParser(tokens, SarlPlugin.sarlGrammarAccess())
         parser.semanticModelBuilder = SarlPlugin.injector.getInstance(IAstFactory::class.java)
+        parser.syntaxErrorProvider = SarlPlugin.injector.getInstance(ISyntaxErrorMessageProvider::class.java)
         parser.unorderedGroupHelper = SarlPlugin.injector.getInstance(IUnorderedGroupHelper::class.java)
         parser.unorderedGroupHelper.initializeWith(SarlPlugin.injector.getInstance(InternalSARLLexer::class.java))
+        parser.setTokenTypeMap(SarlPsiElementType.getTokenTypeMap())
 
 //        val initMarker = builder.mark()
 //        val parseResult = parser.parse()
@@ -57,9 +61,17 @@ class SarlParser : PsiParser {
 //            }
 //            rootMarker.done(IFileElementType(SarlLanguage.INSTANCE))
 //        }
+
+//        val initMarker = builder.mark()
+//        val parseResult = parser.parse()
+//        initMarker.rollbackTo()
+
         val rootMarker = builder.mark()
 
-        parser.parse()
+        val parseResult = parser.parse()
+        if(parseResult != null) {
+            // TODO Do the AST reconstruction
+        }
 
         rootMarker.done(root)
 
