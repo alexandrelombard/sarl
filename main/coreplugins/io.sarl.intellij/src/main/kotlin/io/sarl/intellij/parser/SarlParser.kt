@@ -4,22 +4,14 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
 import com.intellij.psi.tree.IElementType
-import com.intellij.psi.tree.IFileElementType
 import io.sarl.intellij.SarlLanguage
 import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.antlr.SarlPsiElementType
-import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.antlr.lexer.PsiTokenSource
-import io.sarl.lang.parser.antlr.SARLParser
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.lang.parser.antlr.internal.InternalSARLParser
-import org.antlr.runtime.BaseRecognizer
-import org.antlr.runtime.CommonTokenStream
-import org.eclipse.xtext.nodemodel.BidiIterable
-import org.eclipse.xtext.nodemodel.BidiTreeIterable
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.nodemodel.ICompositeNode
-import org.eclipse.xtext.nodemodel.INode
-import org.eclipse.xtext.parser.DefaultEcoreElementFactory
 import org.eclipse.xtext.parser.IAstFactory
 import org.eclipse.xtext.parser.antlr.ISyntaxErrorMessageProvider
 import org.eclipse.xtext.parser.antlr.IUnorderedGroupHelper
@@ -66,11 +58,41 @@ class SarlParser : PsiParser {
 //        val parseResult = parser.parse()
 //        initMarker.rollbackTo()
 
-        val rootMarker = builder.mark()
+        val stack = Stack<Pair<EObject, PsiBuilder.Marker>>()
+        var currentContainer: EObject
 
+        val rootMarker = builder.mark()
         val parseResult = parser.parse()
         if(parseResult != null) {
             // TODO Do the AST reconstruction
+            println("BEGIN")
+//            for(n in parseResult.rootNode.asTreeIterable) {
+//                println("$n ; ${n.parent} ; ${n.semanticElement}")
+//            }
+            val rootAst = parseResult.rootASTElement
+
+            currentContainer = rootAst
+            stack.push(Pair(rootAst, rootMarker))
+
+            for(n in rootAst.eAllContents()) {
+                if(n.eContainer() != currentContainer) {
+                    // We are changing the context
+                    if(stack.map { it.first }.contains(n)) {
+                        // We already have been in this context
+                        while(stack.peek() != n.eContainer()) {
+                            val pair = stack.pop()
+                            pair.second.done()
+                        }
+                    } else {
+                        // We are going deeper
+                        val marker = builder.mark()
+                        stack.push(Pair(n, marker))
+                    }
+
+                    currentContainer = n.eContainer()
+                }
+            }
+            println("END")
         }
 
         rootMarker.done(root)
