@@ -18,11 +18,12 @@ import io.sarl.lang.sarl.impl.SarlClassImplCustom
 import io.sarl.lang.sarl.impl.SarlConstructorImpl
 import io.sarl.lang.sarl.impl.SarlFieldImplCustom
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.xtext.nodemodel.ICompositeNode
+import org.eclipse.xtext.nodemodel.INode
 import org.eclipse.xtext.parser.IAstFactory
 import org.eclipse.xtext.parser.antlr.ISyntaxErrorMessageProvider
 import org.eclipse.xtext.parser.antlr.IUnorderedGroupHelper
 import org.eclipse.xtext.parser.antlr.XtextTokenStream
+import java.lang.StringBuilder
 import java.util.*
 
 class SarlParser : PsiParser {
@@ -38,12 +39,74 @@ class SarlParser : PsiParser {
         parser.unorderedGroupHelper.initializeWith(SarlPlugin.injector.getInstance(InternalSARLLexer::class.java))
         parser.setTokenTypeMap(SarlPsiElementType.getTokenTypeMap())
 
-        astBasedPsiBuilding(root, builder, parser)
+//        astBasedPsiBuilding(root, builder, parser)
+        parseTreeBasedPsiBuilding(root, builder, parser)
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
     }
 
-    private fun contextDone(stack: Stack<Pair<EObject, PsiBuilder.Marker>>) {
+    private fun parseTreeContextDone(stack: Stack<Pair<INode, PsiBuilder.Marker>>) {
+        val pair = stack.pop()
+
+        println("${debugTab(stack.size)}D: ${pair.first}")
+
+        pair.second.done(IElementType(pair.first.toString(), SarlLanguage.INSTANCE))
+    }
+
+    private fun parseTreeBasedPsiBuilding(root: IElementType, builder: PsiBuilder, parser: InternalSARLParser) {
+        val stack = Stack<Pair<INode, PsiBuilder.Marker>>()
+        var currentContainer: INode
+
+        builder.setDebugMode(true)
+
+        println("M: ROOT")
+        val rootMarker = builder.mark()
+        val parseResult = parser.parse()
+        if(parseResult != null) {
+            val rootNode = parseResult.rootNode
+
+            currentContainer = rootNode
+            val rootNodeMarker = builder.mark()
+            println("${debugTab(stack.size)}M: $rootNode")
+            stack.push(Pair(rootNode, rootNodeMarker))
+
+            for(n in rootNode.asTreeIterable) {
+                if(n == rootNode)
+                    continue    // This case is already managed by the enclosing context
+
+                if(n.parent != currentContainer) {
+                    // We are changing the context
+                    if(stack.map { it.first }.contains(n.parent)) {
+                        // We already have been in this context
+                        while(stack.peek().first != n.parent) {
+                            parseTreeContextDone(stack)
+                        }
+                    } else {
+                        // We are going deeper
+                        val marker = builder.mark()
+                        println("${debugTab(stack.size)}M: ${n.parent}")
+                        stack.push(Pair(n.parent, marker))
+                    }
+
+                    currentContainer = n.parent
+                }
+
+                println("${debugTab(stack.size)}E: $n :: ${n.semanticElement}")
+
+                // TODO Manage leaves and errors
+            }
+        }
+
+        // Clear the remaining stack up to the root
+        while(stack.isNotEmpty()) {
+            parseTreeContextDone(stack)
+        }
+
+        println("D: ROOT")
+        rootMarker.done(root)
+    }
+
+    private fun astContextDone(stack: Stack<Pair<EObject, PsiBuilder.Marker>>) {
         val pair = stack.pop()
 
         val psiElement = when(pair.first::class) {
@@ -80,7 +143,7 @@ class SarlParser : PsiParser {
                     if(stack.map { it.first }.contains(n.eContainer())) {
                         // We already have been in this context
                         while(stack.peek().first != n.eContainer()) {
-                            contextDone(stack)
+                            astContextDone(stack)
                         }
                     } else {
                         // We are going deeper
@@ -100,11 +163,19 @@ class SarlParser : PsiParser {
 
         // Clear the remaining stack up to the root
         while(stack.isNotEmpty()) {
-            contextDone(stack)
+            astContextDone(stack)
         }
 
         println("D: ROOT")
         rootMarker.done(root)
+    }
+
+    private fun debugTab(size: Int): String {
+        val str = StringBuilder()
+        for(i in 0..size) {
+            str.append("\t")
+        }
+        return str.toString()
     }
 
 }
