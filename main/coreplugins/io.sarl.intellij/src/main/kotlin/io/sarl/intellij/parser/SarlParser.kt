@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import io.sarl.intellij.SarlLanguage
 import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.antlr.SarlPsiElementType
+import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.antlr.lexer.PsiTokenSource
 import io.sarl.intellij.psi.PsiEObjectElementType
 import io.sarl.intellij.psi.PsiSarlClassElementType
@@ -17,8 +18,14 @@ import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import io.sarl.lang.sarl.impl.SarlClassImplCustom
 import io.sarl.lang.sarl.impl.SarlConstructorImpl
 import io.sarl.lang.sarl.impl.SarlFieldImplCustom
+import org.antlr.runtime.BitSet
+import org.antlr.runtime.IntStream
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.nodemodel.ILeafNode
 import org.eclipse.xtext.nodemodel.INode
+import org.eclipse.xtext.nodemodel.impl.CompositeNodeWithSemanticElement
+import org.eclipse.xtext.nodemodel.impl.LeafNode
+import org.eclipse.xtext.nodemodel.impl.LeafNodeWithSyntaxError
 import org.eclipse.xtext.parser.IAstFactory
 import org.eclipse.xtext.parser.antlr.ISyntaxErrorMessageProvider
 import org.eclipse.xtext.parser.antlr.IUnorderedGroupHelper
@@ -33,13 +40,42 @@ class SarlParser : PsiParser {
         val tokens = XtextTokenStream(source, 0)
 
         val parser = InternalSARLParser(tokens, SarlPlugin.sarlGrammarAccess())
+
+//        val parser = object : InternalSARLParser(tokens, SarlPlugin.sarlGrammarAccess()) {
+//            private val stack = Stack<Pair<INode, PsiBuilder.Marker>>()
+//
+//            override fun enterRule() {
+//                super.enterRule()
+//
+//                stack.push(Pair(currentNode, builder.mark()))
+//            }
+//
+//            override fun leaveRule() {
+//                val pair = stack.pop()
+//
+//                val psiType = getPsiElementType(pair.first.semanticElement)
+//                pair.second.done(psiType)
+//
+//                super.leaveRule()
+//            }
+//
+//            override fun recoverFromMismatchedToken(input: IntStream?, ttype: Int, follow: BitSet?): Any {
+//                return super.recoverFromMismatchedToken(input, ttype, follow)
+//            }
+//        }
+
         parser.semanticModelBuilder = SarlPlugin.injector.getInstance(IAstFactory::class.java)
         parser.syntaxErrorProvider = SarlPlugin.injector.getInstance(ISyntaxErrorMessageProvider::class.java)
         parser.unorderedGroupHelper = SarlPlugin.injector.getInstance(IUnorderedGroupHelper::class.java)
         parser.unorderedGroupHelper.initializeWith(SarlPlugin.injector.getInstance(InternalSARLLexer::class.java))
         parser.setTokenTypeMap(SarlPsiElementType.getTokenTypeMap())
 
+//        val rootMarker = builder.mark()
+//        parser.parse()
+//        rootMarker.done(root)
+
 //        astBasedPsiBuilding(root, builder, parser)
+
         parseTreeBasedPsiBuilding(root, builder, parser)
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
@@ -49,8 +85,9 @@ class SarlParser : PsiParser {
         val pair = stack.pop()
 
         println("${debugTab(stack.size)}D: ${pair.first}")
+        val psiElement = getPsiElementType(pair.first.semanticElement)
 
-        pair.second.done(IElementType(pair.first.toString(), SarlLanguage.INSTANCE))
+        pair.second.done(psiElement)
     }
 
     private fun parseTreeBasedPsiBuilding(root: IElementType, builder: PsiBuilder, parser: InternalSARLParser) {
@@ -60,8 +97,12 @@ class SarlParser : PsiParser {
         builder.setDebugMode(true)
 
         println("M: ROOT")
-        val rootMarker = builder.mark()
+
+        val tmp = builder.mark()
         val parseResult = parser.parse()
+        tmp.rollbackTo()
+
+        val rootMarker = builder.mark()
         if(parseResult != null) {
             val rootNode = parseResult.rootNode
 
@@ -73,6 +114,12 @@ class SarlParser : PsiParser {
             for(n in rootNode.asTreeIterable) {
                 if(n == rootNode)
                     continue    // This case is already managed by the enclosing context
+
+                if(n is ILeafNode)
+                    builder.advanceLexer()
+
+                if(!n.hasDirectSemanticElement())
+                    continue    // The node has no semantic, we skip it
 
                 if(n.parent != currentContainer) {
                     // We are changing the context
@@ -93,6 +140,19 @@ class SarlParser : PsiParser {
 
                 println("${debugTab(stack.size)}E: $n :: ${n.semanticElement}")
 
+                if(n is ILeafNode) {
+                    if(n is LeafNodeWithSyntaxError) {
+                        val marker = builder.mark()
+                        val psiElementType = getPsiElementType(n.semanticElement)
+                        marker.done(psiElementType)
+                    } else {
+                        val marker = builder.mark()
+                        val psiElementType = getPsiElementType(n.semanticElement)
+                        marker.done(psiElementType)
+                    }
+                }
+
+
                 // TODO Manage leaves and errors
             }
         }
@@ -106,16 +166,20 @@ class SarlParser : PsiParser {
         rootMarker.done(root)
     }
 
+    private fun getPsiElementType(obj: EObject): PsiEObjectElementType {
+        return when(obj::class) {
+            EObject::class -> PsiEObjectElementType(obj)
+            SarlClassImplCustom::class -> PsiSarlClassElementType(obj as SarlClassImplCustom)
+            SarlFieldImplCustom::class -> PsiSarlFieldElementType(obj as SarlFieldImplCustom)
+            SarlConstructorImpl::class -> PsiSarlConstructorElementType(obj as SarlConstructorImpl)
+            else -> PsiEObjectElementType(obj)
+        }
+    }
+
     private fun astContextDone(stack: Stack<Pair<EObject, PsiBuilder.Marker>>) {
         val pair = stack.pop()
 
-        val psiElement = when(pair.first::class) {
-            EObject::class -> PsiEObjectElementType(pair.first)
-            SarlClassImplCustom::class -> PsiSarlClassElementType(pair.first as SarlClassImplCustom)
-            SarlFieldImplCustom::class -> PsiSarlFieldElementType(pair.first as SarlFieldImplCustom)
-            SarlConstructorImpl::class -> PsiSarlConstructorElementType(pair.first as SarlConstructorImpl)
-            else -> PsiEObjectElementType(pair.first)
-        }
+        val psiElement = getPsiElementType(pair.first)
         println("D: ${pair.first}")
         pair.second.done(psiElement)
     }
