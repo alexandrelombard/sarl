@@ -25,6 +25,9 @@
         <!-- Parser -->
         <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.parser.SarlParserDefinition"/>
 
+        <!-- Annotators -->
+        <annotator language="Sarl" implementationClass="io.sarl.intellij.ide.annotator.ErrorAnnotator" />
+
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="Sarl"
                                       implementationClass="io.sarl.intellij.ide.structview.SarlStructureViewFactory" />

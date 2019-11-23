@@ -9,15 +9,17 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import io.sarl.intellij.psi.EObjectPsiElement
 import io.sarl.intellij.psi.SarlPsiFileRoot
-import io.sarl.lang.sarl.SarlClass
-import io.sarl.lang.sarl.SarlField
+import io.sarl.lang.sarl.*
 import org.eclipse.xtend.core.xtend.XtendFunction
+import org.eclipse.xtend.core.xtend.XtendTypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
 
 open class SarlStructureViewElement(protected val element: PsiElement) : StructureViewTreeElement, SortableTreeElement {
 
     private val allowedItemsClasses = hashSetOf(
-            SarlPsiFileRoot::class, SarlClass::class, SarlField::class, MethodDeclaration::class,
+            SarlPsiFileRoot::class, SarlClass::class, SarlAgent::class, SarlEvent::class,
+            SarlBehavior::class, SarlCapacity::class, SarlSkill::class, SarlInterface::class,
+            SarlField::class, MethodDeclaration::class,
             XtendFunction::class)
 
     override fun getValue(): Any {

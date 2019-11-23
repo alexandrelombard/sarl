@@ -5,10 +5,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.util.PlatformIcons
 import io.sarl.intellij.SarlIcons
 import io.sarl.intellij.psi.EObjectPsiElement
-import io.sarl.lang.sarl.SarlClass
-import io.sarl.lang.sarl.SarlField
-import io.sarl.lang.sarl.SarlScript
+import io.sarl.lang.sarl.*
 import org.eclipse.xtend.core.xtend.XtendFunction
+import org.eclipse.xtend.core.xtend.XtendTypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
 import javax.swing.Icon
 
@@ -16,19 +15,23 @@ class SarlItemPresentation constructor(protected val element: PsiElement) : Item
 
     override fun getIcon(unused: Boolean): Icon {
         if(element is EObjectPsiElement) {
-            if(element.elementType.element is SarlScript) {
+            val iElement = element.elementType.element
+            if(iElement is SarlScript) {
                 return PlatformIcons.FILE_ICON
             }
-            if(element.elementType.element is SarlClass)  {
+            if(iElement is SarlClass)  {
                 return PlatformIcons.CLASS_ICON
             }
-            if(element.elementType.element is SarlField) {
+            if(iElement is SarlInterface) {
+                return PlatformIcons.INTERFACE_ICON
+            }
+            if(iElement is SarlField) {
                 return PlatformIcons.FIELD_ICON
             }
-            if(element.elementType.element is MethodDeclaration) {
+            if(iElement is MethodDeclaration) {
                 return PlatformIcons.METHOD_ICON
             }
-            if(element.elementType.element is XtendFunction) {
+            if(iElement is XtendFunction) {
                 return PlatformIcons.FUNCTION_ICON
             }
         }
@@ -38,20 +41,26 @@ class SarlItemPresentation constructor(protected val element: PsiElement) : Item
 
     override fun getPresentableText(): String {
         if(element is EObjectPsiElement) {
-            if(element.elementType.element is SarlScript) {
-                return element.elementType.element.`package`
+            val iElement = element.elementType.element
+            if(iElement is SarlScript) {
+                if(iElement.`package` != null) {
+                    return iElement.`package`
+                }
             }
-            if(element.elementType.element is SarlClass) {
-                return element.elementType.element.name
+            if(iElement is XtendTypeDeclaration) {
+                // This one includes SarlClass, SarlInterface, SarlAgent, etc.
+                if(iElement.name != null) {
+                    return iElement.name
+                }
             }
-            if(element.elementType.element is SarlField) {
-                return element.elementType.element.name
+            if(iElement is SarlField) {
+                return "${iElement.name}: ${iElement.type.simpleName}"
             }
-            if(element.elementType.element is MethodDeclaration) {
-                return element.elementType.element.simpleName
+            if(iElement is MethodDeclaration) {
+                return "${iElement.simpleName}(${iElement.parameters.joinToString(",") { it.type.simpleName }}): ${iElement.returnType?.simpleName ?: ""}"
             }
-            if(element.elementType.element is XtendFunction) {
-                return element.elementType.element.name
+            if(iElement is XtendFunction) {
+                return "${iElement.name}(${iElement.parameters.joinToString(",") { it.parameterType?.simpleName ?: "" }}): ${iElement.returnType?.simpleName}"
             }
         }
 
