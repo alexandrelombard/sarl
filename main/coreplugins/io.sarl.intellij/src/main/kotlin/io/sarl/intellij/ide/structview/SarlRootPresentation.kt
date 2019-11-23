@@ -1,4 +1,4 @@
-package io.sarl.intellij.structview
+package io.sarl.intellij.ide.structview
 
 import javax.swing.Icon
 import com.intellij.psi.PsiFile

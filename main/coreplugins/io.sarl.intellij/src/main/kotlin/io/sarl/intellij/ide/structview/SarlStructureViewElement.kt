@@ -1,4 +1,4 @@
-package io.sarl.intellij.structview
+package io.sarl.intellij.ide.structview
 
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement
@@ -11,13 +11,8 @@ import io.sarl.intellij.psi.EObjectPsiElement
 import io.sarl.intellij.psi.SarlPsiFileRoot
 import io.sarl.lang.sarl.SarlClass
 import io.sarl.lang.sarl.SarlField
-import io.sarl.lang.sarl.impl.SarlClassImpl
-import io.sarl.lang.sarl.impl.SarlFieldImpl
-import org.eclipse.xtend.core.macro.declaration.XtendMethodDeclarationImpl
 import org.eclipse.xtend.core.xtend.XtendFunction
-import org.eclipse.xtend.core.xtend.impl.XtendFunctionImpl
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
-import kotlin.reflect.full.isSubclassOf
 
 open class SarlStructureViewElement(protected val element: PsiElement) : StructureViewTreeElement, SortableTreeElement {
 

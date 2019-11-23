@@ -27,7 +27,7 @@
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="Sarl"
-                                      implementationClass="io.sarl.intellij.structview.SarlStructureViewFactory" />
+                                      implementationClass="io.sarl.intellij.ide.structview.SarlStructureViewFactory" />
 
         <!-- Highlighter -->
         <lang.syntaxHighlighterFactory language="Sarl" implementationClass="io.sarl.intellij.ide.highlighter.SarlSyntaxHighlighterFactory" />"

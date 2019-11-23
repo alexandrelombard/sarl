@@ -1,4 +1,4 @@
-package io.sarl.intellij.structview
+package io.sarl.intellij.ide.structview
 
 import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.ide.structureView.StructureViewModel
