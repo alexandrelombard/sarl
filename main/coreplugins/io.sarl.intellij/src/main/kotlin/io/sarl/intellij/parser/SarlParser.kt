@@ -97,23 +97,14 @@ class SarlParser : PsiParser {
                     continue    // This case is already managed by the enclosing context
 
                 if(n is ILeafNode) {
+                    val marker = builder.mark()
+                    val psiElementType = getPsiElementType(n.semanticElement)
                     if(n is LeafNodeWithSyntaxError) {
-                        val marker = builder.mark()
-                        val psiElementType = getPsiElementType(n.semanticElement)
-                        println(builder.tokenText)
-                        builder.advanceLexer()
-                        marker.done(psiElementType)
-                    } else {
-                        val marker = builder.mark()
-                        val psiElementType = getPsiElementType(n.semanticElement)
-                        println(builder.tokenText)
-                        builder.advanceLexer()
-                        marker.done(psiElementType)
+                        builder.error(n.syntaxErrorMessage.message)
                     }
+                    builder.advanceLexer()
+                    marker.done(psiElementType)
                 }
-
-//                if(!n.hasDirectSemanticElement())
-//                    continue    // The node has no semantic, we skip it
 
                 if(n.parent != currentContainer) {
                     // We are changing the context
