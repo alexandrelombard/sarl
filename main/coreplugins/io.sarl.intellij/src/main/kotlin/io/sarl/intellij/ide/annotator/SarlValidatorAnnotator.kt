@@ -13,7 +13,7 @@ import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.util.StringInputStream
 import org.eclipse.xtext.validation.IResourceValidator
 
-class ValidatorAnnotator : Annotator {
+class SarlValidatorAnnotator : Annotator {
 
     private val resourceSet: ResourceSet
     private val validator: IResourceValidator
