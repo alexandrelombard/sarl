@@ -7,9 +7,23 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.navigation.NavigationItem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import io.sarl.intellij.psi.EObjectPsiElement
 import io.sarl.intellij.psi.SarlPsiFileRoot
+import io.sarl.lang.sarl.SarlClass
+import io.sarl.lang.sarl.SarlField
+import io.sarl.lang.sarl.impl.SarlClassImpl
+import io.sarl.lang.sarl.impl.SarlFieldImpl
+import org.eclipse.xtend.core.macro.declaration.XtendMethodDeclarationImpl
+import org.eclipse.xtend.core.xtend.XtendFunction
+import org.eclipse.xtend.core.xtend.impl.XtendFunctionImpl
+import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
+import kotlin.reflect.full.isSubclassOf
 
 open class SarlStructureViewElement(protected val element: PsiElement) : StructureViewTreeElement, SortableTreeElement {
+
+    private val allowedItemsClasses = hashSetOf(
+            SarlPsiFileRoot::class, SarlClass::class, SarlField::class, MethodDeclaration::class,
+            XtendFunction::class)
 
     override fun getValue(): Any {
         return element
@@ -38,15 +52,38 @@ open class SarlStructureViewElement(protected val element: PsiElement) : Structu
     }
 
     override fun getChildren(): Array<TreeElement> {
-        if (element is SarlPsiFileRoot) {
-            // FIXME
-//            val topLevelElements = XPath.findAll(SarlLanguage.INSTANCE, element, "/sarlFile/topLevelObject/*/simpleIdentifier")
-//            val treeElements = ArrayList<TreeElement>(topLevelElements.size)
-//            for (el in topLevelElements) {
-//                treeElements.add(SarlStructureViewElement(el))
-//            }
-//            return treeElements.toArray(arrayOfNulls<TreeElement>(topLevelElements.size))
+        val result = arrayListOf<TreeElement>()
+
+        for(c in element.children) {
+            if(isStructureViewElement(c)) {
+                result.add(SarlStructureViewElement(c))
+            }
         }
-        return arrayOf()
+
+        return result.toTypedArray()
+    }
+
+    private fun isStructureViewElement(element: PsiElement): Boolean {
+        val parent = element.parent
+
+        if(parent is SarlPsiFileRoot) {
+            return true
+        }
+
+        if(element is EObjectPsiElement && parent is EObjectPsiElement) {
+            // We remove the objects whose only semantic is not in the allowed set
+            val allowed = allowedItemsClasses.map {
+                it.java.isAssignableFrom(element.elementType.element::class.java)
+            }.reduce { acc, value -> acc || value}
+
+            if(!allowed) {
+                return false
+            }
+
+            // And we remove the objects who don't carry more semantic than their parents
+            return element.elementType.element != parent.elementType.element
+        }
+
+        return false
     }
 }

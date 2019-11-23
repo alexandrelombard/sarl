@@ -131,7 +131,6 @@ class SarlParser : PsiParser {
             parseTreeContextDone(stack)
         }
 
-        println("D: ROOT")
         rootMarker.done(root)
     }
 

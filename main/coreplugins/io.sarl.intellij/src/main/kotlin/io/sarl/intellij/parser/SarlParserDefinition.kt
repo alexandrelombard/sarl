@@ -50,7 +50,7 @@ class SarlParserDefinition : ParserDefinition {
         val elType = node.elementType
 
         if (elType is PsiEObjectElementType) {
-            return EObjectPsiElement(node)
+            return EObjectPsiElement(node, elType)
         }
 
         return SarlPsiElement(node)
