@@ -4,15 +4,10 @@ import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
-import io.sarl.intellij.SarlLanguage
-import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.antlr.lexer.TokenIElementType
 import io.sarl.intellij.ide.colors.SarlColor
 import io.sarl.intellij.lexer.SarlLexer
-import io.sarl.intellij.parser.SarlParser
-import io.sarl.lang.parser.antlr.SARLParser
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
-import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer.*
 

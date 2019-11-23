@@ -3,14 +3,10 @@ package io.sarl.intellij.antlr.lexer
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiBuilder
 import com.intellij.openapi.progress.ProgressIndicatorProvider
-import com.intellij.openapi.project.Project
-import io.sarl.intellij.antlr.misc.Pair
 import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonToken
 import org.antlr.runtime.Token
 import org.antlr.runtime.TokenSource
-import org.eclipse.xtext.parser.antlr.XtextTokenStream
-import java.io.InputStream
 
 /** Make a PsiBuilder look like a source of ANTLR tokens. PsiBuilder
  * provides tokens created by the lexer created in
@@ -73,7 +69,7 @@ class PsiTokenSource(protected var builder: PsiBuilder) : TokenSource {
         token.line = line
         token.charPositionInLine = charPositionInLine
         token.channel = channel
-        token.inputStream = source.b
+        token.inputStream = source.second
         return token
     }
 

@@ -19,6 +19,9 @@
         <!-- File-type factory -->
         <fileTypeFactory implementation="io.sarl.intellij.SarlFileTypeFactory"/>
 
+        <!-- AST factory -->
+        <lang.ast.factory language="Sarl" implementationClass="io.sarl.intellij.ast.SarlASTFactory" />
+
         <!-- Parser -->
         <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.parser.SarlParserDefinition"/>
 

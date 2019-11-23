@@ -1,15 +1,11 @@
 package io.sarl.intellij.antlr
 
-import com.intellij.lang.Language
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 import io.sarl.intellij.SarlLanguage
-import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.antlr.lexer.RuleIElementType
 import io.sarl.intellij.antlr.lexer.TokenIElementType
 import io.sarl.lang.parser.antlr.SARLAntlrTokenFileProvider
-import io.sarl.lang.parser.antlr.SARLParser
-import io.sarl.lang.parser.antlr.internal.InternalSARLParser
 import org.antlr.runtime.Token
 
 /**

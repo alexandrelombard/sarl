@@ -1,6 +1,5 @@
 package io.sarl.intellij.parser
 
-import com.google.inject.Inject
 import com.intellij.lang.ASTNode
 import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiParser
@@ -11,20 +10,14 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
-import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 import io.sarl.intellij.SarlLanguage
-import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.antlr.SarlPsiElementType
-import io.sarl.intellij.antlr.lexer.PsiElementTypeFactory
 import io.sarl.intellij.lexer.SarlLexer
+import io.sarl.intellij.psi.EObjectPsiElement
+import io.sarl.intellij.psi.PsiEObjectElementType
+import io.sarl.intellij.psi.SarlPsiElement
 import io.sarl.intellij.psi.SarlPsiFileRoot
-import io.sarl.lang.parser.antlr.internal.InternalSARLParser
-import io.sarl.intellij.antlr.psi.AntlrPsiNode
-import io.sarl.intellij.antlr.lexer.RuleIElementType
-import io.sarl.intellij.antlr.lexer.TokenIElementType
-import io.sarl.lang.SARLStandaloneSetup
-import io.sarl.lang.services.SARLGrammarAccess
-import org.eclipse.core.internal.runtime.Activator
+import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 
 class SarlParserDefinition : ParserDefinition {
 
@@ -56,16 +49,11 @@ class SarlParserDefinition : ParserDefinition {
     override fun createElement(node: ASTNode): PsiElement {
         val elType = node.elementType
 
-        if (elType is TokenIElementType) {
-            return AntlrPsiNode(node)
-        }
-        if (elType !is RuleIElementType) {
-            return AntlrPsiNode(node)
+        if (elType is PsiEObjectElementType) {
+            return EObjectPsiElement(node)
         }
 
-        // FIXME: this is a kind of "default" behavior
-        // FIXME: For more details, look at https://github.com/alexandrelombard/sarl/blob/idea_plugin/main/coreplugins/io.sarl.lang.intellij/src-gen/io/sarl/lang/idea/lang/parser/SARLParserDefinition.java
-        return AntlrPsiNode(node)
+        return SarlPsiElement(node)
     }
 
     override fun getCommentTokens(): TokenSet {
