@@ -26,7 +26,10 @@
         <lang.parserDefinition language="Sarl" implementationClass="io.sarl.intellij.parser.SarlParserDefinition"/>
 
         <!-- Annotators -->
-        <annotator language="Sarl" implementationClass="io.sarl.intellij.ide.annotator.ErrorAnnotator" />
+        <annotator language="Sarl" implementationClass="io.sarl.intellij.ide.annotator.ValidatorAnnotator" />
+
+        <!-- Completion -->
+        <completion.contributor language="Sarl" implementationClass="io.sarl.intellij.ide.completion.SarlCompletionContributor" />
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="Sarl"

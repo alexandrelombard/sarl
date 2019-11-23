@@ -9,11 +9,11 @@ import io.sarl.intellij.SarlPlugin
 import io.sarl.intellij.psi.SarlPsiFileRoot
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
-import org.eclipse.xtext.resource.XtextSyntaxDiagnostic
+import org.eclipse.xtext.diagnostics.Diagnostic
 import org.eclipse.xtext.util.StringInputStream
 import org.eclipse.xtext.validation.IResourceValidator
 
-class ErrorAnnotator : Annotator {
+class ValidatorAnnotator : Annotator {
 
     private val resourceSet: ResourceSet
     private val validator: IResourceValidator
@@ -29,15 +29,27 @@ class ErrorAnnotator : Annotator {
             // FIXME We only validate the whole file, and we are not using the reference to the modified PsiElement
             val r = resourceSet.createResource(URI.createURI("dummy.$EXTENSION"))
             r.load(StringInputStream(element.text), null)
+
+            // Managing errors
             if(r.errors.isNotEmpty()) {
                 for(e in r.errors) {
-                    if(e is XtextSyntaxDiagnostic) {
+                    if(e is Diagnostic) {
                         holder.createErrorAnnotation(TextRange(e.offset, e.offset + e.length), e.message)
                     } else {
                         // FIXME Ignoring right now
                     }
                 }
             }
+
+            // Managing warnings
+            if(r.warnings.isNotEmpty()) {
+                for(w in r.warnings) {
+                    if(w is Diagnostic) {
+                        holder.createWarningAnnotation(TextRange(w.offset, w.offset + w.length), w.message)
+                    }
+                }
+            }
+
             r.delete(null)
         }
     }
