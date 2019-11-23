@@ -13,6 +13,7 @@ import org.antlr.runtime.Token
  */
 object SarlPsiElementType {
     private val tokenTypeMap: MutableMap<Int, String> = hashMapOf()
+    private val tokenNameMap: MutableMap<String, Int> = hashMapOf()
 
     private val ruleIElementTypesCache: Map<Int, IElementType?>
     private val tokenIElementTypesCache: Map<Int, IElementType?>
@@ -33,6 +34,9 @@ object SarlPsiElementType {
                 val text = beforeEqual.removeSurrounding("'")
 
                 this.tokenTypeMap[type] = text
+
+                if(!this.tokenNameMap.containsKey(text))
+                    this.tokenNameMap[text] = type
 
                 val token = TokenIElementType(type, text, SarlLanguage.INSTANCE)
 
@@ -59,6 +63,10 @@ object SarlPsiElementType {
 
     fun getTokenTypeMap(): Map<Int, String> {
         return this.tokenTypeMap
+    }
+
+    fun getTokenNameMap(): Map<String, Int> {
+        return this.tokenNameMap
     }
 
     fun getRuleIElementType(ruleType: Int): IElementType? {
