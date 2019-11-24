@@ -63,6 +63,8 @@ class SarlParser : PsiParser {
         parser.unorderedGroupHelper.initializeWith(SarlPlugin.injector.getInstance(InternalSARLLexer::class.java))
         parser.setTokenTypeMap(SarlPsiElementType.getTokenTypeMap())
 
+        SarlPlugin.injector.injectMembers(parser)
+
         parseTreeBasedPsiBuilding(root, builder, parser)
 
         return builder.treeBuilt // calls the ASTFactory.createComposite() etc...
