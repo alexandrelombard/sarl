@@ -16,11 +16,14 @@ class SarlSyntaxHighlighter : SyntaxHighlighterBase() {
         return SarlLexer(InternalSARLLexer())
     }
 
-    override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> =
+    override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> =
             pack(map(tokenType).textAttributesKey)
 
     companion object {
-        fun map(tokenType: IElementType): SarlColor {
+        fun map(tokenType: IElementType?): SarlColor {
+            if(tokenType == null)
+                return SarlColor.DEFAULT
+
             if(tokenType is TokenIElementType) {
                 return when (tokenType.antlrTokenType) {
                     T__81, T__33, T__44, T__38, T__64, T__62, T__63, T__34, T__60,

@@ -42,6 +42,9 @@
         <!-- Highlighter -->
         <lang.syntaxHighlighterFactory language="Sarl" implementationClass="io.sarl.intellij.ide.highlighter.SarlSyntaxHighlighterFactory" />"
 
+        <!-- Commenter (it's the same as Java's) -->
+        <lang.commenter language="Sarl" implementationClass="com.intellij.lang.java.JavaCommenter" />
+
         <!--File type support-->
         <internalFileTemplate name="Sarl Class"/>
         <internalFileTemplate name="Sarl Agent"/>
