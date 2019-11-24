@@ -32,6 +32,8 @@ allprojects {
         updateSinceUntilBuild = false
         instrumentCode = true
         version = "2019.2.3"
+
+        setPlugins("java")
     }
 
     configure<JavaPluginConvention> {
