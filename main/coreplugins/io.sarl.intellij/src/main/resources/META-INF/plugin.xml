@@ -32,7 +32,7 @@
         <annotator language="Sarl" implementationClass="io.sarl.intellij.ide.annotator.SarlValidatorAnnotator" />
 
         <!-- Completion -->
-        <completion.contributor language="any" implementationClass="com.intellij.codeInsight.completion." />
+        <completion.contributor language="any" implementationClass="com.intellij.codeInsight.completion.JavaClassNameCompletionContributor" />
         <completion.contributor language="Sarl" implementationClass="io.sarl.intellij.ide.completion.SarlCompletionContributor" />
 
         <!-- Structure view -->

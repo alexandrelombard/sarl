@@ -46,6 +46,8 @@ class SarlValidatorAnnotator : Annotator {
                 for(w in r.warnings) {
                     if(w is Diagnostic) {
                         holder.createWarningAnnotation(TextRange(w.offset, w.offset + w.length), w.message)
+                    } else {
+                        // FIXME Ignoring right now
                     }
                 }
             }
