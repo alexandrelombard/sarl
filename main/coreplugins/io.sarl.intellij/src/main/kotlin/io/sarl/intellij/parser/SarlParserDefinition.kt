@@ -16,7 +16,7 @@ import io.sarl.intellij.lexer.SarlLexer
 import io.sarl.intellij.psi.EObjectPsiElement
 import io.sarl.intellij.psi.PsiEObjectElementType
 import io.sarl.intellij.psi.SarlPsiElement
-import io.sarl.intellij.psi.SarlPsiFileRoot
+import io.sarl.intellij.psi.SarlPsiFile
 import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
 
 class SarlParserDefinition : ParserDefinition {
@@ -26,7 +26,7 @@ class SarlParserDefinition : ParserDefinition {
     }
 
     override fun createFile(viewProvider: FileViewProvider): PsiFile {
-        return SarlPsiFileRoot(viewProvider)
+        return SarlPsiFile(viewProvider)
     }
 
     override fun getWhitespaceTokens(): TokenSet {

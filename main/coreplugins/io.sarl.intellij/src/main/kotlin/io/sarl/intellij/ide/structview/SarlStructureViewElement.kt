@@ -8,16 +8,15 @@ import com.intellij.navigation.NavigationItem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import io.sarl.intellij.psi.EObjectPsiElement
-import io.sarl.intellij.psi.SarlPsiFileRoot
+import io.sarl.intellij.psi.SarlPsiFile
 import io.sarl.lang.sarl.*
 import org.eclipse.xtend.core.xtend.XtendFunction
-import org.eclipse.xtend.core.xtend.XtendTypeDeclaration
 import org.eclipse.xtend.lib.macro.declaration.MethodDeclaration
 
 open class SarlStructureViewElement(protected val element: PsiElement) : StructureViewTreeElement, SortableTreeElement {
 
     private val allowedItemsClasses = hashSetOf(
-            SarlPsiFileRoot::class, SarlClass::class, SarlAgent::class, SarlEvent::class,
+            SarlPsiFile::class, SarlClass::class, SarlAgent::class, SarlEvent::class,
             SarlBehavior::class, SarlCapacity::class, SarlSkill::class, SarlInterface::class,
             SarlField::class, MethodDeclaration::class,
             XtendFunction::class)
@@ -63,7 +62,7 @@ open class SarlStructureViewElement(protected val element: PsiElement) : Structu
     private fun isStructureViewElement(element: PsiElement): Boolean {
         val parent = element.parent
 
-        if(parent is SarlPsiFileRoot) {
+        if(parent is SarlPsiFile) {
             return true
         }
 

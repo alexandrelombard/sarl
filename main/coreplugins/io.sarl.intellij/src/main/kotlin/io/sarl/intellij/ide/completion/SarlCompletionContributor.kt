@@ -8,6 +8,27 @@ import com.intellij.util.ProcessingContext
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.CompletionParameters
+import com.intellij.codeInsight.completion.AllClassesGetter
+import org.eclipse.xtext.util.ReplaceRegion
+import org.eclipse.xtext.common.types.JvmDeclaredType
+import org.eclipse.xtext.xbase.imports.RewritableImportSection
+import com.intellij.usages.ChunkExtractor.getStartOffset
+import org.eclipse.xtext.EcoreUtil2.getResourceSet
+import org.eclipse.xtext.common.types.access.IJvmTypeProvider
+import org.eclipse.xtext.resource.XtextResource
+import com.intellij.psi.PsiFile
+import com.intellij.codeInsight.completion.JavaPsiClassReferenceElement
+import com.intellij.codeInsight.completion.InsertionContext
+import com.intellij.codeInsight.completion.InsertHandler
+import io.sarl.intellij.psi.SarlPsiFile
+import com.intellij.codeInsight.completion.CompletionType
+import com.intellij.codeInsight.completion.CompletionProvider
+import io.sarl.intellij.SarlPlugin
+import io.sarl.intellij.antlr.SarlPsiElementType
+import io.sarl.lang.parser.antlr.internal.InternalSARLLexer
+import io.sarl.lang.ui.contentassist.SARLProposalProvider
+import org.eclipse.xtext.RuleCall
+
 
 
 
@@ -15,35 +36,36 @@ import com.intellij.codeInsight.completion.CompletionParameters
 class SarlCompletionContributor : CompletionContributor() {
 
     init {
-        extend(CompletionType.SMART, psiElement(), object : CompletionProvider<CompletionParameters>() {
+        // TEST 1
+        extend(CompletionType.BASIC, psiElement(SarlPsiElementType.getTokenIElementType(InternalSARLLexer.RULE_ID)), object : CompletionProvider<CompletionParameters>() {
             override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+                this@SarlCompletionContributor.completeJavaTypes(parameters, result, false, filter = { c: JavaPsiClassReferenceElement -> true})
+
                 result.addElement(
                         LookupElementBuilder
-                                .create("AUTOCOMPLETE TEST")
-                                .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
+                                .create("AUTOCOMPLETE_TEST"))
             }
-
         })
     }
 
     // Extracted from this: https://github.com/alexandrelombard/sarl/blob/idea_plugin/main/coreplugins/io.sarl.lang.intellij/xtend-gen/org/eclipse/xtext/xbase/idea/completion/XbaseCompletionContributor.java
-//    protected fun completeJavaTypes(completionParameters: CompletionParameters, completionResultSet: CompletionResultSet, addImport: Boolean, filter: Function1<JavaPsiClassReferenceElement, Boolean>) {
-//        val _invocationCount = completionParameters.invocationCount
-//        val _lessEqualsThan = _invocationCount <= 2
-//        val _function = { it: LookupElement ->
-//            if (it is JavaPsiClassReferenceElement) {
-//                val _apply = filter.apply(it as JavaPsiClassReferenceElement)
-//                if (_apply.booleanValue()) {
-//                    if (addImport) {
-//                        (it as JavaPsiClassReferenceElement).setInsertHandler(this.importAddingInsertHandler)
-//                    }
-//                    completionResultSet.addElement(it)
-//                }
-//            }
-//        }
-//        JavaClassNameCompletionContributor.addAllClasses(completionParameters, _lessEqualsThan,
-//                JavaCompletionSorting.addJavaSorting(completionParameters, completionResultSet).getPrefixMatcher(), _function)
-//    }
+    protected fun completeJavaTypes(completionParameters: CompletionParameters, completionResultSet: CompletionResultSet, addImport: Boolean, filter: Function1<JavaPsiClassReferenceElement, Boolean>) {
+        val _invocationCount = completionParameters.invocationCount
+        val _lessEqualsThan = _invocationCount <= 2
+        val _function = { it: LookupElement ->
+            if (it is JavaPsiClassReferenceElement) {
+                val _apply = filter.invoke(it)
+                if (_apply) {
+                    if (addImport) {
+//                        it.setInsertHandler(this.importAddingInsertHandler)
+                    }
+                    completionResultSet.addElement(it)
+                }
+            }
+        }
+        JavaClassNameCompletionContributor.addAllClasses(completionParameters, _lessEqualsThan,
+                JavaCompletionSorting.addJavaSorting(completionParameters, completionResultSet).getPrefixMatcher(), _function)
+    }
 
     companion object {
 

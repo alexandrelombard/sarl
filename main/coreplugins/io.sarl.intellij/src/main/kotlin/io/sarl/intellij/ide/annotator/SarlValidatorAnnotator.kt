@@ -6,7 +6,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import io.sarl.intellij.SarlFileType.DEFAULTS.EXTENSION
 import io.sarl.intellij.SarlPlugin
-import io.sarl.intellij.psi.SarlPsiFileRoot
+import io.sarl.intellij.psi.SarlPsiFile
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.xtext.diagnostics.Diagnostic
@@ -25,7 +25,7 @@ class SarlValidatorAnnotator : Annotator {
     }
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if(element is SarlPsiFileRoot) {
+        if(element is SarlPsiFile) {
             // FIXME We only validate the whole file, and we are not using the reference to the modified PsiElement
             val r = resourceSet.createResource(URI.createURI("dummy.$EXTENSION"))
             r.load(StringInputStream(element.text), null)

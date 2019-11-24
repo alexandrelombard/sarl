@@ -55,12 +55,14 @@ project(":") {
 }
 
 dependencies {
-    //implementation("org.antlr:antlr:3.5.2")
     implementation("org.eclipse.xtext:org.eclipse.xtext:2.19.0")
     implementation("org.eclipse.xtext:org.eclipse.xtext.util:2.19.0")
     implementation("org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.19.0")
     implementation("org.eclipse.xtend:org.eclipse.xtend.core:2.19.0")
     implementation("org.eclipse.xtend:org.eclipse.xtend.lib:2.19.0")
+
     implementation ("io.sarl.lang:io.sarl.lang:0.11.0-SNAPSHOT")
     implementation ("io.sarl.lang:io.sarl.lang.core:0.11.0-SNAPSHOT")
+
+    implementation ("io.sarl:io.sarl.lang.ui:0.11.0-SNAPSHOT")
 }

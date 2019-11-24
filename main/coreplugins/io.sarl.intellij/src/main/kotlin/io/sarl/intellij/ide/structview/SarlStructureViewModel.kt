@@ -6,12 +6,12 @@ import com.intellij.ide.structureView.StructureViewModel
 import com.intellij.ide.structureView.StructureViewModelBase
 import com.intellij.ide.util.treeView.smartTree.Sorter
 import io.sarl.intellij.psi.EObjectPsiElement
-import io.sarl.intellij.psi.SarlPsiFileRoot
+import io.sarl.intellij.psi.SarlPsiFile
 import io.sarl.lang.sarl.SarlClass
 import io.sarl.lang.sarl.SarlScript
 
 
-class SarlStructureViewModel(root: SarlPsiFileRoot) : StructureViewModelBase(root, SarlStructureViewRootElement(root)), StructureViewModel.ElementInfoProvider {
+class SarlStructureViewModel(root: SarlPsiFile) : StructureViewModelBase(root, SarlStructureViewRootElement(root)), StructureViewModel.ElementInfoProvider {
 
     override fun getSorters(): Array<Sorter> {
         return arrayOf(ALPHA_SORTER)
@@ -24,7 +24,7 @@ class SarlStructureViewModel(root: SarlPsiFileRoot) : StructureViewModelBase(roo
     override fun isAlwaysShowsPlus(element: StructureViewTreeElement): Boolean {
         val value = element.value
 
-        if(value is SarlPsiFileRoot)
+        if(value is SarlPsiFile)
             return true
 
         if(value is EObjectPsiElement) {
