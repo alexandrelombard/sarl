@@ -42,6 +42,8 @@
         <!-- Highlighter -->
         <lang.syntaxHighlighterFactory language="Sarl" implementationClass="io.sarl.intellij.ide.highlighter.SarlSyntaxHighlighterFactory" />"
 
+        <!-- Formatter -->
+
         <!-- Commenter (it's the same as Java's) -->
         <lang.commenter language="Sarl" implementationClass="com.intellij.lang.java.JavaCommenter" />
 
