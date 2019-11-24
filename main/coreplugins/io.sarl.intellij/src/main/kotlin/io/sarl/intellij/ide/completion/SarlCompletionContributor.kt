@@ -37,9 +37,9 @@ class SarlCompletionContributor : CompletionContributor() {
 
     init {
         // TEST 1
-        extend(CompletionType.BASIC, psiElement(SarlPsiElementType.getTokenIElementType(InternalSARLLexer.RULE_ID)), object : CompletionProvider<CompletionParameters>() {
+        extend(CompletionType.BASIC, PATTERN_RULE_ID, object : CompletionProvider<CompletionParameters>() {
             override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
-                this@SarlCompletionContributor.completeJavaTypes(parameters, result, false, filter = { c: JavaPsiClassReferenceElement -> true})
+                this@SarlCompletionContributor.completeJavaTypes(parameters, result, false) { true }
 
                 result.addElement(
                         LookupElementBuilder
@@ -68,6 +68,8 @@ class SarlCompletionContributor : CompletionContributor() {
     }
 
     companion object {
+
+        val PATTERN_RULE_ID = psiElement(SarlPsiElementType.getTokenIElementType(InternalSARLLexer.RULE_ID))
 
 //        private fun header(name: String): ElementPattern<PsiElement> {
 //            return psiElement()
