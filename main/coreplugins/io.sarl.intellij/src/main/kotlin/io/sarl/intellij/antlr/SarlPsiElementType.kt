@@ -61,6 +61,11 @@ object SarlPsiElementType {
         return tokenIElementTypesCache[tokenType]
     }
 
+    fun getTokenIElementTypeByName(tokenName: String): IElementType? {
+        val tokenType = getTokenNameMap()[tokenName] ?: return null
+        return getTokenIElementType(tokenType)
+    }
+
     fun getTokenTypeMap(): Map<Int, String> {
         return this.tokenTypeMap
     }

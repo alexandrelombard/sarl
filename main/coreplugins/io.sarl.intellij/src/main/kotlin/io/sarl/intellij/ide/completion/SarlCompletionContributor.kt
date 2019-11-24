@@ -46,6 +46,16 @@ class SarlCompletionContributor : CompletionContributor() {
                                 .create("AUTOCOMPLETE_TEST"))
             }
         })
+
+        // TEST 2
+        extend(CompletionType.BASIC, PATTERN_OPEN_BRACKET, object : CompletionProvider<CompletionParameters>() {
+            override fun addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
+                result.addElement(
+                        LookupElementBuilder.create("}")
+                )
+            }
+
+        })
     }
 
     // Extracted from this: https://github.com/alexandrelombard/sarl/blob/idea_plugin/main/coreplugins/io.sarl.lang.intellij/xtend-gen/org/eclipse/xtext/xbase/idea/completion/XbaseCompletionContributor.java
@@ -70,6 +80,8 @@ class SarlCompletionContributor : CompletionContributor() {
     companion object {
 
         val PATTERN_RULE_ID = psiElement(SarlPsiElementType.getTokenIElementType(InternalSARLLexer.RULE_ID))
+        val PATTERN_OPEN_BRACKET = psiElement().afterLeaf("{")
+
 
 //        private fun header(name: String): ElementPattern<PsiElement> {
 //            return psiElement()
